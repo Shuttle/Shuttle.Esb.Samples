@@ -1,5 +1,4 @@
 using System;
-using Shuttle.ESB.Modules;
 using log4net;
 using Shuttle.Core.Host;
 using Shuttle.Core.Infrastructure;
@@ -20,7 +19,6 @@ namespace RequestResponse.Server
 				.Create()
 				.AddEnryptionAlgorithm(new TripleDesEncryptionAlgorithm())
 				.AddCompressionAlgorithm(new GZipCompressionAlgorithm())
-				.AddModule(new ActiveTimeRangeModule())
 				.Start();
 		}
 
