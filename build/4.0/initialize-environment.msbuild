@@ -2,21 +2,14 @@
    <UsingTask AssemblyFile="MSBuildCommunityTasks\MSBuild.Community.Tasks.dll" TaskName="MSBuild.Community.Tasks.FileUpdate" />
    <UsingTask AssemblyFile="MSBuildCommunityTasks\MSBuild.Community.Tasks.dll" TaskName="MSBuild.Community.Tasks.Prompt" />
 
-   <PropertyGroup>
-      <RootFolder>$(MSBuildProjectDirectory)\..\..</RootFolder>
-   </PropertyGroup>
-
    <ItemGroup>
-      <SharedProject Include="shared.msbuild" />
-      <SampleEndpointUserFile Include="..\..\samples\**\*.csproj.user" />
+      <SampleEndpointUserFile Include="..\..\**\*.csproj.user" />
       <ConfigFile Include="..\..\**\*.config" />
    </ItemGroup>
 
    <Target Name="InitializeEnvironment">
       <CallTarget Targets="ApplicationConfigurationSetup" />
       <CallTarget Targets="ProjectConfiguration" />
-      <MSBuild Projects="debug.msbuild"></MSBuild>
-      <MSBuild Projects="release.msbuild"></MSBuild>
    </Target>
 
    <Target Name="ApplicationConfigurationSetup">
@@ -32,7 +25,6 @@
    </Target>
 
    <Target Name="ProjectConfiguration">
-      <FileUpdate Files="@(SharedProject)" Regex="&lt;RootFolder&gt;.+&lt;/RootFolder&gt;" ReplacementText="&lt;RootFolder&gt;$(RootFolder)&lt;/RootFolder&gt;" />
       <FileUpdate Files="@(SampleEndpointUserFile)" Regex="&lt;StartProgram&gt;.+\\[Dd]ebug\\.+&lt;/StartProgram&gt;" ReplacementText="&lt;StartProgram&gt;%(SampleEndpointUserFile.rootdir)%(SampleEndpointUserFile.directory)bin\debug\Shuttle.Core.Host.exe&lt;/StartProgram&gt;" />
       <FileUpdate Files="@(SampleEndpointUserFile)" Regex="&lt;StartProgram&gt;.+\\[Rr]elease\\.+&lt;/StartProgram&gt;" ReplacementText="&lt;StartProgram&gt;%(SampleEndpointUserFile.rootdir)%(SampleEndpointUserFile.directory)bin\release\Shuttle.Core.Host.exe&lt;/StartProgram&gt;" />
    </Target>
