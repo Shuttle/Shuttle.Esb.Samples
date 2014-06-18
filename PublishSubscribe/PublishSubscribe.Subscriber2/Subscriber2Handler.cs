@@ -13,15 +13,15 @@ namespace PublishSubscribe.Subscriber2
 
 			ColoredConsole.WriteLine(ConsoleColor.Blue, comment);
 
-			context.Bus.Publish(new WorkDoneEvent
+			context.Publish(new WorkDoneEvent
 			{
 				Comment = comment
 			});
 			
-			context.Bus.SendDeferredReply(DateTime.Now.AddSeconds(5), new WorkDoneEvent
+			context.SendReply(new WorkDoneEvent
 			{
 				Comment = "[DEFERRED / Subscriber2] : order id = " + context.Message.OrderId
-			});
+			}, c => c.Defer(DateTime.Now.AddSeconds(5)));
 		}
 
     	public bool IsReusable

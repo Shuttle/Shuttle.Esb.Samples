@@ -64,36 +64,41 @@
     <DefineConstants>$(DefineConstants);NET45FULL</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="RabbitMQ.Client">
-      <HintPath>..\packages\RabbitMQ.Client.3.3.0\lib\net30\RabbitMQ.Client.dll</HintPath>
+    <Reference Include="RabbitMQ.Client, Version=3.3.2.0, Culture=neutral, PublicKeyToken=89e7d7c5feba84ce, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\RabbitMQ.Client.3.3.2\lib\net30\RabbitMQ.Client.dll</HintPath>
     </Reference>
-    <Reference Include="Shuttle.Core.Data">
-      <HintPath>..\packages\shuttle-core-data.3.0.2\lib\net35-full\Shuttle.Core.Data.dll</HintPath>
+    <Reference Include="Shuttle.Core.Data, Version=3.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\shuttle-core-data.3.1.0\lib\net35-full\Shuttle.Core.Data.dll</HintPath>
     </Reference>
-    <Reference Include="Shuttle.Core.Domain">
-      <HintPath>..\packages\shuttle-core-domain.3.0.2\lib\net35-full\Shuttle.Core.Domain.dll</HintPath>
+    <Reference Include="Shuttle.Core.Domain, Version=3.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\shuttle-core-domain.3.1.0\lib\net35-full\Shuttle.Core.Domain.dll</HintPath>
     </Reference>
-    <Reference Include="Shuttle.Core.Host">
-      <HintPath>..\packages\shuttle-core-host.3.0.2\lib\net35-full\Shuttle.Core.Host.exe</HintPath>
+    <Reference Include="Shuttle.Core.Host, Version=3.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\shuttle-core-host.3.1.0\lib\net35-full\Shuttle.Core.Host.exe</HintPath>
     </Reference>
-    <Reference Include="Shuttle.Core.Infrastructure">
-      <HintPath>..\packages\shuttle-core-infrastructure.3.0.2\lib\net35-full\Shuttle.Core.Infrastructure.dll</HintPath>
+    <Reference Include="Shuttle.Core.Infrastructure, Version=3.1.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\shuttle-core-infrastructure.3.1.1\lib\net35-full\Shuttle.Core.Infrastructure.dll</HintPath>
     </Reference>
     <Reference Include="Shuttle.ESB.Core, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\shuttle-esb-core.3.0.0-rc7\lib\net35-full\Shuttle.ESB.Core.dll</HintPath>
+      <HintPath>..\packages\shuttle-esb-core.3.0.0-rc9\lib\net35-full\Shuttle.ESB.Core.dll</HintPath>
     </Reference>
     <Reference Include="Shuttle.ESB.Msmq, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\shuttle-esb-msmq.3.0.0-rc7\lib\net35-full\Shuttle.ESB.Msmq.dll</HintPath>
+      <HintPath>..\packages\shuttle-esb-msmq.3.0.0-rc9\lib\net35-full\Shuttle.ESB.Msmq.dll</HintPath>
     </Reference>
     <Reference Include="Shuttle.ESB.RabbitMQ, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\shuttle-esb-rabbitmq.3.0.0-rc7\lib\net35-full\Shuttle.ESB.RabbitMQ.dll</HintPath>
+      <HintPath>..\packages\shuttle-esb-rabbitmq.3.0.0-rc9\lib\net35-full\Shuttle.ESB.RabbitMQ.dll</HintPath>
     </Reference>
     <Reference Include="Shuttle.ESB.SqlServer, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\shuttle-esb-sqlserver.3.0.0-rc7\lib\net35-full\Shuttle.ESB.SqlServer.dll</HintPath>
+      <HintPath>..\packages\shuttle-esb-sqlserver.3.0.0-rc9\lib\net35-full\Shuttle.ESB.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">

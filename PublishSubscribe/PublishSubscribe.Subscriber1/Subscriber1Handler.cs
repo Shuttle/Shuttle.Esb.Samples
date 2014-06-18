@@ -13,10 +13,10 @@ namespace PublishSubscribe.Subscriber1
 
 			ColoredConsole.WriteLine(ConsoleColor.Blue, comment);
 
-			context.Bus.Publish(new WorkDoneEvent
-			                    	{
-			                    		Comment = comment
-			                    	});
+			context.Publish(new WorkDoneEvent
+				{
+					Comment = comment
+				});
 		}
 
 		public bool IsReusable

@@ -21,7 +21,7 @@ namespace RequestResponse.Server
 				sb.Insert(0, c);
 			}
 
-			context.Bus.SendReply(
+			context.SendReply(
 				new TextReversedEvent
 					{
 						ReversedText = sb.ToString()

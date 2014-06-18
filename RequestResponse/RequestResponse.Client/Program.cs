@@ -33,11 +33,12 @@ namespace RequestResponse.Client
 									Text = Guid.NewGuid().ToString().Substring(0, 5)
 								};
 
-				bus.OutgoingCorrelationId = "correlation-id";
-				bus.OutgoingHeaders.Add(new TransportHeader { Key = "header1", Value = "value1" });
-				bus.OutgoingHeaders.Add(new TransportHeader { Key = "header2", Value = "value2" });
-
-				Console.WriteLine("Message (id: {0}) sent.  Text: {1}", bus.Send(command).MessageId, command.Text);
+				Console.WriteLine("Message (id: {0}) sent.  Text: {1}", bus.Send(command, c =>
+					{
+						c.WithCorrelationId("correlation-id");
+						c.Headers.Add(new TransportHeader { Key = "header1", Value = "value1" });
+						c.Headers.Add(new TransportHeader { Key = "header2", Value = "value2" });
+					}).MessageId, command.Text);
 			}
 		}
 	}
