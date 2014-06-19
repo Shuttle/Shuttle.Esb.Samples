@@ -18,10 +18,10 @@ namespace PublishSubscribe.Subscriber2
 				Comment = comment
 			});
 			
-			context.SendReply(new WorkDoneEvent
+			context.Send(new WorkDoneEvent
 			{
 				Comment = "[DEFERRED / Subscriber2] : order id = " + context.Message.OrderId
-			}, c => c.Defer(DateTime.Now.AddSeconds(5)));
+			}, c => c.Defer(DateTime.Now.AddSeconds(5)).Reply());
 		}
 
     	public bool IsReusable

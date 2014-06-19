@@ -87,19 +87,19 @@
     </Reference>
     <Reference Include="Shuttle.ESB.Core, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\shuttle-esb-core.3.0.1-rc9\lib\net35-full\Shuttle.ESB.Core.dll</HintPath>
+      <HintPath>..\packages\shuttle-esb-core.3.0.0-rc10\lib\net35-full\Shuttle.ESB.Core.dll</HintPath>
     </Reference>
     <Reference Include="Shuttle.ESB.Msmq, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\shuttle-esb-msmq.3.0.0-rc9\lib\net35-full\Shuttle.ESB.Msmq.dll</HintPath>
+      <HintPath>..\packages\shuttle-esb-msmq.3.0.0-rc10\lib\net35-full\Shuttle.ESB.Msmq.dll</HintPath>
     </Reference>
     <Reference Include="Shuttle.ESB.RabbitMQ, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\shuttle-esb-rabbitmq.3.0.0-rc9\lib\net35-full\Shuttle.ESB.RabbitMQ.dll</HintPath>
+      <HintPath>..\packages\shuttle-esb-rabbitmq.3.0.0-rc10\lib\net35-full\Shuttle.ESB.RabbitMQ.dll</HintPath>
     </Reference>
     <Reference Include="Shuttle.ESB.SqlServer, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\shuttle-esb-sqlserver.3.0.0-rc9\lib\net35-full\Shuttle.ESB.SqlServer.dll</HintPath>
+      <HintPath>..\packages\shuttle-esb-sqlserver.3.0.0-rc10\lib\net35-full\Shuttle.ESB.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>

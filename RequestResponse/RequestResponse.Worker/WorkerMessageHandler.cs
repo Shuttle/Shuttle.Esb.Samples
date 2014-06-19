@@ -33,11 +33,11 @@ namespace RequestResponse.Worker
 
 			sb.Append(" : [WORKER1]");
 
-			context.SendReply(
+			context.Send(
 				new TextReversedEvent
 				{
 					ReversedText = sb.ToString()
-				});
+				}, c => c.Reply());
 
 			Console.WriteLine("Message {0}: reversed text sent back to {1}.  Reversed text: {2}", received,
 							  context.TransportMessage.SenderInboxWorkQueueUri, sb);
