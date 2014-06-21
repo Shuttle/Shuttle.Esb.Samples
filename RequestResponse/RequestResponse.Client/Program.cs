@@ -14,9 +14,8 @@ namespace RequestResponse.Client
 			Log.Assign(new Log4NetLog(LogManager.GetLogger(typeof(Program))));
 
 			var bus = ServiceBus
-				.Create()
-				.AddCompressionAlgorithm(new GZipCompressionAlgorithm())
-				.AddEnryptionAlgorithm(new TripleDesEncryptionAlgorithm())
+				.Create(c => c.AddCompressionAlgorithm(new GZipCompressionAlgorithm())
+				              .AddEnryptionAlgorithm(new TripleDesEncryptionAlgorithm()))
 				.Start();
 
 			Console.WriteLine("Client bus started.  Press CTRL+C to stop.");

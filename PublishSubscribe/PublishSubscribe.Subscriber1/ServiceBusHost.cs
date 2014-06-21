@@ -28,8 +28,7 @@ namespace PublishSubscribe.Subscriber1
             subscriptionManager.Subscribe(new[] {typeof (OrderCompletedEvent).FullName});
 
             bus = ServiceBus
-                .Create()
-				.SubscriptionManager(subscriptionManager)
+				.Create(c => c.SubscriptionManager(subscriptionManager))
 				.Start();
         }
     }

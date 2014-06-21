@@ -8,29 +8,28 @@ using Shuttle.ESB.SqlServer;
 
 namespace PublishSubscribe.Subscriber2
 {
-    public class ServiceBusHost : IHost, IDisposable
-    {
-        private IServiceBus bus;
+	public class ServiceBusHost : IHost, IDisposable
+	{
+		private IServiceBus bus;
 
-        public void Dispose()
-        {
-            bus.Dispose();
-        }
+		public void Dispose()
+		{
+			bus.Dispose();
+		}
 
-        public void Start()
-        {
+		public void Start()
+		{
 			Log.Assign(new ConsoleLog(typeof(ServiceBusHost)) { LogLevel = LogLevel.Trace });
 
-            new ConnectionStringService().Approve();
+			new ConnectionStringService().Approve();
 
-            var subscriptionManager = SubscriptionManager.Default();
+			var subscriptionManager = SubscriptionManager.Default();
 
-            subscriptionManager.Subscribe(new[] { typeof(OrderCompletedEvent).FullName });
+			subscriptionManager.Subscribe(new[] { typeof(OrderCompletedEvent).FullName });
 
-            bus = ServiceBus
-                .Create()
-                .SubscriptionManager(subscriptionManager)
-                .Start();
-        }
-    }
+			bus = ServiceBus
+				.Create(c => c.SubscriptionManager(subscriptionManager))
+				.Start();
+		}
+	}
 }

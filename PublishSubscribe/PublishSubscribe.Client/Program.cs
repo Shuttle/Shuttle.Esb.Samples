@@ -20,8 +20,7 @@ namespace PublishSubscribe.Client
             subscriptionManager.Subscribe(new[] { typeof(WorkDoneEvent).FullName });
 
 		    var bus = ServiceBus
-				.Create()
-				.SubscriptionManager(subscriptionManager)
+				.Create(c => c.SubscriptionManager(subscriptionManager))
 				.Start();
 
 			Console.WriteLine();

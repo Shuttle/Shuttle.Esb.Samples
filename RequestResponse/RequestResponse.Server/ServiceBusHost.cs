@@ -1,9 +1,9 @@
 using System;
-using log4net;
 using Shuttle.Core.Host;
 using Shuttle.Core.Infrastructure;
 using Shuttle.Core.Infrastructure.Log4Net;
 using Shuttle.ESB.Core;
+using log4net;
 
 namespace RequestResponse.Server
 {
@@ -13,12 +13,12 @@ namespace RequestResponse.Server
 
 		public void Start()
 		{
-			Log.Assign(new Log4NetLog(LogManager.GetLogger(typeof(ServiceBusHost))));
+			Log.Assign(new Log4NetLog(LogManager.GetLogger(typeof (ServiceBusHost))));
 
 			bus = ServiceBus
-				.Create()
-				.AddEnryptionAlgorithm(new TripleDesEncryptionAlgorithm())
-				.AddCompressionAlgorithm(new GZipCompressionAlgorithm())
+				.Create(c => c.AddEnryptionAlgorithm(new TripleDesEncryptionAlgorithm())
+				              .AddCompressionAlgorithm(new GZipCompressionAlgorithm())
+				)
 				.Start();
 		}
 
