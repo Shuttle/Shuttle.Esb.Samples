@@ -8,14 +8,14 @@
 		<ProjectReference Include="..\..\**\*.csproj" />
 
 		<Framework Include="net35-full;net40-full;net45-full" />
-		<Configurations Include="Debug;Release" />
+		<Configuration Include="Debug;Release" />
 	</ItemGroup>
 
 	<Target Name="Build">
         <MSBuild
             Projects="$(MSBuildProjectFile)"
             Targets="PerformBuild"
-            Properties="Configuration=%(Configurations.Identity)"
+            Properties="Configuration=%(Configuration.Identity)"
         />
 	</Target>
 
