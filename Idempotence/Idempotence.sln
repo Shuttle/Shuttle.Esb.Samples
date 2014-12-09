@@ -1,0 +1,45 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Idempotence.Client", "Idempotence.Client\Idempotence.Client.csproj", "{96FC8457-9626-4E1A-8795-1306E2C78F0F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Idempotence.Server", "Idempotence.Server\Idempotence.Server.csproj", "{51F0BB64-C516-4224-B666-7C287F035B3D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Idempotence.Messages", "Idempotence.Messages\Idempotence.Messages.csproj", "{32ABC963-0D64-4432-9C67-21B12B00CCC8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{4A95486D-A98E-46A6-9CC0-1520A74EC89A}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Idempotence.Subscriber", "Idempotence.Subscriber\Idempotence.Subscriber.csproj", "{953FB406-48D3-4AA7-B0D6-7ABEAD792D4F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{96FC8457-9626-4E1A-8795-1306E2C78F0F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96FC8457-9626-4E1A-8795-1306E2C78F0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96FC8457-9626-4E1A-8795-1306E2C78F0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96FC8457-9626-4E1A-8795-1306E2C78F0F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{51F0BB64-C516-4224-B666-7C287F035B3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51F0BB64-C516-4224-B666-7C287F035B3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51F0BB64-C516-4224-B666-7C287F035B3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51F0BB64-C516-4224-B666-7C287F035B3D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32ABC963-0D64-4432-9C67-21B12B00CCC8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32ABC963-0D64-4432-9C67-21B12B00CCC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32ABC963-0D64-4432-9C67-21B12B00CCC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32ABC963-0D64-4432-9C67-21B12B00CCC8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{953FB406-48D3-4AA7-B0D6-7ABEAD792D4F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{953FB406-48D3-4AA7-B0D6-7ABEAD792D4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{953FB406-48D3-4AA7-B0D6-7ABEAD792D4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{953FB406-48D3-4AA7-B0D6-7ABEAD792D4F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
