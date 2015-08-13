@@ -11,6 +11,11 @@ namespace Shuttle.RequestResponse.Server
 			Console.WriteLine();
 			Console.WriteLine("[MEMBER REGISTERED] : user name = '{0}'", context.Message.UserName);
 			Console.WriteLine();
+
+			context.Send(new MemberRegisteredEvent
+			{
+				UserName = context.Message.UserName
+			}, c => c.Reply());
 		}
 
 		public bool IsReusable
