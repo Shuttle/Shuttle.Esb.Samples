@@ -39,7 +39,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MemberRegisteredEvent.cs" />
     <Compile Include="RegisterMemberCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
