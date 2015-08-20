@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shuttle.Deferred.Messages", "Shuttle.Deferred.Messages\Shuttle.Deferred.Messages.csproj", "{788A6A74-92D5-4CA3-B451-4E5C4E58467A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shuttle.Deferred.Client", "Shuttle.Deferred.Client\Shuttle.Deferred.Client.csproj", "{27A860B8-A84A-4699-B3EC-432F1233C01D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shuttle.Deferred.Server", "Shuttle.Deferred.Server\Shuttle.Deferred.Server.csproj", "{00AB0588-D6CD-4C87-87D8-7985313BF274}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{788A6A74-92D5-4CA3-B451-4E5C4E58467A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{788A6A74-92D5-4CA3-B451-4E5C4E58467A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{788A6A74-92D5-4CA3-B451-4E5C4E58467A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{788A6A74-92D5-4CA3-B451-4E5C4E58467A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{27A860B8-A84A-4699-B3EC-432F1233C01D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{27A860B8-A84A-4699-B3EC-432F1233C01D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{27A860B8-A84A-4699-B3EC-432F1233C01D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{27A860B8-A84A-4699-B3EC-432F1233C01D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{00AB0588-D6CD-4C87-87D8-7985313BF274}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00AB0588-D6CD-4C87-87D8-7985313BF274}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00AB0588-D6CD-4C87-87D8-7985313BF274}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00AB0588-D6CD-4C87-87D8-7985313BF274}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
