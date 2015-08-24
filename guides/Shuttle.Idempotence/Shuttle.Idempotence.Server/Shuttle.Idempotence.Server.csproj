@@ -30,8 +30,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Shuttle.Core.Data, Version=3.1.5.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\shuttle-core-data.3.1.5\lib\net45-full\Shuttle.Core.Data.dll</HintPath>
+    <Reference Include="Shuttle.Core.Data, Version=3.1.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\shuttle-core-data.3.1.6\lib\net45-full\Shuttle.Core.Data.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Shuttle.Core.Host, Version=3.1.7.0, Culture=neutral, processorArchitecture=MSIL">
@@ -42,16 +42,16 @@
       <HintPath>..\packages\shuttle-core-infrastructure.3.1.5\lib\net45-full\Shuttle.Core.Infrastructure.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Shuttle.ESB.Core, Version=3.4.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\shuttle-esb-core.3.4.1\lib\net45-full\Shuttle.ESB.Core.dll</HintPath>
+    <Reference Include="Shuttle.ESB.Core, Version=3.6.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\shuttle-esb-core.3.6.5\lib\net45-full\Shuttle.ESB.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Shuttle.ESB.Msmq, Version=3.4.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\shuttle-esb-msmq.3.4.2\lib\net45-full\Shuttle.ESB.Msmq.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Shuttle.ESB.SqlServer, Version=3.4.4.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\shuttle-esb-sqlserver.3.4.4\lib\net45-full\Shuttle.ESB.SqlServer.dll</HintPath>
+    <Reference Include="Shuttle.ESB.SqlServer, Version=3.4.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\shuttle-esb-sqlserver.3.4.5\lib\net45-full\Shuttle.ESB.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -68,7 +68,9 @@
     <Compile Include="RegisterMemberHandler .cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
