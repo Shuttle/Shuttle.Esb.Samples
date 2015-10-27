@@ -1,8 +1,10 @@
-﻿namespace Shuttle.ProcessManagement.WebApi
+﻿using System.Collections.Generic;
+
+namespace Shuttle.ProcessManagement.WebApi
 {
 	public class RegisterOrderModel
 	{
-		public string Title { get; set; }
+		public List<string> Titles { get; set; }
 		public string TargetSystem { get; set; }
 	}
 }

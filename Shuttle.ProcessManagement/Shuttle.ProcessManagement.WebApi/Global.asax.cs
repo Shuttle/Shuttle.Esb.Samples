@@ -34,7 +34,7 @@ namespace Shuttle.ProcessManagement.WebApi
 
         public WebApiApplication()
         {
-            var logger = LogManager.GetLogger(typeof (WebApiApplication));
+            var logger = LogManager.GetLogger(typeof(WebApiApplication));
 
             Log.Assign(new Log4NetLog(logger));
 
@@ -65,7 +65,7 @@ namespace Shuttle.ProcessManagement.WebApi
                 ControllerBuilder.Current.SetControllerFactory(new CastleControllerFactory(_container));
 
                 _container.Register(
-                    Component.For<IHttpControllerActivator>().Instance(new ApiControllerActivator(_container)));
+                    Component.For<IHttpControllerActivator>().Instance(new ShuttleApiControllerActivator(_container)));
 
                 ConfigureJson();
 
@@ -223,7 +223,7 @@ namespace Shuttle.ProcessManagement.WebApi
 
             _container.Register(Component.For<IDatabaseContextCache>().ImplementedBy<ThreadStaticDatabaseContextCache>());
             _container.Register(Component.For<IDatabaseGateway>().ImplementedBy<DatabaseGateway>());
-            _container.Register(Component.For(typeof (IDataRepository<>)).ImplementedBy(typeof (DataRepository<>)));
+            _container.Register(Component.For(typeof(IDataRepository<>)).ImplementedBy(typeof(DataRepository<>)));
 
             _container.Register(
                 Classes
@@ -231,14 +231,14 @@ namespace Shuttle.ProcessManagement.WebApi
                     .Pick()
                     .If(type => type.Name.EndsWith("Factory"))
                     .Configure(configurer => configurer.Named(configurer.Implementation.Name.ToLower()))
-                    .WithService.Select((type, basetype) => new[] {type.InterfaceMatching(@".*Factory\Z")}));
+                    .WithService.Select((type, basetype) => new[] { type.InterfaceMatching(@".*Factory\Z") }));
 
             const string assemblyName = "Shuttle.ProcessManagement";
 
             _container.Register(
                 Classes
                     .FromAssemblyNamed(assemblyName)
-                    .BasedOn(typeof (IDataRowMapper<>))
+                    .BasedOn(typeof(IDataRowMapper<>))
                     .WithServiceFirstInterface());
 
             _container.Register(
@@ -261,6 +261,19 @@ namespace Shuttle.ProcessManagement.WebApi
                     .Pick()
                     .If(type => type.Name.EndsWith("Factory"))
                     .WithServiceFirstInterface());
+
+            var shuttleApiControllerType = typeof(ShuttleApiController);
+
+            _container.Register(
+                Classes
+                    .FromThisAssembly()
+                    .Pick()
+                    .If((type => type.Name.EndsWith("Controller", StringComparison.OrdinalIgnoreCase)
+                                 &&
+                                 shuttleApiControllerType.IsAssignableFrom(type)))
+                    .LifestyleTransient()
+                    .WithServiceFirstInterface()
+                    .Configure(c => c.Named(c.Implementation.UnderlyingSystemType.Name)));
         }
     }
 }

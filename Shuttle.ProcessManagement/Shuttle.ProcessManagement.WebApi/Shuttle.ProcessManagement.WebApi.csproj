@@ -200,7 +200,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Infrastructure\ApiControllerActivator.cs" />
+    <Compile Include="Infrastructure\ShuttleApiControllerActivator.cs" />
     <Compile Include="Infrastructure\ApiResolver.cs" />
     <Compile Include="Infrastructure\CastleControllerFactory.cs" />
     <Compile Include="Infrastructure\CorsMessageHandler.cs" />
@@ -323,6 +323,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Shuttle.ProcessManagement\Shuttle.ProcessManagement.csproj">
+      <Project>{DBEF18C5-CD08-438F-A5D3-810DB21A307D}</Project>
+      <Name>Shuttle.ProcessManagement</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

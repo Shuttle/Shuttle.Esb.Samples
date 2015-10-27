@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Shuttle.Core.Data">
+      <HintPath>..\packages\shuttle-core-data.3.2.1\lib\net45-full\Shuttle.Core.Data.dll</HintPath>
+    </Reference>
     <Reference Include="Shuttle.Core.Infrastructure">
       <HintPath>..\packages\shuttle-core-infrastructure.3.2.0\lib\net45-full\Shuttle.Core.Infrastructure.dll</HintPath>
     </Reference>
@@ -42,11 +45,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataAccess\OrderProcessViewColumns.cs" />
+    <Compile Include="DataAccess\HandRolled\OrderProcessColumns.cs" />
     <Compile Include="DataAccess\HandRolled\OrderProcess.cs" />
     <Compile Include="DataAccess\HandRolled\OrderProcessItem.cs" />
     <Compile Include="DataAccess\HandRolled\OrderProcessStatus.cs" />
-    <Compile Include="DataAccess\IOrderQuery.cs" />
-    <Compile Include="DataAccess\OrderQuery.cs" />
+    <Compile Include="DataAccess\IOrderProcessViewQuery.cs" />
+    <Compile Include="DataAccess\IOrderProcessViewQueryFactory.cs" />
+    <Compile Include="DataAccess\OrderColumns.cs" />
+    <Compile Include="DataAccess\OrderProcessViewQuery.cs" />
+    <Compile Include="DataAccess\OrderProcessViewQueryFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

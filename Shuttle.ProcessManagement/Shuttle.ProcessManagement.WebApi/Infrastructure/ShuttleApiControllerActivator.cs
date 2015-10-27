@@ -8,11 +8,11 @@ using Shuttle.Core.Infrastructure;
 
 namespace Shuttle.ProcessManagement.WebApi
 {
-	public class ApiControllerActivator : IHttpControllerActivator
+	public class ShuttleApiControllerActivator : IHttpControllerActivator
 	{
 		private readonly IWindsorContainer _container;
 
-		public ApiControllerActivator(IWindsorContainer container)
+		public ShuttleApiControllerActivator(IWindsorContainer container)
 		{
 			Guard.AgainstNull(container, "container");
 
@@ -26,7 +26,7 @@ namespace Shuttle.ProcessManagement.WebApi
 
 			try
 			{
-				return _container.Resolve<IHttpController>(controllerType.Name.ToLower());
+				return _container.Resolve<IHttpController>(controllerType.Name);
 			}
 			catch
 			{

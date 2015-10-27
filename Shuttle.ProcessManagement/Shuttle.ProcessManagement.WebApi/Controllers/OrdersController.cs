@@ -1,37 +1,38 @@
-﻿using System.Collections.Generic;
+﻿using System.Linq;
+using System.Net.Http;
 using System.Web.Http;
 using Shuttle.Core.Infrastructure;
 
 namespace Shuttle.ProcessManagement.WebApi.Controllers
 {
-	public class OrdersController : ApiController
-	{
-		// GET api/values
-		public IEnumerable<string> Get()
-		{
-			return new[] { "value1", "value2" };
-		}
+    public class OrdersController : ShuttleApiController
+    {
+        private readonly IOrderProcessViewQuery _orderProcessViewQuery;
 
-		// GET api/values/5
-		public string Get(int id)
-		{
-			return "value";
-		}
+        public OrdersController(IOrderProcessViewQuery orderProcessViewQuery)
+        {
+            Guard.AgainstNull(orderProcessViewQuery, "orderProcessViewQuery");
 
-		// POST api/values
-		public void Post([FromBody] RegisterOrderModel model)
-		{
-			Guard.AgainstNull(model, "model");
-		}
+            _orderProcessViewQuery = orderProcessViewQuery;
+        }
 
-		// PUT api/values/5
-		public void Put(int id, [FromBody] string value)
-		{
-		}
+        // GET api/values
+        public HttpResponseMessage Get()
+        {
+            return OK(from row in _orderProcessViewQuery.All()
+                select new
+                {
+                    Id = OrderProcessViewColumns.Id.MapFrom(row),
+                    OrderNumber = OrderProcessViewColumns.OrderNumber.MapFrom(row),
+                    OrderDate = OrderProcessViewColumns.OrderDate.MapFrom(row),
+                    Status = OrderProcessViewColumns.Status.MapFrom(row)
+                });
+        }
 
-		// DELETE api/values/5
-		public void Delete(int id)
-		{
-		}
-	}
+        // POST api/values
+        public void Post([FromBody] RegisterOrderModel model)
+        {
+            Guard.AgainstNull(model, "model");
+        }
+    }
 }
