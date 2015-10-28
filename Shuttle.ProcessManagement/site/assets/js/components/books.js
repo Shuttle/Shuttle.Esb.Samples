@@ -1,6 +1,8 @@
 ﻿Shuttle.ViewModels.Book = can.Map.extend({
-    init: function (title) {
-        this.attr('title', title);
+    init: function (book) {
+        this.attr('id', book.id);
+        this.attr('title', book.title);
+        this.attr('price', book.price);
     },
 
     setStatus: function (status) {
@@ -33,16 +35,22 @@ Shuttle.ViewModels.Books = can.Map.extend({
     books: new can.List(),
 
     init: function () {
-        this.addBook('Patterns of  Enterprise Application Architecture - Martin Fowler');
-        this.addBook('Applying Domain-Driven Design Patterns - Jimmy Nilsso');
-        this.addBook('Implementing Domain-Driven Design - Vaughn Vernon');
-        this.addBook('Domain-Driven Design - Eric Evans');
-        this.addBook('Refactoring - Martin Fowler, et. al.');
-        this.addBook('Test Driven Development - Kent Beck');
+        var self = this;
+
+        Shuttle.Services.apiService.getJson('products')
+            .done(function (data) {
+                can.each(data, function(item) {
+                    self.books.push(new Shuttle.ViewModels.Book(item));
+                });
+            });
     },
 
-    addBook: function (title) {
-        this.books.push(new Shuttle.ViewModels.Book(title));
+    add: function(content) {
+        content.attr('buying', true);
+    },
+
+    remove: function(content) {
+        content.attr('buying', false);
     },
 
     orderHandRolled: function (content, element, event) {

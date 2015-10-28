@@ -1,0 +1,28 @@
+﻿<div class='list'>
+	<table class='table table-bordered table-hover'>
+		<thead>
+			<tr>
+				<th class='col-md-1'></th>
+				<th>Customer name</th>
+				<th>Order number</th>
+				<th>Order date</th>
+				<th>Status</th>
+				<th class='col-md-2'>Total</th>
+			</tr>
+		</thead>
+		<tbody>
+			{{#each orders}}
+			<tr>
+				<td>
+					<button class="btn btn-default btn-danger" type="submit" can-click="cancelOrder">Cancel</button>
+				</td>
+				<td>{{customerName}}</td>
+				<td>{{orderNumber}}</td>
+				<td>{{orderDate}}</td>
+				<td>{{status}}</td>
+				<td>{{orderTotal}}</td>
+			</tr>
+			{{/each}}
+		</tbody>
+	</table>
+</div>

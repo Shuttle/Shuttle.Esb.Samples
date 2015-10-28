@@ -1,4 +1,5 @@
 ﻿Shuttle = {};
+Shuttle.Services = {};
 Shuttle.ViewModels = {};
 Shuttle.Components = {};
 

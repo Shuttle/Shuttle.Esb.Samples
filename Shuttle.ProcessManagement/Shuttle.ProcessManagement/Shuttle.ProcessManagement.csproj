@@ -45,16 +45,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataAccess\OrderProcessViewColumns.cs" />
-    <Compile Include="DataAccess\HandRolled\OrderProcessColumns.cs" />
-    <Compile Include="DataAccess\HandRolled\OrderProcess.cs" />
-    <Compile Include="DataAccess\HandRolled\OrderProcessItem.cs" />
-    <Compile Include="DataAccess\HandRolled\OrderProcessStatus.cs" />
-    <Compile Include="DataAccess\IOrderProcessViewQuery.cs" />
-    <Compile Include="DataAccess\IOrderProcessViewQueryFactory.cs" />
+    <Compile Include="DataAccess\OrderProcessView\OrderProcessViewColumns.cs" />
+    <Compile Include="DataAccess\ProcessManagementData.cs" />
+    <Compile Include="DataAccess\ProcessManager-HandRolled\OrderProcessColumns.cs" />
+    <Compile Include="DataAccess\ProcessManager-HandRolled\OrderProcess.cs" />
+    <Compile Include="DataAccess\ProcessManager-HandRolled\OrderProcessItem.cs" />
+    <Compile Include="DataAccess\ProcessManager-HandRolled\OrderProcessStatus.cs" />
+    <Compile Include="DataAccess\OrderProcessView\IOrderProcessViewQuery.cs" />
+    <Compile Include="DataAccess\OrderProcessView\IOrderProcessViewQueryFactory.cs" />
     <Compile Include="DataAccess\OrderColumns.cs" />
-    <Compile Include="DataAccess\OrderProcessViewQuery.cs" />
-    <Compile Include="DataAccess\OrderProcessViewQueryFactory.cs" />
+    <Compile Include="DataAccess\OrderProcessView\OrderProcessViewQuery.cs" />
+    <Compile Include="DataAccess\OrderProcessView\OrderProcessViewQueryFactory.cs" />
+    <Compile Include="DataAccess\Product\IProductQuery.cs" />
+    <Compile Include="DataAccess\Product\ProductColumns.cs" />
+    <Compile Include="DataAccess\Product\ProductQuery.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
