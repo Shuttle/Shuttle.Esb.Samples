@@ -32,6 +32,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shuttle.ProcessManagement.W
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shuttle.ProcessManagement", "Shuttle.ProcessManagement\Shuttle.ProcessManagement.csproj", "{DBEF18C5-CD08-438F-A5D3-810DB21A307D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shuttle.ProcessManagement.Messages", "Shuttle.ProcessManagement.Messages\Shuttle.ProcessManagement.Messages.csproj", "{BF2F5A45-CC2E-4C09-B29F-FF265F56AC9C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -50,6 +52,10 @@ Global
 		{DBEF18C5-CD08-438F-A5D3-810DB21A307D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DBEF18C5-CD08-438F-A5D3-810DB21A307D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DBEF18C5-CD08-438F-A5D3-810DB21A307D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF2F5A45-CC2E-4C09-B29F-FF265F56AC9C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF2F5A45-CC2E-4C09-B29F-FF265F56AC9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF2F5A45-CC2E-4C09-B29F-FF265F56AC9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF2F5A45-CC2E-4C09-B29F-FF265F56AC9C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

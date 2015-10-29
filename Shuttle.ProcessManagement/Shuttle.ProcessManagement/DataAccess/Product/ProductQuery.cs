@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using Shuttle.Core.Infrastructure;
 
 namespace Shuttle.ProcessManagement
 {
@@ -23,6 +24,15 @@ namespace Shuttle.ProcessManagement
             table.Rows.Add(new Guid("{0F98EBDF-369F-4E95-83FE-3EFDE9358657}"), "Test Driven Development - Kent Beck", 37);
 
             return table.Rows.OfType<DataRow>();
+        }
+
+        public DataRow Get(Guid id)
+        {
+            var result = All().FirstOrDefault(dataRow => ProductColumns.Id.MapFrom(dataRow).Equals(id));
+
+            Guard.Against<ApplicationException>(result == null, string.Format("Could not locate a product with id '{0}'.", id));
+
+            return result;
         }
     }
 }

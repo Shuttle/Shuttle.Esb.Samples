@@ -3,67 +3,88 @@
         this.attr('id', book.id);
         this.attr('title', book.title);
         this.attr('price', book.price);
-    },
-
-    setStatus: function (status) {
-        this.attr('status', status);
-    },
-
-    orderInProcess: function () {
-        return this.attr('status') === 'orderInProcess';
-    },
-
-    displayStatus: function () {
-        var status = this.attr('status') || '';
-
-        switch (status) {
-            case 'orderInProcess':
-                {
-                    return 'The order is in process.';
-                }
-            case 'error':
-                {
-                    return 'An error has occurred.';
-                }
-        }
-
-        return '';
     }
 });
 
 Shuttle.ViewModels.Books = can.Map.extend({
     books: new can.List(),
+    total: 0,
+    canOrder: false,
+    hasMessage: false,
 
     init: function () {
         var self = this;
 
+        this.attr('fetching', true);
+
         Shuttle.Services.apiService.getJson('products')
-            .done(function (data) {
+            .done(function(data) {
                 can.each(data, function(item) {
                     self.books.push(new Shuttle.ViewModels.Book(item));
                 });
+            })
+            .fail(function(xhr, textStatus, errorThrown) {
+                self.showMessage(textStatus, 'Error fetching products.', 'danger');
+            })
+            .then(function() {
+                self.attr('fetching', false);
             });
     },
 
-    add: function(content) {
+    showMessage: function (title, message, type) {
+        this.attr('hasMessage', true);
+        this.attr('messageType', type);
+        this.attr('messageTitle', title);
+        this.attr('message', message);
+    },
+
+    hideMessage: function() {
+        this.attr('hasMessage', false);
+    },
+
+    calculateTotal: function () {
+        var total = 0;
+
+        can.each(this.books, function (book) {
+            if (book.buying) {
+                total = total + book.price;
+            }
+        });
+
+        this.attr('canOrder', total > 0);
+        this.attr('total', total);
+    },
+
+    add: function (content) {
         content.attr('buying', true);
+
+        this.calculateTotal();
     },
 
-    remove: function(content) {
+    remove: function (content) {
         content.attr('buying', false);
+
+        this.calculateTotal();
     },
 
-    orderHandRolled: function (content, element, event) {
-        can.ajax({
-            url: Shuttle.configuration.api + 'orders',
-            type: 'POST',
-            data: { title: content.attr('title') }
-        })
-            .done(function () {
-                content.setStatus('orderInProcess');
+    orderHandRolled: function () {
+        var order = {
+            productIds: [],
+            targetSystem: 'HandRolled'
+        };
+
+        can.each(this.books, function (book) {
+            if (book.buying) {
+                order.productIds.push(book.id);
+            }
+        });
+
+        Shuttle.Services.apiService.postJson('orders', { data: order })
+            .done(function() {
+                alert('done!');
             })
-            .fail(function () {
-                content.setStatus('error');
+            .fail(function(xhr, textStatus, errorThrown) {
+                self.showMessage('Error submitting order.', errorThrown, 'danger');
             });
     }
 });

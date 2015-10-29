@@ -20,12 +20,14 @@
     },
 
     postJson: function (url, options) {
+        var postData;
         var o = options || {};
 
         if (o.async == undefined) {
             o.async = true;
         }
-        var postData = o.data || {};
+
+        postData = o.data || {};
 
         return $.ajax({
             url: this.getApiUrl(url) + url,

@@ -1,26 +1,59 @@
-﻿<div class='list'>
-  <table class='table table-bordered table-hover'>
-    <thead>
+﻿{{#if hasMessage}}
+<shuttle-message title='{{messageTitle}}' message='{{message}}' type='{{messageType}}'></shuttle-message>
+{{else}}
+{{#if fetching}}
+<shuttle-fetching title='(fetching books)'></shuttle-fetching>
+{{else}}
+<h3>Available titles</h3>
+<table class='table table-bordered table-hover'>
+  <thead>
+    <tr>
+      <th class='col-md-1'></th>
+      <th>Title</th>
+      <th class='col-md-2 text-right'>Price</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each books}}
+    <tr class='{{#if buying}}success{{/if}}'>
+      <td>
+        {{#if buying}}
+        <button class="btn btn-default btn-danger btn-xs" can-click="remove">Remove</button>
+        {{else}}
+        <button class="btn btn-default btn-success btn-xs" can-click="add">Add</button>
+        {{/if}}
+      </td>
+      <td>{{description}}</td>
+      <td class="text-right">{{price}}</td>
+    </tr>
+    {{/each}}
+  </tbody>
+  <tfoot>
+    <tr>
       <tr>
-        <th class='col-md-1'></th>
-        <th>Title</th>
-        <th class='col-md-2'>Price</th>
-      </tr>
-    </thead>
-    <tbody>
-      {{#each books}}
-      <tr class='{{#if buying}}info{{/if}}'>
-        <td>
-          {{#if buying}}
-          <button class="btn btn-default btn-danger" can-click="remove">Remove</button>
-          {{else}}
-          <button class="btn btn-default btn-success" can-click="add">Add</button>
-          {{/if}}
+        <td colspan="2">
         </td>
-        <td>{{description}}</td>
-        <td>{{price}}</td>
+        <td class="text-right info">{{total}}</td>
       </tr>
-      {{/each}}
-    </tbody>
-  </table>
+    </tr>
+  </tfoot>
+</table>
+{{#if canOrder}}
+<div class="shuttle-buttons clearfix">
+  <div class="btn-group pull-right">
+    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      Order <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu">
+      <li>
+        <a href="#" can-click="orderHandRolled">Use hand-rolled process manager</a>
+      </li>
+      <li>
+        <a href="#">Use module process manager implementation</a>
+      </li>
+    </ul>
+  </div>
 </div>
+{{/if}}
+{{/if}}
+{{/if}}
