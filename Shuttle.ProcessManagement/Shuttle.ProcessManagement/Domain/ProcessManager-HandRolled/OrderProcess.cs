@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
+using System.Runtime.Remoting.Messaging;
+using System.Security.Cryptography;
 using Shuttle.Core.Infrastructure;
-using Shuttle.ProcessManagement.HandRolled;
 
 namespace Shuttle.ProcessManagement
 {
@@ -10,6 +12,11 @@ namespace Shuttle.ProcessManagement
     {
         private readonly List<OrderProcessItem> _orderProcessItems = new List<OrderProcessItem>();
         private readonly List<OrderProcessStatus> _statuses = new List<OrderProcessStatus>();
+
+        public OrderProcess()
+            : this(Guid.NewGuid())
+        {
+        }
 
         public OrderProcess(Guid id)
         {
@@ -20,8 +27,8 @@ namespace Shuttle.ProcessManagement
 
         public Guid Id { get; private set; }
 
-        public Guid OrderId { get; set; }
-        public Guid InvoiceId { get; set; }
+        public Guid? OrderId { get; set; }
+        public Guid? InvoiceId { get; set; }
         public string CustomerName { get; set; }
         public string CustomerEMail { get; set; }
 
@@ -47,6 +54,13 @@ namespace Shuttle.ProcessManagement
             Guard.AgainstNull(status, "status");
 
             _statuses.Add(status);
+        }
+
+        public OrderProcessStatus Status()
+        {
+            _statuses.Sort((s1, s2) => s1.StatusDate.CompareTo(s2.StatusDate));
+
+            return _statuses.FirstOrDefault();
         }
     }
 }

@@ -30,6 +30,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Castle.Core">
+      <HintPath>..\packages\Castle.Core.3.3.3\lib\net45\Castle.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.Windsor">
+      <HintPath>..\packages\Castle.Windsor.3.3.0\lib\net45\Castle.Windsor.dll</HintPath>
+    </Reference>
     <Reference Include="Shuttle.Core.Data">
       <HintPath>..\packages\shuttle-core-data.3.2.1\lib\net45-full\Shuttle.Core.Data.dll</HintPath>
     </Reference>
@@ -47,10 +53,16 @@
   <ItemGroup>
     <Compile Include="DataAccess\OrderProcessView\OrderProcessViewColumns.cs" />
     <Compile Include="DataAccess\ProcessManagementData.cs" />
+    <Compile Include="DataAccess\ProcessManager-HandRolled\OrderProcessStatusColumns.cs" />
+    <Compile Include="DataAccess\ProcessManager-HandRolled\OrderProcessItemColumns.cs" />
+    <Compile Include="DataAccess\ProcessManager-HandRolled\IOrderProcessQueryFactory.cs" />
     <Compile Include="DataAccess\ProcessManager-HandRolled\OrderProcessColumns.cs" />
-    <Compile Include="DataAccess\ProcessManager-HandRolled\OrderProcess.cs" />
-    <Compile Include="DataAccess\ProcessManager-HandRolled\OrderProcessItem.cs" />
-    <Compile Include="DataAccess\ProcessManager-HandRolled\OrderProcessStatus.cs" />
+    <Compile Include="DataAccess\ProcessManager-HandRolled\OrderProcessQueryFactory.cs" />
+    <Compile Include="DataAccess\ProcessManager-HandRolled\OrderProcessRepository.cs" />
+    <Compile Include="Domain\ProcessManager-HandRolled\IOrderProcessRepository.cs" />
+    <Compile Include="Domain\ProcessManager-HandRolled\OrderProcess.cs" />
+    <Compile Include="Domain\ProcessManager-HandRolled\OrderProcessItem.cs" />
+    <Compile Include="Domain\ProcessManager-HandRolled\OrderProcessStatus.cs" />
     <Compile Include="DataAccess\OrderProcessView\IOrderProcessViewQuery.cs" />
     <Compile Include="DataAccess\OrderProcessView\IOrderProcessViewQueryFactory.cs" />
     <Compile Include="DataAccess\OrderColumns.cs" />
@@ -60,6 +72,7 @@
     <Compile Include="DataAccess\Product\ProductColumns.cs" />
     <Compile Include="DataAccess\Product\ProductQuery.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WindsorContainerExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

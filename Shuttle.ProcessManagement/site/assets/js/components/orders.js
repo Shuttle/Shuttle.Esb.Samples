@@ -80,7 +80,7 @@ Shuttle.ViewModels.Orders = can.Map.extend({
     _poll: function () {
         var found;
         var self = this;
-        var timeout = this.get('_pollTimer');
+        var timeout = this.attr('_pollTimer');
 
         if (timeout) {
             clearTimeout(timeout);
@@ -116,7 +116,7 @@ Shuttle.ViewModels.Orders = can.Map.extend({
                 });
         }, 1000);
 
-        this.set('_pollTimer', timeout);
+        this.attr('_pollTimer', timeout);
     }
 });
 

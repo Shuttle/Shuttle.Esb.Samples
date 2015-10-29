@@ -39,7 +39,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="RegisterOrderCommand.cs" />
+    <Compile Include="Copy of RegisterOrderProcessCommand.cs" />
+    <Compile Include="RegisterOrderProcessCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuotedProduct.cs" />
   </ItemGroup>

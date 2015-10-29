@@ -69,9 +69,14 @@ namespace Shuttle.ProcessManagement.WebApi
 
                 ConfigureJson();
 
-                _bus = ServiceBus
-                    .Create(c => c.MessageHandlerFactory(new CastleMessageHandlerFactory(_container)))
-                    .Start();
+                var serviceBusConfiguration = new ServiceBusConfiguration
+                {
+                    MessageHandlerFactory = new CastleMessageHandlerFactory(_container)
+                };
+
+                serviceBusConfiguration.QueueManager.ScanForQueueFactories();
+
+                _bus = new ServiceBus(serviceBusConfiguration).Start();
 
                 _log.Information("[started]");
             }
@@ -221,46 +226,7 @@ namespace Shuttle.ProcessManagement.WebApi
         {
             _container = new WindsorContainer();
 
-            _container.Register(Component.For<IDatabaseContextCache>().ImplementedBy<ThreadStaticDatabaseContextCache>());
-            _container.Register(Component.For<IDatabaseGateway>().ImplementedBy<DatabaseGateway>());
-            _container.Register(Component.For(typeof(IDataRepository<>)).ImplementedBy(typeof(DataRepository<>)));
-
-            _container.Register(
-                Classes
-                    .FromAssemblyNamed("Shuttle.Core.Data")
-                    .Pick()
-                    .If(type => type.Name.EndsWith("Factory"))
-                    .Configure(configurer => configurer.Named(configurer.Implementation.Name.ToLower()))
-                    .WithService.Select((type, basetype) => new[] { type.InterfaceMatching(@".*Factory\Z") }));
-
-            const string assemblyName = "Shuttle.ProcessManagement";
-
-            _container.Register(
-                Classes
-                    .FromAssemblyNamed(assemblyName)
-                    .BasedOn(typeof(IDataRowMapper<>))
-                    .WithServiceFirstInterface());
-
-            _container.Register(
-                Classes
-                    .FromAssemblyNamed(assemblyName)
-                    .Pick()
-                    .If(type => type.Name.EndsWith("Repository"))
-                    .WithServiceFirstInterface());
-
-            _container.Register(
-                Classes
-                    .FromAssemblyNamed(assemblyName)
-                    .Pick()
-                    .If(type => type.Name.EndsWith("Query"))
-                    .WithServiceFirstInterface());
-
-            _container.Register(
-                Classes
-                    .FromAssemblyNamed(assemblyName)
-                    .Pick()
-                    .If(type => type.Name.EndsWith("Factory"))
-                    .WithServiceFirstInterface());
+            _container.RegisterDataAccess();
 
             var shuttleApiControllerType = typeof(ShuttleApiController);
 

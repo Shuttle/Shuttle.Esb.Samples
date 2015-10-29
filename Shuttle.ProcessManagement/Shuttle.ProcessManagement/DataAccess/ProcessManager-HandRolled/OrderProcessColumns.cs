@@ -9,11 +9,11 @@ namespace Shuttle.ProcessManagement
         public static readonly MappedColumn<Guid> Id =
             new MappedColumn<Guid>("Id", DbType.Guid);
 
-        public static readonly MappedColumn<Guid> OrderId =
-            new MappedColumn<Guid>("OrderId", DbType.Guid);
+        public static readonly MappedColumn<Guid?> OrderId =
+            new MappedColumn<Guid?>("OrderId", DbType.Guid);
 
-        public static readonly MappedColumn<Guid> InvoiceId =
-            new MappedColumn<Guid>("InvoiceId", DbType.Guid);
+        public static readonly MappedColumn<Guid?> InvoiceId =
+            new MappedColumn<Guid?>("InvoiceId", DbType.Guid);
 
         public static readonly MappedColumn<string> CustomerName =
             new MappedColumn<string>("CustomerName", DbType.String, 65);

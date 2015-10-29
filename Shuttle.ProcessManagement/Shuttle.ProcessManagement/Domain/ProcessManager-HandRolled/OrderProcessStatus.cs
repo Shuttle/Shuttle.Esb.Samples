@@ -1,10 +1,15 @@
 ﻿using System;
 using Shuttle.Core.Infrastructure;
 
-namespace Shuttle.ProcessManagement.HandRolled
+namespace Shuttle.ProcessManagement
 {
     public class OrderProcessStatus
     {
+        public OrderProcessStatus(string status)
+            : this(status, DateTime.Now)
+        {
+        }
+
         public OrderProcessStatus(string status, DateTime statusDate)
         {
             Guard.AgainstNullOrEmptyString(status, "status");
