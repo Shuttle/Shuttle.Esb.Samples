@@ -7,10 +7,38 @@
 });
 
 Shuttle.ViewModels.Books = can.Map.extend({
+    init: function() {
+        this.validatePresenceOf('customerName');
+        this.validatePresenceOf('customerEMail');
+        this.validateFormatOf(['customerEMail'], /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i, {
+            message: 'invalid email'
+        });
+    }
+},{
     books: new can.List(),
     total: 0,
     canOrder: false,
     hasMessage: false,
+
+    invalidCustomerName: function() {
+        return this.errors('customerName') != undefined;
+    },
+
+    customerNameErrors: function() {
+        return this.invalidCustomerName()
+            ? this.errors('customerName').customerName
+            : [];
+    },
+
+    invalidCustomerEMail: function() {
+        return this.errors('customerEMail') != undefined;
+    },
+
+    customerEMailErrors: function () {
+        return this.invalidCustomerEMail()
+            ? this.errors('customerEMail').customerEMail
+            : [];
+    },
 
     init: function () {
         var self = this;
@@ -67,11 +95,21 @@ Shuttle.ViewModels.Books = can.Map.extend({
         this.calculateTotal();
     },
 
+    canSubmit: function() {
+        return this.errors() == undefined;
+    },
+
     orderHandRolled: function () {
         var order = {
             productIds: [],
-            targetSystem: 'HandRolled'
+            targetSystem: 'HandRolled',
+            customerName: this.attr('customerName'),
+            customerEMail: this.attr('customerEMail')
         };
+
+        if (!this.canSubmit()) {
+            return;
+        }
 
         can.each(this.books, function (book) {
             if (book.buying) {

@@ -39,19 +39,48 @@
   </tfoot>
 </table>
 {{#if canOrder}}
-<div class="shuttle-buttons clearfix">
-  <div class="btn-group pull-right">
-    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-      Order <span class="caret"></span>
-    </button>
-    <ul class="dropdown-menu">
-      <li>
-        <a href="#" can-click="orderHandRolled">Use hand-rolled process manager</a>
-      </li>
-      <li>
-        <a href="#">Use module process manager implementation</a>
-      </li>
-    </ul>
+<div class="panel panel-primary">
+  <div class="panel-heading">
+    <h3 class="panel-title">Checkout</h3>
+  </div>
+  <div class="panel-body">
+    <form>
+      <div class="form-group {{#if invalidCustomerName}}has-error{{/if}}">
+        <label for="CustomerName">Name</label>
+        <input type="text" class="form-control" id="CustomerName" placeholder="your name" can-value="{customerName}" />
+        {{#if invalidCustomerName}}
+        {{#each customerNameErrors}}
+        <span class="help-block">{{.}}</span>
+        {{/each}}
+        {{/if}}
+      </div>
+      <div class="form-group {{#if invalidCustomerEMail}}has-error{{/if}}">
+        <label for="exampleInputEmail2">Email</label>
+        <input type="email" class="form-control" id="CustomerEMail" placeholder="abc.xyz@example.com"
+               can-value="{customerEMail}" />
+        {{#if invalidCustomerEMail}}
+        {{#each customerEMailErrors}}
+        <span class="help-block">{{.}}</span>
+        {{/each}}
+        {{/if}}
+      </div>
+      <div class="shuttle-buttons clearfix">
+        <div class="btn-group pull-right">
+          <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                  aria-expanded="false">
+            Order <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu">
+            <li>
+              <a href="#" can-click="orderHandRolled">Use hand-rolled process manager</a>
+            </li>
+            <li>
+              <a href="#">Use module process manager implementation</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </form>
   </div>
 </div>
 {{/if}}

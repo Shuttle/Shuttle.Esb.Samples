@@ -51,7 +51,11 @@ namespace Shuttle.ProcessManagement.WebApi.Controllers
             Guard.AgainstNull(model.TargetSystem, "model.TargetSystem");
             Guard.Against<Exception>(model.ProductIds.Count == 0, "No products have been selected.");
 
-            var message = new RegisterOrderProcessCommand();
+            var message = new RegisterOrderProcessCommand
+            {
+                CustomerName = model.CustomerName,
+                CustomerEMail = model.CustomerEMail
+            };
 
             foreach (var productIdValue in model.ProductIds)
             {
