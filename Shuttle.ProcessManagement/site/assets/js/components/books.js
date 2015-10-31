@@ -9,7 +9,9 @@
 Shuttle.ViewModels.Books = can.Map.extend({
     init: function() {
         this.validatePresenceOf('customerName');
+        this.validateLengthOf('customerName', 0, 65);
         this.validatePresenceOf('customerEMail');
+        this.validateLengthOf('customerEMail', 0, 130);
         this.validateFormatOf(['customerEMail'], /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i, {
             message: 'invalid email'
         });

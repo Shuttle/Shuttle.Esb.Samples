@@ -38,6 +38,7 @@ namespace Shuttle.ProcessManagement.WebApi.Controllers
                           select new
                           {
                               Id = OrderProcessViewColumns.Id.MapFrom(row),
+                              CustomerName = OrderProcessViewColumns.CustomerName.MapFrom(row),
                               OrderNumber = OrderProcessViewColumns.OrderNumber.MapFrom(row),
                               OrderDate = OrderProcessViewColumns.OrderDate.MapFrom(row),
                               Status = OrderProcessViewColumns.Status.MapFrom(row)

@@ -1,15 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Shuttle.ProcessManagement.Messages
 {
-    public class OrderProcessRegisteredEvent
+    public class RegisterOrderProcessCommand
     {
-        public Guid OrderProcessId { get; set; }
+        public RegisterOrderProcessCommand()
+        {
+            QuotedProducts = new List<QuotedProduct>();
+        }
+
         public List<QuotedProduct> QuotedProducts { get; set; }
         public string CustomerName { get; set; }
         public string CustomerEMail { get; set; }
-        public string Status { get; set; }
-        public DateTime StatusDate { get; set; }
     }
 }

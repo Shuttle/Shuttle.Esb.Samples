@@ -2,6 +2,7 @@
 using System.Data;
 using Shuttle.Core.Data;
 using Shuttle.Core.Infrastructure;
+using Shuttle.ProcessManagement.Messages;
 
 namespace Shuttle.ProcessManagement
 {
@@ -22,6 +23,11 @@ namespace Shuttle.ProcessManagement
         public IEnumerable<DataRow> All()
         {
             return _databaseGateway.GetRowsUsing(_queryFactory.All());
+        }
+
+        public void Add(OrderProcessRegisteredEvent message)
+        {
+            _databaseGateway.ExecuteUsing(_queryFactory.Add(message));
         }
     }
 }

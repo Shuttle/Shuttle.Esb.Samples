@@ -89,15 +89,15 @@ Shuttle.ViewModels.Orders = can.Map.extend({
         timeout = setTimeout(function () {
             Shuttle.Services.apiService.getJson('orders')
                 .done(function (data) {
-                    found = false;
-
                     can.each(data, function (item) {
-                        self.orders.forEach(function(element, index, list) {
+                        found = false;
+
+                        self.orders.forEach(function (element, index, list) {
                             if (element.attr('id') === item.id) {
                                 element.attr('orderNumber', item.orderNumber);
                                 element.attr('orderDate', item.orderDate);
                                 element.attr('orderTotal', item.orderTotal);
-                                element.attr('status', item.statu);
+                                element.attr('status', item.status);
 
                                 found = true;
                             }
@@ -107,6 +107,8 @@ Shuttle.ViewModels.Orders = can.Map.extend({
                             self.orders.push(new Shuttle.ViewModels.Order(item));
                         }
                     });
+
+                    self.hideMessage();
                 })
                 .fail(function(xhr, textStatus, errorThrown) {
                     self.showMessage(textStatus, 'Error fetching orders.', 'danger');
