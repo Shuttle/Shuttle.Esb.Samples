@@ -1,5 +1,23 @@
 ﻿Shuttle.Services.ApiService = can.Construct.extend({
-    getJson: function (url, options) {
+    'delete': function (url, options) {
+        var o = options || {};
+
+        if (o.async == undefined) {
+            o.async = true;
+        }
+
+        if (!o.cache) {
+            o.cache = false;
+        }
+
+        return $.ajax({
+            url: this.getApiUrl(url) + url,
+            type: 'DELETE',
+            async: o.async
+        });
+    },
+
+    get: function (url, options) {
         var o = options || {};
 
         if (o.async == undefined) {
@@ -19,7 +37,7 @@
         });
     },
 
-    postJson: function (url, options) {
+    post: function (url, options) {
         var postData;
         var o = options || {};
 

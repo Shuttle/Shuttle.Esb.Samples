@@ -47,7 +47,7 @@ Shuttle.ViewModels.Books = can.Map.extend({
 
         this.attr('fetching', true);
 
-        Shuttle.Services.apiService.getJson('products')
+        Shuttle.Services.apiService.get('products')
             .done(function(data) {
                 can.each(data, function(item) {
                     self.books.push(new Shuttle.ViewModels.Book(item));
@@ -119,7 +119,7 @@ Shuttle.ViewModels.Books = can.Map.extend({
             }
         });
 
-        Shuttle.Services.apiService.postJson('orders', { data: order })
+        Shuttle.Services.apiService.post('orders', { data: order })
             .done(function() {
                 alert('done!');
             })

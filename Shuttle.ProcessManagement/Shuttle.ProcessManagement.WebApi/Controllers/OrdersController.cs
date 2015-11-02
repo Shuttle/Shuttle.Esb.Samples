@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Linq;
 using System.Net.Http;
+using System.Security.Policy;
 using System.Web.Http;
 using Shuttle.Core.Data;
 using Shuttle.Core.Infrastructure;
@@ -35,15 +36,23 @@ namespace Shuttle.ProcessManagement.WebApi.Controllers
             using (_databaseContextFactory.Create(ProcessManagementData.ConnectionStringName))
             {
                 return OK(from row in _orderProcessViewQuery.All()
-                          select new
+                    let status = (OrderProcessViewColumns.Status.MapFrom(row) ?? string.Empty).ToLower()
+                    select new
                           {
                               Id = OrderProcessViewColumns.Id.MapFrom(row),
                               CustomerName = OrderProcessViewColumns.CustomerName.MapFrom(row),
                               OrderNumber = OrderProcessViewColumns.OrderNumber.MapFrom(row),
                               OrderDate = OrderProcessViewColumns.OrderDate.MapFrom(row),
-                              Status = OrderProcessViewColumns.Status.MapFrom(row)
+                              OrderTotal = OrderProcessViewColumns.OrderTotal.MapFrom(row),
+                              Status = status,
+                              CanCancel = status == "cooling off"
                           });
             }
+        }
+
+        public HttpResponseMessage Delete(Guid id)
+        {
+            return OK();
         }
 
         public void Post([FromBody] RegisterOrderModel model)

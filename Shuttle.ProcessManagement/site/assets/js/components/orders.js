@@ -10,17 +10,6 @@
 
     setStatus: function (status) {
         this.attr('status', status);
-    },
-
-    displayStatus: function () {
-        switch (status) {
-            case 'orderInProcess':
-                {
-                    return 'The order is in process.';
-                }
-        }
-
-        return '';
     }
 });
 
@@ -33,7 +22,7 @@ Shuttle.ViewModels.Orders = can.Map.extend({
 
         this.attr('fetching', true);
 
-        Shuttle.Services.apiService.getJson('orders')
+        Shuttle.Services.apiService.get('orders')
             .done(function(data) {
                 can.each(data, function(item) {
                     self.orders.push(new Shuttle.ViewModels.Order(item));
@@ -63,17 +52,44 @@ Shuttle.ViewModels.Orders = can.Map.extend({
         this.attr('hasMessage', false);
     },
 
-    cancel: function (content, element, event) {
-        can.ajax({
-            url: Shuttle.configuration.api + 'orders/' + content.attr('id'),
-            type: 'DELETE',
-            data: { title: content.attr('title') }
-        })
+    showModalMessage: function (title, message, type) {
+        this.attr('modalTitle', title);
+        this.attr('modalMessage', message);
+        this.attr('modalTextType', type);
+
+        $('#order-modal').modal({ show: true });
+    },
+
+    _removeOrder: function(id) {
+        var removeIndex = undefined;
+
+        this.orders.forEach(function(element, index) {
+            if (removeIndex != undefined) {
+                return;
+            }
+
+            if (element.attr('id') === id) {
+                removeIndex = index;
+            }
+        });
+
+        if (removeIndex == undefined) {
+            return;
+        }
+
+        this.orders.splice(removeIndex, 1);
+    },
+
+    cancelOrder : function (content) {
+        var self = this;
+        var id = content.attr('id');
+
+        Shuttle.Services.apiService.delete('orders/' + id)
             .done(function () {
-                content.setStatus('orderInProcess');
+                self._removeOrder(id);
             })
             .fail(function () {
-                content.setStatus('error');
+                self.showModalMessage('Server Error', 'The selected order could not be deleted.', 'danger');
             });
     },
 
@@ -81,31 +97,52 @@ Shuttle.ViewModels.Orders = can.Map.extend({
         var found;
         var self = this;
         var timeout = this.attr('_pollTimer');
+        var orderIdsToRemove = [];
 
         if (timeout) {
             clearTimeout(timeout);
         }
 
         timeout = setTimeout(function () {
-            Shuttle.Services.apiService.getJson('orders')
+            Shuttle.Services.apiService.get('orders')
                 .done(function (data) {
-                    can.each(data, function (item) {
+                    can.each(data, function (order) {
                         found = false;
 
-                        self.orders.forEach(function (element, index, list) {
-                            if (element.attr('id') === item.id) {
-                                element.attr('orderNumber', item.orderNumber);
-                                element.attr('orderDate', item.orderDate);
-                                element.attr('orderTotal', item.orderTotal);
-                                element.attr('status', item.status);
+                        self.orders.each(function (element) {
+                            if (element.attr('id') === order.id) {
+                                element.attr('orderNumber', order.orderNumber);
+                                element.attr('orderDate', order.orderDate);
+                                element.attr('orderTotal', order.orderTotal);
+                                element.attr('status', order.status);
 
                                 found = true;
                             }
                         });
 
                         if (!found) {
-                            self.orders.push(new Shuttle.ViewModels.Order(item));
+                            self.orders.push(new Shuttle.ViewModels.Order(order));
                         }
+                    });
+
+                    self.orders.each(function (existingOrder) {
+                        found = false;
+
+                        can.each(data, function (order) {
+                            if (found) {
+                                return;
+                            }
+
+                            found = (order.id === existingOrder.attr('id'));
+                        });
+
+                        if (!found) {
+                            orderIdsToRemove.push(existingOrder.attr('id'));
+                        }
+                    });
+
+                    can.each(orderIdsToRemove, function(id) {
+                        self._removeOrder(id);
                     });
 
                     self.hideMessage();

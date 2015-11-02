@@ -20,7 +20,7 @@
     {{#each orders}}
     <tr>
       <td>
-        <button class="btn btn-default btn-danger" type="submit" can-click="cancelOrder">Cancel</button>
+        <button class="btn btn-default btn-danger btn-xs" type="submit" can-click="cancelOrder">Cancel</button>
       </td>
       <td>{{customerName}}</td>
       <td>{{orderNumber}}</td>
@@ -34,3 +34,4 @@
 </div>
 {{/if}}
 {{/if}}
+<shuttle-modal modal-id='order-modal' title="{{modalTitle}}" text-type="{{modalTextType}}"><p>{{modalMessage}}</p></shuttle-modal>
