@@ -12,5 +12,7 @@ namespace Shuttle.ProcessManagement.Messages
         public List<QuotedProduct> QuotedProducts { get; set; }
         public string CustomerName { get; set; }
         public string CustomerEMail { get; set; }
+        public string TargetSystem { get; set; }
+        public string TargetSystemUri { get; set; }
     }
 }

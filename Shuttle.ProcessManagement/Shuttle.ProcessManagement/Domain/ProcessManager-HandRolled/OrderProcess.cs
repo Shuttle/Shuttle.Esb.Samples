@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Runtime.Remoting.Messaging;
-using System.Security.Cryptography;
 using Shuttle.Core.Infrastructure;
 
 namespace Shuttle.ProcessManagement
@@ -61,6 +59,11 @@ namespace Shuttle.ProcessManagement
             _statuses.Sort((s1, s2) => s1.StatusDate.CompareTo(s2.StatusDate));
 
             return _statuses.FirstOrDefault();
+        }
+
+        public bool CanCancel()
+        {
+            return Status().Status.Equals("Cooling Off", StringComparison.InvariantCultureIgnoreCase);
         }
     }
 }

@@ -34,4 +34,3 @@
 </div>
 {{/if}}
 {{/if}}
-<shuttle-modal modal-id='order-modal' title="{{modalTitle}}" text-type="{{modalTextType}}"><p>{{modalMessage}}</p></shuttle-modal>

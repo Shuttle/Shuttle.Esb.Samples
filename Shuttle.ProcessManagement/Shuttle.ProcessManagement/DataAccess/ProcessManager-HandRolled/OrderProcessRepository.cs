@@ -1,4 +1,5 @@
-﻿using Shuttle.Core.Data;
+﻿using System;
+using Shuttle.Core.Data;
 using Shuttle.Core.Infrastructure;
 
 namespace Shuttle.ProcessManagement
@@ -7,13 +8,23 @@ namespace Shuttle.ProcessManagement
     {
         private readonly IDatabaseGateway _databaseGateway;
         private readonly IOrderProcessQueryFactory _queryFactory;
+        private readonly IDataRowMapper<OrderProcess> _orderProcessMapper;
+        private readonly IDataRowMapper<OrderProcessItem> _orderProcessItemMapper;
+        private readonly IDataRowMapper<OrderProcessStatus> _orderProcessStatusMapper;
 
-        public OrderProcessRepository( IDatabaseGateway databaseGateway, IOrderProcessQueryFactory queryFactory)
+        public OrderProcessRepository(IDatabaseGateway databaseGateway, IOrderProcessQueryFactory queryFactory, IDataRowMapper<OrderProcess> orderProcessMapper, IDataRowMapper<OrderProcessItem> orderProcessItemMapper, IDataRowMapper<OrderProcessStatus> orderProcessStatusMapper)
         {
             Guard.AgainstNull(databaseGateway, "databaseGateway");
+            Guard.AgainstNull(queryFactory, "queryFactory");
+            Guard.AgainstNull(orderProcessMapper, "orderProcessMapper");
+            Guard.AgainstNull(orderProcessItemMapper, "orderProcessItemMapper");
+            Guard.AgainstNull(orderProcessStatusMapper, "orderProcessStatusMapper");
 
             _databaseGateway = databaseGateway;
             _queryFactory = queryFactory;
+            _orderProcessMapper = orderProcessMapper;
+            _orderProcessItemMapper = orderProcessItemMapper;
+            _orderProcessStatusMapper = orderProcessStatusMapper;
         }
 
         public void Add(OrderProcess orderProcess)
@@ -31,6 +42,28 @@ namespace Shuttle.ProcessManagement
             {
                 _databaseGateway.ExecuteUsing(_queryFactory.AddStatus(status, orderProcess.Id));
             }
+        }
+
+        public OrderProcess Get(Guid id)
+        {
+            var orderProcess = _orderProcessMapper.Map(_databaseGateway.GetSingleRowUsing(_queryFactory.Get(id))).Result;
+
+            foreach (var row in _databaseGateway.GetRowsUsing(_queryFactory.GetItems(id)))
+            {
+                orderProcess.AddItem(_orderProcessItemMapper.Map(row).Result);
+            }
+
+            foreach (var row in _databaseGateway.GetRowsUsing(_queryFactory.GetStatuses(id)))
+            {
+                orderProcess.AddStatus(_orderProcessStatusMapper.Map(row).Result);
+            }
+
+            return orderProcess;
+        }
+
+        public void Remove(OrderProcess orderProcess)
+        {
+            _databaseGateway.ExecuteUsing(_queryFactory.Remove(orderProcess.Id));
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Shuttle.Core.Data;
+﻿using System;
+using Shuttle.Core.Data;
 using Shuttle.ProcessManagement.Messages;
 
 namespace Shuttle.ProcessManagement
@@ -7,5 +8,8 @@ namespace Shuttle.ProcessManagement
     {
         IQuery All();
         IQuery Add(OrderProcessRegisteredEvent message);
+        IQuery Find(Guid id);
+        IQuery Cancelling(Guid id);
+        IQuery Remove(Guid id);
     }
 }

@@ -15,7 +15,7 @@ namespace Shuttle.ProcessManagement
         public static readonly MappedColumn<string> Description =
             new MappedColumn<string>("Description", DbType.String, 130);
 
-        public static readonly MappedColumn<string> Price =
-            new MappedColumn<string>("Price", DbType.Decimal);
+        public static readonly MappedColumn<decimal> Price =
+            new MappedColumn<decimal>("Price", DbType.Decimal);
     }
 }

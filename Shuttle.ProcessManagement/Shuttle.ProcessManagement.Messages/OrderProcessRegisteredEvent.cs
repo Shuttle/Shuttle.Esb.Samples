@@ -11,5 +11,7 @@ namespace Shuttle.ProcessManagement.Messages
         public string CustomerEMail { get; set; }
         public string Status { get; set; }
         public DateTime StatusDate { get; set; }
+        public string TargetSystem { get; set; }
+        public string TargetSystemUri { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Shuttle.Core.Data;
+﻿using System;
+using Shuttle.Core.Data;
 using Shuttle.ProcessManagement.Messages;
 
 namespace Shuttle.ProcessManagement
@@ -7,7 +8,22 @@ namespace Shuttle.ProcessManagement
     {
         public IQuery All()
         {
-            return RawQuery.Create(@"select Id, CustomerName, OrderNumber, OrderDate, Status from OrderProcessView order by OrderDate");
+            return RawQuery.Create(string.Concat(SelectClause(), "order by OrderDate"));
+        }
+
+        private static string SelectClause()
+        {
+            return @"
+select 
+    Id, 
+    CustomerName, 
+    OrderNumber, 
+    OrderDate, 
+    Status,
+    TargetSystem,
+    TargetSystemUri
+from 
+    OrderProcessView ";
         }
 
         public IQuery Add(OrderProcessRegisteredEvent message)
@@ -17,18 +33,39 @@ insert into dbo.OrderProcessView
 (
     Id,
     CustomerName,
-    Status
+    Status,
+    TargetSystem,
+    TargetSystemUri
 )
 values
 (
     @Id,
     @CustomerName,
-    @Status
+    @Status,
+    @TargetSystem,
+    @TargetSystemUri
 )
 ")
                 .AddParameterValue(OrderProcessViewColumns.Id, message.OrderProcessId)
                 .AddParameterValue(OrderProcessViewColumns.CustomerName, message.CustomerName)
-                .AddParameterValue(OrderProcessViewColumns.Status, message.Status);
+                .AddParameterValue(OrderProcessViewColumns.Status, message.Status)
+                .AddParameterValue(OrderProcessViewColumns.TargetSystem, message.TargetSystem)
+                .AddParameterValue(OrderProcessViewColumns.TargetSystemUri, message.TargetSystemUri);
+        }
+
+        public IQuery Find(Guid id)
+        {
+            return RawQuery.Create(string.Concat(SelectClause(), "where Id = @Id")).AddParameterValue(OrderProcessViewColumns.Id, id);
+        }
+
+        public IQuery Cancelling(Guid id)
+        {
+            return RawQuery.Create("update dbo.OrderProcessView set Status = 'Cancelling' where Id = @Id").AddParameterValue(OrderProcessViewColumns.Id, id);
+        }
+
+        public IQuery Remove(Guid id)
+        {
+            return RawQuery.Create("delete from dbo.OrderProcessView where Id = @Id").AddParameterValue(OrderProcessViewColumns.Id, id);
         }
     }
 }

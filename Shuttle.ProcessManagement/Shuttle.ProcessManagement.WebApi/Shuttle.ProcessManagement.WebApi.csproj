@@ -330,6 +330,10 @@
       <Project>{BF2F5A45-CC2E-4C09-B29F-FF265F56AC9C}</Project>
       <Name>Shuttle.ProcessManagement.Messages</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Shuttle.ProcessManagement.Services\Shuttle.ProcessManagement.Services.csproj">
+      <Project>{cef92873-55e8-423f-af5b-480412adf090}</Project>
+      <Name>Shuttle.ProcessManagement.Services</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Shuttle.ProcessManagement\Shuttle.ProcessManagement.csproj">
       <Project>{DBEF18C5-CD08-438F-A5D3-810DB21A307D}</Project>
       <Name>Shuttle.ProcessManagement</Name>

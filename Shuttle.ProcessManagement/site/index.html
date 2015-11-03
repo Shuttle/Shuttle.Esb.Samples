@@ -12,7 +12,7 @@
 </head>
 <body>
     <div id="application-container"></div>
-    <script type="text/stache" id="application-template">
+<script type="text/stache" id="application-template">
             <div class="container-fluid">
                 <div class="row row-offcanvas row-offcanvas-left">
                     <div id="application-content" class="main col-sm-12 col-md-12">
@@ -21,6 +21,8 @@
                         <shuttle-books></shuttle-books>
 
                         <shuttle-orders></shuttle-orders>
+    
+                        <shuttle-modal modal-id='modal-message' title="{{modalTitle}}" text-type="{{modalTextType}}"><p>{{modalMessage}}</p></shuttle-modal>
                     </div>
                 </div>
             </div>
@@ -31,6 +33,7 @@
     <script src='assets/js/external/can.site.js' type='text/javascript'></script>
     <script src='assets/js/configuration.js' type='text/javascript'></script>
     <script src='assets/js/services/ApiService.js' type='text/javascript'></script>
+    <script src='assets/js/components/ViewModel.js' type='text/javascript'></script>
     <script src='assets/js/components/modal.js' type='text/javascript'></script>
     <script src='assets/js/components/message.js' type='text/javascript'></script>
     <script src='assets/js/components/fetching.js' type='text/javascript'></script>

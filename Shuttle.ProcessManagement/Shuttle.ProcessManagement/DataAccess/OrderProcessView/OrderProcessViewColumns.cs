@@ -12,5 +12,7 @@ namespace Shuttle.ProcessManagement
         public static readonly MappedColumn<DateTime?> OrderDate = new MappedColumn<DateTime?>("OrderDate", DbType.DateTime);
         public static readonly MappedColumn<decimal?> OrderTotal = new MappedColumn<decimal?>("OrderTotal", DbType.Decimal);
         public static readonly MappedColumn<string> Status = new MappedColumn<string>("Status", DbType.String, 35);
+        public static readonly MappedColumn<string> TargetSystem = new MappedColumn<string>("TargetSystem", DbType.String, 65);
+        public static readonly MappedColumn<string> TargetSystemUri = new MappedColumn<string>("TargetSystemUri", DbType.String, 130);
     }
 }

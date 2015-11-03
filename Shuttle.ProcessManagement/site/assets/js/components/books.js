@@ -6,8 +6,8 @@
     }
 });
 
-Shuttle.ViewModels.Books = can.Map.extend({
-    init: function() {
+Shuttle.ViewModels.Books = Shuttle.ViewModel.extend({
+    init: function () {
         this.validatePresenceOf('customerName');
         this.validateLengthOf('customerName', 0, 65);
         this.validatePresenceOf('customerEMail');
@@ -16,23 +16,22 @@ Shuttle.ViewModels.Books = can.Map.extend({
             message: 'invalid email'
         });
     }
-},{
+}, {
     books: new can.List(),
     total: 0,
     canOrder: false,
-    hasMessage: false,
 
-    invalidCustomerName: function() {
+    invalidCustomerName: function () {
         return this.errors('customerName') != undefined;
     },
 
-    customerNameErrors: function() {
+    customerNameErrors: function () {
         return this.invalidCustomerName()
             ? this.errors('customerName').customerName
             : [];
     },
 
-    invalidCustomerEMail: function() {
+    invalidCustomerEMail: function () {
         return this.errors('customerEMail') != undefined;
     },
 
@@ -48,28 +47,17 @@ Shuttle.ViewModels.Books = can.Map.extend({
         this.attr('fetching', true);
 
         Shuttle.Services.apiService.get('products')
-            .done(function(data) {
-                can.each(data, function(item) {
+            .done(function (data) {
+                can.each(data, function (item) {
                     self.books.push(new Shuttle.ViewModels.Book(item));
                 });
             })
-            .fail(function(xhr, textStatus, errorThrown) {
+            .fail(function (xhr, textStatus, errorThrown) {
                 self.showMessage(textStatus, 'Error fetching products.', 'danger');
             })
-            .then(function() {
+            .then(function () {
                 self.attr('fetching', false);
             });
-    },
-
-    showMessage: function (title, message, type) {
-        this.attr('hasMessage', true);
-        this.attr('messageType', type);
-        this.attr('messageTitle', title);
-        this.attr('message', message);
-    },
-
-    hideMessage: function() {
-        this.attr('hasMessage', false);
     },
 
     calculateTotal: function () {
@@ -97,11 +85,24 @@ Shuttle.ViewModels.Books = can.Map.extend({
         this.calculateTotal();
     },
 
-    canSubmit: function() {
+    canSubmit: function () {
         return this.errors() == undefined;
     },
 
+    cancel: function () {
+        this._clearOrder();
+    },
+
+    _clearOrder: function () {
+        this.books.each(function (book) {
+            book.attr('buying', false);
+        });
+
+        this.calculateTotal();
+    },
+
     orderHandRolled: function () {
+        var self = this;
         var order = {
             productIds: [],
             targetSystem: 'HandRolled',
@@ -120,10 +121,12 @@ Shuttle.ViewModels.Books = can.Map.extend({
         });
 
         Shuttle.Services.apiService.post('orders', { data: order })
-            .done(function() {
-                alert('done!');
+            .done(function () {
+                self._clearOrder();
+
+                self.showModalMessage('Order', 'Your order has been sent for processing.');
             })
-            .fail(function(xhr, textStatus, errorThrown) {
+            .fail(function (xhr, textStatus, errorThrown) {
                 self.showMessage('Error submitting order.', errorThrown, 'danger');
             });
     }

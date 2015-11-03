@@ -1,4 +1,6 @@
-﻿/****** Object:  Table [dbo].[Invoice]    Script Date: 10/29/2015 4:33:52 PM ******/
+﻿USE [shuttle]
+GO
+/****** Object:  Table [dbo].[Invoice]    Script Date: 11/3/2015 7:33:27 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -20,7 +22,7 @@ CREATE TABLE [dbo].[Invoice](
 GO
 SET ANSI_PADDING OFF
 GO
-/****** Object:  Table [dbo].[InvoiceItem]    Script Date: 10/29/2015 4:33:52 PM ******/
+/****** Object:  Table [dbo].[InvoiceItem]    Script Date: 11/3/2015 7:33:27 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -36,7 +38,7 @@ CREATE TABLE [dbo].[InvoiceItem](
 GO
 SET ANSI_PADDING OFF
 GO
-/****** Object:  Table [dbo].[Order]    Script Date: 10/29/2015 4:33:52 PM ******/
+/****** Object:  Table [dbo].[Order]    Script Date: 11/3/2015 7:33:27 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -58,7 +60,7 @@ CREATE TABLE [dbo].[Order](
 GO
 SET ANSI_PADDING OFF
 GO
-/****** Object:  Table [dbo].[OrderItem]    Script Date: 10/29/2015 4:33:52 PM ******/
+/****** Object:  Table [dbo].[OrderItem]    Script Date: 11/3/2015 7:33:27 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -74,7 +76,7 @@ CREATE TABLE [dbo].[OrderItem](
 GO
 SET ANSI_PADDING OFF
 GO
-/****** Object:  Table [dbo].[OrderProcess]    Script Date: 10/29/2015 4:33:52 PM ******/
+/****** Object:  Table [dbo].[OrderProcess]    Script Date: 11/3/2015 7:33:27 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -96,7 +98,7 @@ CREATE TABLE [dbo].[OrderProcess](
 GO
 SET ANSI_PADDING OFF
 GO
-/****** Object:  Table [dbo].[OrderProcessItem]    Script Date: 10/29/2015 4:33:52 PM ******/
+/****** Object:  Table [dbo].[OrderProcessItem]    Script Date: 11/3/2015 7:33:27 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -113,7 +115,7 @@ CREATE TABLE [dbo].[OrderProcessItem](
 GO
 SET ANSI_PADDING OFF
 GO
-/****** Object:  Table [dbo].[OrderProcessStatus]    Script Date: 10/29/2015 4:33:52 PM ******/
+/****** Object:  Table [dbo].[OrderProcessStatus]    Script Date: 11/3/2015 7:33:27 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -123,13 +125,13 @@ GO
 CREATE TABLE [dbo].[OrderProcessStatus](
 	[OrderProcessId] [uniqueidentifier] NOT NULL,
 	[Status] [varchar](35) NOT NULL,
-	[StatusChangeDate] [datetime] NOT NULL
+	[StatusDate] [datetime] NOT NULL
 ) ON [PRIMARY]
 
 GO
 SET ANSI_PADDING OFF
 GO
-/****** Object:  Table [dbo].[OrderProcessView]    Script Date: 10/29/2015 4:33:52 PM ******/
+/****** Object:  Table [dbo].[OrderProcessView]    Script Date: 11/3/2015 7:33:27 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -142,13 +144,15 @@ CREATE TABLE [dbo].[OrderProcessView](
 	[OrderNumber] [varbinary](20) NULL,
 	[OrderDate] [datetime] NULL,
 	[OrderTotal] [decimal](18, 2) NULL,
-	[Status] [varchar](35) NULL
+	[Status] [varchar](35) NULL,
+	[TargetSystem] [varchar](65) NOT NULL,
+	[TargetSystemUri] [varchar](130) NOT NULL
 ) ON [PRIMARY]
 
 GO
 SET ANSI_PADDING OFF
 GO
-/****** Object:  Index [IX_OrderItem]    Script Date: 10/29/2015 4:33:52 PM ******/
+/****** Object:  Index [IX_OrderItem]    Script Date: 11/3/2015 7:33:27 AM ******/
 CREATE CLUSTERED INDEX [IX_OrderItem] ON [dbo].[OrderItem]
 (
 	[OrderId] ASC

@@ -13,7 +13,7 @@
     }
 });
 
-Shuttle.ViewModels.Orders = can.Map.extend({
+Shuttle.ViewModels.Orders = Shuttle.ViewModel.extend({
     orders: new can.List(),
     _pollTimer: undefined,
 
@@ -28,9 +28,7 @@ Shuttle.ViewModels.Orders = can.Map.extend({
                     self.orders.push(new Shuttle.ViewModels.Order(item));
                 });
 
-                if (self.orders.length === 0) {
-                    self.showMessage('Active orders', 'There are no active orders.', 'info');
-                }
+                self._checkOrderCount();
             })
             .fail(function (xhr, textStatus, errorThrown) {
                 self.showMessage(textStatus, 'Error fetching orders.', 'danger');
@@ -41,23 +39,12 @@ Shuttle.ViewModels.Orders = can.Map.extend({
             });
     },
 
-    showMessage: function (title, message, type) {
-        this.attr('hasMessage', true);
-        this.attr('messageType', type);
-        this.attr('messageTitle', title);
-        this.attr('message', message);
-    },
-
-    hideMessage: function () {
-        this.attr('hasMessage', false);
-    },
-
-    showModalMessage: function (title, message, type) {
-        this.attr('modalTitle', title);
-        this.attr('modalMessage', message);
-        this.attr('modalTextType', type);
-
-        $('#order-modal').modal({ show: true });
+    _checkOrderCount: function() {
+        if (this.orders.length === 0) {
+            this.showMessage('Active orders', 'There are no active orders.', 'info');
+        } else {
+            this.hideMessage();
+        }
     },
 
     _removeOrder: function(id) {
@@ -86,7 +73,7 @@ Shuttle.ViewModels.Orders = can.Map.extend({
 
         Shuttle.Services.apiService.delete('orders/' + id)
             .done(function () {
-                self._removeOrder(id);
+                self.showModalMessage('Order', 'Your cancellation request has been sent for processing.');
             })
             .fail(function () {
                 self.showModalMessage('Server Error', 'The selected order could not be deleted.', 'danger');
@@ -145,7 +132,7 @@ Shuttle.ViewModels.Orders = can.Map.extend({
                         self._removeOrder(id);
                     });
 
-                    self.hideMessage();
+                    self._checkOrderCount();
                 })
                 .fail(function(xhr, textStatus, errorThrown) {
                     self.showMessage(textStatus, 'Error fetching orders.', 'danger');
@@ -153,7 +140,7 @@ Shuttle.ViewModels.Orders = can.Map.extend({
                 .always(function() {
                     self._poll();
                 });
-        }, 1000);
+        }, 250);
 
         this.attr('_pollTimer', timeout);
     }

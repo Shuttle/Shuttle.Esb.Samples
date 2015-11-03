@@ -76,5 +76,58 @@ values
                 .AddParameterValue(OrderProcessStatusColumns.Status, status.Status)
                 .AddParameterValue(OrderProcessStatusColumns.StatusDate, status.StatusDate);
         }
+
+        public IQuery Get(Guid id)
+        {
+            return RawQuery.Create(@"
+select
+    Id,
+    OrderId,
+    InvoiceId,
+    CustomerName,
+    CustomerEMail
+from 
+    dbo.OrderProcess
+where
+    Id = @Id
+")
+                .AddParameterValue(OrderProcessColumns.Id, id);
+        }
+
+        public IQuery GetItems(Guid id)
+        {
+            return RawQuery.Create(@"
+select
+    ProductId,
+    Description,
+    Price
+from 
+    dbo.OrderProcessItem
+where
+    OrderProcessId = @OrderProcessId
+")
+                .AddParameterValue(OrderProcessItemColumns.OrderProcessId, id);
+        }
+
+        public IQuery GetStatuses(Guid id)
+        {
+            return RawQuery.Create(@"
+select
+    Status,
+    StatusDate
+from 
+    dbo.OrderProcessStatus
+where
+    OrderProcessId = @OrderProcessId
+")
+                .AddParameterValue(OrderProcessStatusColumns.OrderProcessId, id);
+        }
+
+        public IQuery Remove(Guid id)
+        {
+            return
+                RawQuery.Create(@"delete from dbo.OrderProcess where Id = @Id")
+                    .AddParameterValue(OrderProcessColumns.Id, id);
+        }
     }
 }

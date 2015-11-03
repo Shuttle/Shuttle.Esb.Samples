@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using Shuttle.Core.Data;
 using Shuttle.Core.Infrastructure;
@@ -28,6 +29,21 @@ namespace Shuttle.ProcessManagement
         public void Add(OrderProcessRegisteredEvent message)
         {
             _databaseGateway.ExecuteUsing(_queryFactory.Add(message));
+        }
+
+        public DataRow Find(Guid id)
+        {
+            return _databaseGateway.GetSingleRowUsing(_queryFactory.Find(id));
+        }
+
+        public void Cancelling(Guid id)
+        {
+            _databaseGateway.ExecuteUsing(_queryFactory.Cancelling(id));
+        }
+
+        public void Remove(Guid id)
+        {
+            _databaseGateway.ExecuteUsing(_queryFactory.Remove(id));
         }
     }
 }

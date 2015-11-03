@@ -229,6 +229,7 @@ namespace Shuttle.ProcessManagement.WebApi
             _container.RegisterDataAccess();
 
             var shuttleApiControllerType = typeof(ShuttleApiController);
+            var dataRowMapperType = typeof(IDataRowMapper<>);
 
             _container.Register(
                 Classes
@@ -240,6 +241,14 @@ namespace Shuttle.ProcessManagement.WebApi
                     .LifestyleTransient()
                     .WithServiceFirstInterface()
                     .Configure(c => c.Named(c.Implementation.UnderlyingSystemType.Name)));
+
+            _container.Register(
+                Classes
+                    .FromAssemblyNamed("Shuttle.ProcessManagement.Services")
+                    .Pick()
+                    .If(type => type.Name.EndsWith("Service"))
+                    .LifestyleSingleton()
+                    .WithServiceFirstInterface());
         }
     }
 }

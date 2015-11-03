@@ -72,6 +72,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="OrderProcessCancelledHandler.cs" />
     <Compile Include="Host.cs" />
     <Compile Include="OrderProcessRegisteredHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

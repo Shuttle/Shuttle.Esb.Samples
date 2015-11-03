@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{BF2F5A45-CC2E-4C09-B29F-FF265F56AC9C}</ProjectGuid>
+    <ProjectGuid>{CEF92873-55E8-423F-AF5B-480412ADF090}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Shuttle.ProcessManagement.Messages</RootNamespace>
-    <AssemblyName>Shuttle.ProcessManagement.Messages</AssemblyName>
+    <RootNamespace>Shuttle.ProcessManagement.Services</RootNamespace>
+    <AssemblyName>Shuttle.ProcessManagement.Services</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -30,6 +30,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Shuttle.Core.Data">
+      <HintPath>..\packages\shuttle-core-data.3.2.1\lib\net45-full\Shuttle.Core.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Shuttle.Core.Infrastructure">
+      <HintPath>..\packages\shuttle-core-infrastructure.3.2.0\lib\net45-full\Shuttle.Core.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="Shuttle.ESB.Core">
+      <HintPath>..\packages\shuttle-esb-core.3.8.1\lib\net45-full\Shuttle.ESB.Core.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -39,12 +48,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CancelOrderProcessCommand.cs" />
-    <Compile Include="OrderProcessCancelledEvent.cs" />
-    <Compile Include="RegisterOrderProcessCommand.cs" />
-    <Compile Include="OrderProcessRegisteredEvent.cs" />
+    <Compile Include="OrderProcessService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="QuotedProduct.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Shuttle.ProcessManagement.Messages\Shuttle.ProcessManagement.Messages.csproj">
+      <Project>{BF2F5A45-CC2E-4C09-B29F-FF265F56AC9C}</Project>
+      <Name>Shuttle.ProcessManagement.Messages</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Shuttle.ProcessManagement\Shuttle.ProcessManagement.csproj">
+      <Project>{DBEF18C5-CD08-438F-A5D3-810DB21A307D}</Project>
+      <Name>Shuttle.ProcessManagement</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

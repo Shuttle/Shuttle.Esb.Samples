@@ -52,7 +52,9 @@ namespace Shuttle.Process.HandRolled.Server
                 CustomerName = context.Message.CustomerName,
                 CustomerEMail = context.Message.CustomerEMail,
                 Status = status.Status,
-                StatusDate = status.StatusDate
+                StatusDate = status.StatusDate,
+                TargetSystem = context.Message.TargetSystem,
+                TargetSystemUri = context.Message.TargetSystemUri
             });
         }
 

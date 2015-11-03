@@ -42,6 +42,7 @@ namespace Shuttle.Process.QueryServer
             var subscriptionManager = SubscriptionManager.Default();
 
             subscriptionManager.Subscribe<OrderProcessRegisteredEvent>();
+            subscriptionManager.Subscribe<OrderProcessCancelledEvent>();
 
             _bus = ServiceBus.Create(
                 c =>

@@ -65,6 +65,7 @@
         {{/if}}
       </div>
       <div class="shuttle-buttons clearfix">
+		<button type="button" class="btn btn-default" can-click="cancel">Cancel</button>
         <div class="btn-group pull-right">
           <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                   aria-expanded="false">
