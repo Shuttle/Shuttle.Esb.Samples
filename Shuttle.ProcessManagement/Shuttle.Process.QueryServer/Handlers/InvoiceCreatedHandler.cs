@@ -1,17 +1,18 @@
 ﻿using Shuttle.Core.Data;
 using Shuttle.Core.Infrastructure;
 using Shuttle.ESB.Core;
+using Shuttle.Invoicing.Messages;
 using Shuttle.ProcessManagement;
-using Shuttle.ProcessManagement.Messages;
 
 namespace Shuttle.Process.QueryServer
 {
-    public class OrderProcessCancelledHandler : IMessageHandler<OrderProcessCancelledEvent>
+    public class InvoiceCreatedHandler : IMessageHandler<InvoiceCreatedEvent>
     {
         private readonly IDatabaseContextFactory _databaseContextFactory;
         private readonly IOrderProcessViewQuery _orderProcessViewQuery;
 
-        public OrderProcessCancelledHandler(IDatabaseContextFactory databaseContextFactory, IOrderProcessViewQuery orderProcessViewQuery)
+        public InvoiceCreatedHandler(IDatabaseContextFactory databaseContextFactory,
+            IOrderProcessViewQuery orderProcessViewQuery)
         {
             Guard.AgainstNull(databaseContextFactory, "databaseContextFactory");
             Guard.AgainstNull(orderProcessViewQuery, "orderProcessViewQuery");
@@ -20,11 +21,11 @@ namespace Shuttle.Process.QueryServer
             _orderProcessViewQuery = orderProcessViewQuery;
         }
 
-        public void ProcessMessage(HandlerContext<OrderProcessCancelledEvent> context)
+        public void ProcessMessage(HandlerContext<InvoiceCreatedEvent> context)
         {
             using (_databaseContextFactory.Create(ProcessManagementData.ConnectionStringName))
             {
-                _orderProcessViewQuery.Remove(context.Message.Id);
+                _orderProcessViewQuery.SaveStatus(context.TransportMessage.OrderProcessId(), "Invoice Created");
             }
         }
 

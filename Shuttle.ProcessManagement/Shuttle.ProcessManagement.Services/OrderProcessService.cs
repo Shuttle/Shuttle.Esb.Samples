@@ -11,20 +11,20 @@ namespace Shuttle.ProcessManagement.Services
     {
         private readonly IServiceBus _bus;
         private readonly IDatabaseContextFactory _databaseContextFactory;
-        private readonly IDatabaseGateway _databaseGateway;
         private readonly IOrderProcessViewQuery _orderProcessViewQuery;
+        private readonly IOrderProcessRepository _orderProcessRepository;
 
-        public OrderProcessService(IServiceBus bus, IDatabaseContextFactory databaseContextFactory, IDatabaseGateway databaseGateway, IOrderProcessViewQuery orderProcessViewQuery)
+        public OrderProcessService(IServiceBus bus, IDatabaseContextFactory databaseContextFactory, IOrderProcessViewQuery orderProcessViewQuery, IOrderProcessRepository orderProcessRepository)
         {
             Guard.AgainstNull(bus, "bus");
             Guard.AgainstNull(databaseContextFactory, "databaseContextFactory");
-            Guard.AgainstNull(databaseGateway, "databaseGateway");
             Guard.AgainstNull(orderProcessViewQuery, "orderProcessViewQuery");
+            Guard.AgainstNull(orderProcessRepository, "orderProcessRepository");
 
             _bus = bus;
             _databaseContextFactory = databaseContextFactory;
-            _databaseGateway = databaseGateway;
             _orderProcessViewQuery = orderProcessViewQuery;
+            _orderProcessRepository = orderProcessRepository;
         }
 
         public dynamic ActiveOrders()
@@ -40,8 +40,9 @@ namespace Shuttle.ProcessManagement.Services
                            OrderNumber = OrderProcessViewColumns.OrderNumber.MapFrom(row),
                            OrderDate = OrderProcessViewColumns.OrderDate.MapFrom(row),
                            OrderTotal = OrderProcessViewColumns.OrderTotal.MapFrom(row),
-                           Status = status,
-                           CanCancel = status == "cooling off"
+                           Status = OrderProcessViewColumns.Status.MapFrom(row),
+                           CanCancel = status == "cooling off",
+                           CanArchive = status == "completed"
                        };
             }
         }
@@ -50,14 +51,39 @@ namespace Shuttle.ProcessManagement.Services
         {
             using (_databaseContextFactory.Create(ProcessManagementData.ConnectionStringName))
             {
-                var row = _orderProcessViewQuery.Find(id);
+                var orderProcess = _orderProcessRepository.Get(id);
+
+                if (!orderProcess.CanCancel())
+                {
+                    return;
+                }
 
                 _bus.Send(new CancelOrderProcessCommand
                 {
-                    Id = id
-                }, c => c.WithRecipient(OrderProcessViewColumns.TargetSystemUri.MapFrom(row)));
+                    OrderProcessId = id
+                }, c => c.WithRecipient(orderProcess.TargetSystemUri));
 
-                _orderProcessViewQuery.Cancelling(id);
+                _orderProcessViewQuery.SaveStatus(id, "Cancelling");
+            }
+        }
+
+        public void ArchiveOrder(Guid id)
+        {
+            using (_databaseContextFactory.Create(ProcessManagementData.ConnectionStringName))
+            {
+                var orderProcess = _orderProcessRepository.Get(id);
+
+                if (!orderProcess.CanArchive())
+                {
+                    return;
+                }
+
+                _bus.Send(new ArchiveOrderProcessCommand
+                {
+                    OrderProcessId = id
+                }, c => c.WithRecipient(orderProcess.TargetSystemUri));
+
+                _orderProcessViewQuery.SaveStatus(id, "Archiving");
             }
         }
     }

@@ -195,6 +195,7 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="Controllers\ArchivedOrdersController.cs" />
     <Compile Include="Controllers\ProductsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\OrdersController.cs" />
@@ -326,6 +327,10 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Shuttle.Castle\Shuttle.Castle.csproj">
+      <Project>{0052F712-70A6-400C-ACBE-CBED47C5AFD0}</Project>
+      <Name>Shuttle.Castle</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Shuttle.ProcessManagement.Messages\Shuttle.ProcessManagement.Messages.csproj">
       <Project>{BF2F5A45-CC2E-4C09-B29F-FF265F56AC9C}</Project>
       <Name>Shuttle.ProcessManagement.Messages</Name>

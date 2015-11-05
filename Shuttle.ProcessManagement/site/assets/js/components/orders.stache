@@ -13,20 +13,25 @@
       <th>Order number</th>
       <th>Order date</th>
       <th>Status</th>
-      <th class='col-md-2'>Total</th>
+      <th class='col-md-2 text-right'>Total</th>
     </tr>
   </thead>
   <tbody>
     {{#each orders}}
     <tr>
       <td>
+		{{#if canCancel}}
         <button class="btn btn-default btn-danger btn-xs" type="submit" can-click="cancelOrder">Cancel</button>
+		{{/if}}
+		{{#if canArchive}}
+        <button class="btn btn-default btn-danger btn-xs" type="submit" can-click="archiveOrder">Archive</button>
+		{{/if}}
       </td>
       <td>{{customerName}}</td>
       <td>{{orderNumber}}</td>
       <td>{{orderDate}}</td>
       <td>{{status}}</td>
-      <td>{{orderTotal}}</td>
+      <td class="text-right">{{orderTotal}}</td>
     </tr>
     {{/each}}
   </tbody>

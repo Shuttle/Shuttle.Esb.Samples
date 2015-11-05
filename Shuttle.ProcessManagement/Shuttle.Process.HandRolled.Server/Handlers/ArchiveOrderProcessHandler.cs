@@ -6,13 +6,12 @@ using Shuttle.ProcessManagement.Messages;
 
 namespace Shuttle.Process.HandRolled.Server
 {
-    public class CancelOrderProcessHandler : IMessageHandler<CancelOrderProcessCommand>
+    public class ArchiveOrderProcessHandler : IMessageHandler<ArchiveOrderProcessCommand>
     {
         private readonly IDatabaseContextFactory _databaseContextFactory;
         private readonly IOrderProcessRepository _repository;
 
-        public CancelOrderProcessHandler(IDatabaseContextFactory databaseContextFactory,
-            IOrderProcessRepository repository)
+        public ArchiveOrderProcessHandler(IDatabaseContextFactory databaseContextFactory, IOrderProcessRepository repository)
         {
             Guard.AgainstNull(databaseContextFactory, "databaseContextFactory");
             Guard.AgainstNull(repository, "repository");
@@ -21,13 +20,13 @@ namespace Shuttle.Process.HandRolled.Server
             _repository = repository;
         }
 
-        public void ProcessMessage(HandlerContext<CancelOrderProcessCommand> context)
+        public void ProcessMessage(HandlerContext<ArchiveOrderProcessCommand> context)
         {
             using (_databaseContextFactory.Create(ProcessManagementData.ConnectionStringName))
             {
-                var orderProcess = _repository.Get(context.Message.Id);
+                var orderProcess = _repository.Get(context.Message.OrderProcessId);
 
-                if (!orderProcess.CanCancel())
+                if (!orderProcess.CanArchive())
                 {
                     return;
                 }
@@ -35,7 +34,10 @@ namespace Shuttle.Process.HandRolled.Server
                 _repository.Remove(orderProcess);
             }
 
-            context.Publish(new OrderProcessCancelledEvent {Id = context.Message.Id});
+            context.Publish(new OrderProcessArchivedEvent
+            {
+                OrderProcessId = context.Message.OrderProcessId
+            });
         }
 
         public bool IsReusable {

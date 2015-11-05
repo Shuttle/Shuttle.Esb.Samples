@@ -40,6 +40,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CancelOrderProcessCommand.cs" />
+    <Compile Include="AcceptOrderProcessCommand.cs" />
+    <Compile Include="CompleteOrderProcessCommand.cs" />
+    <Compile Include="ArchiveOrderProcessCommand.cs" />
+    <Compile Include="OrderProcessArchivedEvent.cs" />
+    <Compile Include="OrderProcessCompletedEvent.cs" />
+    <Compile Include="OrderProcessAcceptedEvent.cs" />
     <Compile Include="OrderProcessCancelledEvent.cs" />
     <Compile Include="RegisterOrderProcessCommand.cs" />
     <Compile Include="OrderProcessRegisteredEvent.cs" />

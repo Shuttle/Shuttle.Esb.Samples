@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Globalization;
-using System.Linq;
 using System.Net.Http;
-using System.Security.Policy;
 using System.Web.Http;
-using Shuttle.Core.Data;
 using Shuttle.Core.Infrastructure;
 using Shuttle.ESB.Core;
 using Shuttle.ProcessManagement.Messages;
@@ -14,19 +11,16 @@ namespace Shuttle.ProcessManagement.WebApi.Controllers
     public class OrdersController : ShuttleApiController
     {
         private readonly IServiceBus _bus;
-        private readonly IDatabaseContextFactory _databaseContextFactory;
         private readonly IOrderProcessService _orderProcessService;
         private readonly IProductQuery _productQuery;
 
-        public OrdersController(IServiceBus bus, IDatabaseContextFactory databaseContextFactory, IOrderProcessService orderProcessService, IProductQuery productQuery)
+        public OrdersController(IServiceBus bus, IOrderProcessService orderProcessService, IProductQuery productQuery)
         {
             Guard.AgainstNull(bus, "bus");
-            Guard.AgainstNull(databaseContextFactory, "databaseContextFactory");
-            Guard.AgainstNull(orderProcessService, "OrderProcessService");
+            Guard.AgainstNull(orderProcessService, "rderProcessService");
             Guard.AgainstNull(productQuery, "productQuery");
 
             _bus = bus;
-            _databaseContextFactory = databaseContextFactory;
             _orderProcessService = orderProcessService;
             _productQuery = productQuery;
         }
@@ -59,21 +53,21 @@ namespace Shuttle.ProcessManagement.WebApi.Controllers
             switch (model.TargetSystem.ToLower(CultureInfo.InvariantCulture))
             {
                 case "handrolled":
-                    {
-                        message.TargetSystemUri = "msmq://./process-handrolled-server";
+                {
+                    message.TargetSystemUri = "msmq://./process-handrolled-server";
 
-                        break;
-                    }
+                    break;
+                }
                 case "defaultmodule":
-                    {
-                        message.TargetSystemUri = "msmq://./process-default-server";
+                {
+                    message.TargetSystemUri = "msmq://./process-default-server";
 
-                        break;
-                    }
+                    break;
+                }
                 default:
-                    {
-                        throw new ApplicationException(string.Format("Unknown target system '{0}'.", model.TargetSystem));
-                    }
+                {
+                    throw new ApplicationException(string.Format("Unknown target system '{0}'.", model.TargetSystem));
+                }
             }
 
             foreach (var productIdValue in model.ProductIds)
@@ -95,7 +89,15 @@ namespace Shuttle.ProcessManagement.WebApi.Controllers
                 });
             }
 
-            _bus.Send(message, c => { c.WithRecipient(message.TargetSystemUri); });
+            _bus.Send(message, c =>
+            {
+                c.WithRecipient(message.TargetSystemUri);
+                c.Headers.Add(new TransportHeader
+                {
+                    Key = "TargetSystem",
+                    Value = message.TargetSystem
+                });
+            });
         }
     }
 }

@@ -1,15 +1,17 @@
 ﻿Shuttle.ViewModels.Order = can.Map.extend({
     init: function (order) {
+        this.applyValues(order);
+    },
+
+    applyValues: function(order) {
         this.attr('id', order.id);
         this.attr('customerName', order.customerName);
         this.attr('orderNumber', order.orderNumber);
         this.attr('orderDate', order.orderDate);
         this.attr('orderTotal', order.orderTotal);
         this.attr('status', order.status);
-    },
-
-    setStatus: function (status) {
-        this.attr('status', status);
+        this.attr('canCancel', order.canCancel);
+        this.attr('canArchive', order.canArchive);
     }
 });
 
@@ -80,6 +82,19 @@ Shuttle.ViewModels.Orders = Shuttle.ViewModel.extend({
             });
     },
 
+    archiveOrder : function (content) {
+        var self = this;
+        var id = content.attr('id');
+
+        Shuttle.Services.apiService.post('archivedorders/' + id)
+            .done(function () {
+                self.showModalMessage('Order Archiving', 'Your archive request has been sent for processing.');
+            })
+            .fail(function () {
+                self.showModalMessage('Server Error', 'The selected order could not be archived.', 'danger');
+            });
+    },
+
     _poll: function () {
         var found;
         var self = this;
@@ -98,10 +113,7 @@ Shuttle.ViewModels.Orders = Shuttle.ViewModel.extend({
 
                         self.orders.each(function (element) {
                             if (element.attr('id') === order.id) {
-                                element.attr('orderNumber', order.orderNumber);
-                                element.attr('orderDate', order.orderDate);
-                                element.attr('orderTotal', order.orderTotal);
-                                element.attr('status', order.status);
+                                element.applyValues(order);
 
                                 found = true;
                             }

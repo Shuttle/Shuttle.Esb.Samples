@@ -14,7 +14,11 @@ insert into dbo.OrderProcess
     OrderId,
     InvoiceId,
     CustomerName,
-    CustomerEMail
+    CustomerEMail,
+    DateRegistered,
+    OrderNumber,
+    TargetSystem,
+    TargetSystemUri
 )
 values
 (
@@ -22,17 +26,25 @@ values
     @OrderId,
     @InvoiceId,
     @CustomerName,
-    @CustomerEMail
+    @CustomerEMail,
+    @DateRegistered,
+    @OrderNumber,
+    @TargetSystem,
+    @TargetSystemUri
 )
 ")
                 .AddParameterValue(OrderProcessColumns.Id, orderProcess.Id)
-                .AddParameterValue(OrderProcessColumns.OrderId, (object)orderProcess.OrderId ?? DBNull.Value)
-                .AddParameterValue(OrderProcessColumns.InvoiceId, (object)orderProcess.InvoiceId ?? DBNull.Value)
+                .AddParameterValue(OrderProcessColumns.OrderId, (object) orderProcess.OrderId ?? DBNull.Value)
+                .AddParameterValue(OrderProcessColumns.InvoiceId, (object) orderProcess.InvoiceId ?? DBNull.Value)
                 .AddParameterValue(OrderProcessColumns.CustomerName, orderProcess.CustomerName)
-                .AddParameterValue(OrderProcessColumns.CustomerEMail, orderProcess.CustomerEMail);
+                .AddParameterValue(OrderProcessColumns.CustomerEMail, orderProcess.CustomerEMail)
+                .AddParameterValue(OrderProcessColumns.DateRegistered, orderProcess.DateRegistered)
+                .AddParameterValue(OrderProcessColumns.OrderNumber, orderProcess.OrderNumber)
+                .AddParameterValue(OrderProcessColumns.TargetSystem, orderProcess.TargetSystem)
+                .AddParameterValue(OrderProcessColumns.TargetSystemUri, orderProcess.TargetSystemUri);
         }
 
-        public IQuery AddItem(OrderProcessItem orderProcessItem, Guid orderProcessId)
+        public IQuery AddItem(OrderProcessItem orderProcessItem, Guid id)
         {
             return RawQuery.Create(@"
 insert into dbo.OrderProcessItem
@@ -50,13 +62,13 @@ values
     @Price
 )
 ")
-                .AddParameterValue(OrderProcessItemColumns.OrderProcessId, orderProcessId)
+                .AddParameterValue(OrderProcessItemColumns.OrderProcessId, id)
                 .AddParameterValue(OrderProcessItemColumns.ProductId, orderProcessItem.ProductId)
                 .AddParameterValue(OrderProcessItemColumns.Description, orderProcessItem.Description)
                 .AddParameterValue(OrderProcessItemColumns.Price, orderProcessItem.Price);
         }
 
-        public IQuery AddStatus(OrderProcessStatus status, Guid orderProcessId)
+        public IQuery AddStatus(OrderProcessStatus status, Guid id)
         {
             return RawQuery.Create(@"
 insert into dbo.OrderProcessStatus
@@ -72,7 +84,7 @@ values
     @StatusDate
 )
 ")
-                .AddParameterValue(OrderProcessStatusColumns.OrderProcessId, orderProcessId)
+                .AddParameterValue(OrderProcessStatusColumns.OrderProcessId, id)
                 .AddParameterValue(OrderProcessStatusColumns.Status, status.Status)
                 .AddParameterValue(OrderProcessStatusColumns.StatusDate, status.StatusDate);
         }
@@ -85,7 +97,11 @@ select
     OrderId,
     InvoiceId,
     CustomerName,
-    CustomerEMail
+    CustomerEMail,
+    DateRegistered,
+    OrderNumber,
+    TargetSystem,
+    TargetSystemUri
 from 
     dbo.OrderProcess
 where
@@ -128,6 +144,20 @@ where
             return
                 RawQuery.Create(@"delete from dbo.OrderProcess where Id = @Id")
                     .AddParameterValue(OrderProcessColumns.Id, id);
+        }
+
+        public IQuery SaveOrderId(Guid orderId, Guid id)
+        {
+            return RawQuery.Create(@"update dbo.OrderProcess set OrderId = @OrderId where Id = @Id")
+                .AddParameterValue(OrderProcessColumns.OrderId, orderId)
+                .AddParameterValue(OrderProcessColumns.Id, id);
+        }
+
+        public IQuery SaveInvoiceId(Guid invoiceId, Guid id)
+        {
+            return RawQuery.Create(@"update dbo.OrderProcess set invoiceId = @invoiceId where Id = @Id")
+                .AddParameterValue(OrderProcessColumns.InvoiceId, invoiceId)
+                .AddParameterValue(OrderProcessColumns.Id, id);
         }
     }
 }

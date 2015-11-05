@@ -2,12 +2,16 @@
 using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 using log4net;
+using Shuttle.Castle;
 using Shuttle.Core.Host;
 using Shuttle.Core.Infrastructure;
 using Shuttle.Core.Infrastructure.Log4Net;
+using Shuttle.EMailSender.Messages;
 using Shuttle.ESB.Castle;
 using Shuttle.ESB.Core;
 using Shuttle.ESB.SqlServer;
+using Shuttle.Invoicing.Messages;
+using Shuttle.Ordering.Messages;
 using Shuttle.ProcessManagement;
 
 namespace Shuttle.Process.HandRolled.Server
@@ -28,21 +32,22 @@ namespace Shuttle.Process.HandRolled.Server
 
             _container = new WindsorContainer();
 
-            _container.RegisterDataAccess();
+            _container.RegisterDataAccessCore();
+            _container.RegisterDataAccess("Shuttle.ProcessManagement");
 
-            // register all the message handlers in this assembly
-            _container.Register(
-                Classes.FromThisAssembly()
-                .BasedOn(typeof(IMessageHandler<>))
-                .WithServiceFromInterface(typeof(IMessageHandler<>))
-                .LifestyleTransient()
-                );
+            var subscriptionManager = SubscriptionManager.Default();
+
+            subscriptionManager.Subscribe<OrderCreatedEvent>();
+            subscriptionManager.Subscribe<InvoiceCreatedEvent>();
+            subscriptionManager.Subscribe<EMailSentEvent>();
 
             _bus = ServiceBus.Create(
-                c => c
-                    .MessageHandlerFactory(new CastleMessageHandlerFactory(_container))
-                    .SubscriptionManager(SubscriptionManager.Default())
-                ).Start();
+                c =>
+                {
+                    c
+                        .MessageHandlerFactory(new CastleMessageHandlerFactory(_container).RegisterHandlers())
+                        .SubscriptionManager(subscriptionManager);
+                }).Start();
         }
     }
 }

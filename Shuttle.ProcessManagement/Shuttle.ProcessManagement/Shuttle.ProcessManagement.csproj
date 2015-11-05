@@ -63,10 +63,10 @@
     <Compile Include="DataAccess\ProcessManager-HandRolled\OrderProcessQueryFactory.cs" />
     <Compile Include="DataAccess\ProcessManager-HandRolled\OrderProcessRepository.cs" />
     <Compile Include="Domain\IOrderProcessService.cs" />
-    <Compile Include="Domain\ProcessManager-HandRolled\IOrderProcessRepository.cs" />
-    <Compile Include="Domain\ProcessManager-HandRolled\OrderProcess.cs" />
-    <Compile Include="Domain\ProcessManager-HandRolled\OrderProcessItem.cs" />
-    <Compile Include="Domain\ProcessManager-HandRolled\OrderProcessStatus.cs" />
+    <Compile Include="Domain\IOrderProcessRepository.cs" />
+    <Compile Include="Domain\OrderProcess.cs" />
+    <Compile Include="Domain\OrderProcessItem.cs" />
+    <Compile Include="Domain\OrderProcessStatus.cs" />
     <Compile Include="DataAccess\OrderProcessView\IOrderProcessViewQuery.cs" />
     <Compile Include="DataAccess\OrderProcessView\IOrderProcessViewQueryFactory.cs" />
     <Compile Include="DataAccess\OrderColumns.cs" />
@@ -76,7 +76,6 @@
     <Compile Include="DataAccess\Product\ProductColumns.cs" />
     <Compile Include="DataAccess\Product\ProductQuery.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="WindsorContainerExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

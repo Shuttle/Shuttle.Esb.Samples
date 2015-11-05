@@ -6,5 +6,6 @@ namespace Shuttle.ProcessManagement
     {
         dynamic ActiveOrders();
         void CancelOrder(Guid id);
+        void ArchiveOrder(Guid id);
     }
 }

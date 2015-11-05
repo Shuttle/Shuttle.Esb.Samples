@@ -2,12 +2,16 @@
 using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 using log4net;
+using Shuttle.Castle;
 using Shuttle.Core.Host;
 using Shuttle.Core.Infrastructure;
 using Shuttle.Core.Infrastructure.Log4Net;
+using Shuttle.EMailSender.Messages;
 using Shuttle.ESB.Castle;
 using Shuttle.ESB.Core;
 using Shuttle.ESB.SqlServer;
+using Shuttle.Invoicing.Messages;
+using Shuttle.Ordering.Messages;
 using Shuttle.ProcessManagement;
 using Shuttle.ProcessManagement.Messages;
 
@@ -29,26 +33,25 @@ namespace Shuttle.Process.QueryServer
 
             _container = new WindsorContainer();
 
-            _container.RegisterDataAccess();
-
-            // register all the message handlers in this assembly
-            _container.Register(
-                Classes.FromThisAssembly()
-                    .BasedOn(typeof (IMessageHandler<>))
-                    .WithServiceFromInterface(typeof (IMessageHandler<>))
-                    .LifestyleTransient()
-                );
+            _container.RegisterDataAccessCore();
+            _container.RegisterDataAccess("Shuttle.ProcessManagement");
 
             var subscriptionManager = SubscriptionManager.Default();
 
             subscriptionManager.Subscribe<OrderProcessRegisteredEvent>();
             subscriptionManager.Subscribe<OrderProcessCancelledEvent>();
+            subscriptionManager.Subscribe<OrderProcessAcceptedEvent>();
+            subscriptionManager.Subscribe<OrderProcessCompletedEvent>();
+            subscriptionManager.Subscribe<OrderProcessArchivedEvent>();
+            subscriptionManager.Subscribe<OrderCreatedEvent>();
+            subscriptionManager.Subscribe<InvoiceCreatedEvent>();
+            subscriptionManager.Subscribe<EMailSentEvent>();
 
             _bus = ServiceBus.Create(
                 c =>
                 {
                     c
-                        .MessageHandlerFactory(new CastleMessageHandlerFactory(_container))
+                        .MessageHandlerFactory(new CastleMessageHandlerFactory(_container).RegisterHandlers())
                         .SubscriptionManager(subscriptionManager);
                 }).Start();
         }

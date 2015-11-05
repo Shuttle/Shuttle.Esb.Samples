@@ -36,14 +36,14 @@ namespace Shuttle.ProcessManagement
             return _databaseGateway.GetSingleRowUsing(_queryFactory.Find(id));
         }
 
-        public void Cancelling(Guid id)
-        {
-            _databaseGateway.ExecuteUsing(_queryFactory.Cancelling(id));
-        }
-
         public void Remove(Guid id)
         {
             _databaseGateway.ExecuteUsing(_queryFactory.Remove(id));
+        }
+
+        public void SaveStatus(Guid orderProcessId, string status)
+        {
+            _databaseGateway.ExecuteUsing(_queryFactory.SaveStatus(orderProcessId, status));
         }
     }
 }

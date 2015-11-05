@@ -13,5 +13,8 @@ namespace Shuttle.ProcessManagement.Messages
         public DateTime StatusDate { get; set; }
         public string TargetSystem { get; set; }
         public string TargetSystemUri { get; set; }
+        public string OrderNumber { get; set; }
+        public DateTime OrderDate { get; set; }
+        public decimal OrderTotal { get; set; }
     }
 }

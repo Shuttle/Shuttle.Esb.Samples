@@ -11,7 +11,7 @@ namespace Shuttle.ProcessManagement
         IEnumerable<DataRow> All();
         void Add(OrderProcessRegisteredEvent message);
         DataRow Find(Guid id);
-        void Cancelling(Guid id);
         void Remove(Guid id);
+        void SaveStatus(Guid orderProcessId, string status);
     }
 }

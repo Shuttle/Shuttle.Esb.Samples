@@ -13,6 +13,7 @@ using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 using log4net;
 using Newtonsoft.Json.Serialization;
+using Shuttle.Castle;
 using Shuttle.Core.Data;
 using Shuttle.Core.Infrastructure;
 using Shuttle.Core.Infrastructure.Log4Net;
@@ -226,10 +227,10 @@ namespace Shuttle.ProcessManagement.WebApi
         {
             _container = new WindsorContainer();
 
-            _container.RegisterDataAccess();
+            _container.RegisterDataAccessCore();
+            _container.RegisterDataAccess("Shuttle.ProcessManagement");
 
             var shuttleApiControllerType = typeof(ShuttleApiController);
-            var dataRowMapperType = typeof(IDataRowMapper<>);
 
             _container.Register(
                 Classes

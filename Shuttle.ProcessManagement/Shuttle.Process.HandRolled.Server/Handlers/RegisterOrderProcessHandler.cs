@@ -1,4 +1,5 @@
-﻿using Shuttle.Core.Data;
+﻿using System;
+using Shuttle.Core.Data;
 using Shuttle.Core.Infrastructure;
 using Shuttle.ESB.Core;
 using Shuttle.ProcessManagement;
@@ -23,15 +24,21 @@ namespace Shuttle.Process.HandRolled.Server
 
         public void ProcessMessage(HandlerContext<RegisterOrderProcessCommand> context)
         {
+            var message = context.Message;
+
             var orderProcess = new OrderProcess
             {
                 OrderId = null,
                 InvoiceId = null,
-                CustomerName = context.Message.CustomerName,
-                CustomerEMail = context.Message.CustomerEMail
+                CustomerName = message.CustomerName,
+                CustomerEMail = message.CustomerEMail,
+                TargetSystem = message.TargetSystem,
+                TargetSystemUri = message.TargetSystemUri
             };
 
-            foreach (var quotedProduct in context.Message.QuotedProducts)
+            orderProcess.GenerateOrderNumber();
+
+            foreach (var quotedProduct in message.QuotedProducts)
             {
                 orderProcess.AddItem(new OrderProcessItem(quotedProduct.ProductId, quotedProduct.Description, quotedProduct.Price));
             }
@@ -48,14 +55,22 @@ namespace Shuttle.Process.HandRolled.Server
             context.Publish(new OrderProcessRegisteredEvent
             {
                 OrderProcessId = orderProcess.Id,
-                QuotedProducts = context.Message.QuotedProducts,
-                CustomerName = context.Message.CustomerName,
-                CustomerEMail = context.Message.CustomerEMail,
+                QuotedProducts = message.QuotedProducts,
+                CustomerName = message.CustomerName,
+                CustomerEMail = message.CustomerEMail,
+                OrderNumber = orderProcess.OrderNumber,
+                OrderDate = orderProcess.DateRegistered,
+                OrderTotal = orderProcess.Total(),
                 Status = status.Status,
                 StatusDate = status.StatusDate,
-                TargetSystem = context.Message.TargetSystem,
-                TargetSystemUri = context.Message.TargetSystemUri
+                TargetSystem = message.TargetSystem,
+                TargetSystemUri = message.TargetSystemUri
             });
+
+            context.Send(new AcceptOrderProcessCommand
+            {
+                OrderProcessId = orderProcess.Id
+            }, c => c.Defer(DateTime.Now.AddSeconds(10)).Local());
         }
 
         public bool IsReusable

@@ -9,7 +9,7 @@ namespace Shuttle.ProcessManagement
         IQuery All();
         IQuery Add(OrderProcessRegisteredEvent message);
         IQuery Find(Guid id);
-        IQuery Cancelling(Guid id);
         IQuery Remove(Guid id);
+        IQuery SaveStatus(Guid id, string status);
     }
 }

@@ -19,6 +19,7 @@ select
     CustomerName, 
     OrderNumber, 
     OrderDate, 
+    OrderTotal, 
     Status,
     TargetSystem,
     TargetSystemUri
@@ -33,6 +34,9 @@ insert into dbo.OrderProcessView
 (
     Id,
     CustomerName,
+    OrderNumber,
+    OrderDate,
+    OrderTotal,
     Status,
     TargetSystem,
     TargetSystemUri
@@ -41,6 +45,9 @@ values
 (
     @Id,
     @CustomerName,
+    @OrderNumber,
+    @OrderDate,
+    @OrderTotal,
     @Status,
     @TargetSystem,
     @TargetSystemUri
@@ -48,6 +55,9 @@ values
 ")
                 .AddParameterValue(OrderProcessViewColumns.Id, message.OrderProcessId)
                 .AddParameterValue(OrderProcessViewColumns.CustomerName, message.CustomerName)
+                .AddParameterValue(OrderProcessViewColumns.OrderNumber, message.OrderNumber)
+                .AddParameterValue(OrderProcessViewColumns.OrderDate, message.OrderDate)
+                .AddParameterValue(OrderProcessViewColumns.OrderTotal, message.OrderTotal)
                 .AddParameterValue(OrderProcessViewColumns.Status, message.Status)
                 .AddParameterValue(OrderProcessViewColumns.TargetSystem, message.TargetSystem)
                 .AddParameterValue(OrderProcessViewColumns.TargetSystemUri, message.TargetSystemUri);
@@ -58,14 +68,16 @@ values
             return RawQuery.Create(string.Concat(SelectClause(), "where Id = @Id")).AddParameterValue(OrderProcessViewColumns.Id, id);
         }
 
-        public IQuery Cancelling(Guid id)
-        {
-            return RawQuery.Create("update dbo.OrderProcessView set Status = 'Cancelling' where Id = @Id").AddParameterValue(OrderProcessViewColumns.Id, id);
-        }
-
         public IQuery Remove(Guid id)
         {
             return RawQuery.Create("delete from dbo.OrderProcessView where Id = @Id").AddParameterValue(OrderProcessViewColumns.Id, id);
+        }
+
+        public IQuery SaveStatus(Guid id, string status)
+        {
+            return RawQuery.Create("update dbo.OrderProcessView set Status = @Status where Id = @Id")
+                .AddParameterValue(OrderProcessViewColumns.Id, id)
+                .AddParameterValue(OrderProcessViewColumns.Status, status);
         }
     }
 }

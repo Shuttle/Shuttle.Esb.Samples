@@ -21,6 +21,7 @@ namespace Shuttle.ProcessManagement
             Guard.AgainstNull(id, "id");
 
             Id = id;
+            DateRegistered = DateTime.Now;
         }
 
         public Guid Id { get; private set; }
@@ -40,6 +41,11 @@ namespace Shuttle.ProcessManagement
             get { return new ReadOnlyCollection<OrderProcessStatus>(_statuses); }
         }
 
+        public DateTime DateRegistered { get; set; }
+        public string OrderNumber { get; set; }
+        public string TargetSystem { get; set; }
+        public string TargetSystemUri { get; set; }
+
         public void AddItem(OrderProcessItem item)
         {
             Guard.AgainstNull(item, "item");
@@ -56,7 +62,7 @@ namespace Shuttle.ProcessManagement
 
         public OrderProcessStatus Status()
         {
-            _statuses.Sort((s1, s2) => s1.StatusDate.CompareTo(s2.StatusDate));
+            _statuses.Sort((s1, s2) => s2.StatusDate.CompareTo(s1.StatusDate));
 
             return _statuses.FirstOrDefault();
         }
@@ -64,6 +70,21 @@ namespace Shuttle.ProcessManagement
         public bool CanCancel()
         {
             return Status().Status.Equals("Cooling Off", StringComparison.InvariantCultureIgnoreCase);
+        }
+
+        public void GenerateOrderNumber()
+        {
+            OrderNumber = string.Format("ORD-{0}-{1}", DateRegistered.Ticks.ToString().Substring(8, 6), Guid.NewGuid().ToString("N").Substring(6));
+        }
+
+        public decimal Total()
+        {
+            return _orderProcessItems.Aggregate(0m, (current, orderProcessItem) => current + orderProcessItem.Price);
+        }
+
+        public bool CanArchive()
+        {
+            return Status().Status.Equals("Completed");
         }
     }
 }

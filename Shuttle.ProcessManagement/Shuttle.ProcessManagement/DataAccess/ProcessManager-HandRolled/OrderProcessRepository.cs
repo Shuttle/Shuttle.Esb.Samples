@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using Shuttle.Core.Data;
 using Shuttle.Core.Infrastructure;
 
@@ -46,7 +47,14 @@ namespace Shuttle.ProcessManagement
 
         public OrderProcess Get(Guid id)
         {
-            var orderProcess = _orderProcessMapper.Map(_databaseGateway.GetSingleRowUsing(_queryFactory.Get(id))).Result;
+            var orderProcessRow = _databaseGateway.GetSingleRowUsing(_queryFactory.Get(id));
+
+            if (orderProcessRow == null)
+            {
+                return null;
+            }
+
+            var orderProcess = _orderProcessMapper.Map(orderProcessRow).Result;
 
             foreach (var row in _databaseGateway.GetRowsUsing(_queryFactory.GetItems(id)))
             {
@@ -64,6 +72,21 @@ namespace Shuttle.ProcessManagement
         public void Remove(OrderProcess orderProcess)
         {
             _databaseGateway.ExecuteUsing(_queryFactory.Remove(orderProcess.Id));
+        }
+
+        public void AddStatus(OrderProcessStatus orderProcessStatus, Guid id)
+        {
+            _databaseGateway.ExecuteUsing(_queryFactory.AddStatus(orderProcessStatus, id));
+        }
+
+        public void SaveOrderId(Guid orderId, Guid id)
+        {
+            _databaseGateway.ExecuteUsing(_queryFactory.SaveOrderId(orderId, id));
+        }
+
+        public void SaveInvoiceId(Guid invoiceId, Guid id)
+        {
+            _databaseGateway.ExecuteUsing(_queryFactory.SaveInvoiceId(invoiceId, id));
         }
     }
 }
