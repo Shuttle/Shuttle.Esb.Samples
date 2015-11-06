@@ -8,13 +8,6 @@ namespace Shuttle.Castle
 {
     public static class WindsorContainerExtensions
     {
-        public static void RegisterDataAccess(this IWindsorContainer container)
-        {
-            Guard.AgainstNull(container, "container");
-
-            container.RegisterDataAccess(Assembly.GetExecutingAssembly());
-        }
-
         public static void RegisterDataAccess(this IWindsorContainer container, string assemblyName)
         {
             Guard.AgainstNull(container, "container");

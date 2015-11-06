@@ -12,19 +12,16 @@ namespace Shuttle.ProcessManagement.Services
         private readonly IServiceBus _bus;
         private readonly IDatabaseContextFactory _databaseContextFactory;
         private readonly IOrderProcessViewQuery _orderProcessViewQuery;
-        private readonly IOrderProcessRepository _orderProcessRepository;
 
-        public OrderProcessService(IServiceBus bus, IDatabaseContextFactory databaseContextFactory, IOrderProcessViewQuery orderProcessViewQuery, IOrderProcessRepository orderProcessRepository)
+        public OrderProcessService(IServiceBus bus, IDatabaseContextFactory databaseContextFactory, IOrderProcessViewQuery orderProcessViewQuery)
         {
             Guard.AgainstNull(bus, "bus");
             Guard.AgainstNull(databaseContextFactory, "databaseContextFactory");
             Guard.AgainstNull(orderProcessViewQuery, "orderProcessViewQuery");
-            Guard.AgainstNull(orderProcessRepository, "orderProcessRepository");
 
             _bus = bus;
             _databaseContextFactory = databaseContextFactory;
             _orderProcessViewQuery = orderProcessViewQuery;
-            _orderProcessRepository = orderProcessRepository;
         }
 
         public dynamic ActiveOrders()
@@ -51,9 +48,9 @@ namespace Shuttle.ProcessManagement.Services
         {
             using (_databaseContextFactory.Create(ProcessManagementData.ConnectionStringName))
             {
-                var orderProcess = _orderProcessRepository.Get(id);
+                var row = _orderProcessViewQuery.Find(id);
 
-                if (!orderProcess.CanCancel())
+                if (row == null)
                 {
                     return;
                 }
@@ -61,7 +58,7 @@ namespace Shuttle.ProcessManagement.Services
                 _bus.Send(new CancelOrderProcessCommand
                 {
                     OrderProcessId = id
-                }, c => c.WithRecipient(orderProcess.TargetSystemUri));
+                }, c => c.WithRecipient(OrderProcessViewColumns.TargetSystemUri.MapFrom(row)));
 
                 _orderProcessViewQuery.SaveStatus(id, "Cancelling");
             }
@@ -71,9 +68,9 @@ namespace Shuttle.ProcessManagement.Services
         {
             using (_databaseContextFactory.Create(ProcessManagementData.ConnectionStringName))
             {
-                var orderProcess = _orderProcessRepository.Get(id);
+                var row = _orderProcessViewQuery.Find(id);
 
-                if (!orderProcess.CanArchive())
+                if (row == null)
                 {
                     return;
                 }
@@ -81,7 +78,7 @@ namespace Shuttle.ProcessManagement.Services
                 _bus.Send(new ArchiveOrderProcessCommand
                 {
                     OrderProcessId = id
-                }, c => c.WithRecipient(orderProcess.TargetSystemUri));
+                }, c => c.WithRecipient(OrderProcessViewColumns.TargetSystemUri.MapFrom(row)));
 
                 _orderProcessViewQuery.SaveStatus(id, "Archiving");
             }

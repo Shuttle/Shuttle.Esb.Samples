@@ -101,11 +101,11 @@ Shuttle.ViewModels.Books = Shuttle.ViewModel.extend({
         this.calculateTotal();
     },
 
-    orderHandRolled: function () {
+    _submitOrder: function(targetSystem) {
         var self = this;
         var order = {
             productIds: [],
-            targetSystem: 'HandRolled',
+            targetSystem: targetSystem,
             customerName: this.attr('customerName'),
             customerEMail: this.attr('customerEMail')
         };
@@ -129,6 +129,18 @@ Shuttle.ViewModels.Books = Shuttle.ViewModel.extend({
             .fail(function (xhr, textStatus, errorThrown) {
                 self.showMessage('Error submitting order.', errorThrown, 'danger');
             });
+    },
+
+    orderCustom: function () {
+        this._submitOrder('custom');
+    },
+
+    orderCustomEventSource: function() {
+        this._submitOrder('custom / event-source');
+    },
+
+    orderEventSourceModule: function() {
+        this._submitOrder('event-source / module');
     }
 });
 

@@ -35,7 +35,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shuttle.ProcessManagement",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shuttle.ProcessManagement.Messages", "Shuttle.ProcessManagement.Messages\Shuttle.ProcessManagement.Messages.csproj", "{BF2F5A45-CC2E-4C09-B29F-FF265F56AC9C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shuttle.Process.HandRolled.Server", "Shuttle.Process.HandRolled.Server\Shuttle.Process.HandRolled.Server.csproj", "{C062676D-50FB-4D0A-B0CF-7DAB86E9CB02}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shuttle.Process.Custom.Server", "Shuttle.Process.Custom.Server\Shuttle.Process.Custom.Server.csproj", "{C062676D-50FB-4D0A-B0CF-7DAB86E9CB02}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shuttle.Process.QueryServer", "Shuttle.Process.QueryServer\Shuttle.Process.QueryServer.csproj", "{6DBD4A5E-FFF9-47BA-B009-03A040327558}"
 EndProject
@@ -64,6 +64,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shuttle.EMailSender.Server", "Shuttle.EMailSender.Server\Shuttle.EMailSender.Server.csproj", "{8CEB37AD-CB65-4A13-9946-00E780F04811}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shuttle.Castle", "Shuttle.Castle\Shuttle.Castle.csproj", "{0052F712-70A6-400C-ACBE-CBED47C5AFD0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shuttle.Process.CustomES.Server", "Shuttle.Process.CustomES.Server\Shuttle.Process.CustomES.Server.csproj", "{81D58BD4-C239-41E4-B174-1FDE276E177E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -135,12 +137,17 @@ Global
 		{0052F712-70A6-400C-ACBE-CBED47C5AFD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0052F712-70A6-400C-ACBE-CBED47C5AFD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0052F712-70A6-400C-ACBE-CBED47C5AFD0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{81D58BD4-C239-41E4-B174-1FDE276E177E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81D58BD4-C239-41E4-B174-1FDE276E177E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81D58BD4-C239-41E4-B174-1FDE276E177E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81D58BD4-C239-41E4-B174-1FDE276E177E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{C062676D-50FB-4D0A-B0CF-7DAB86E9CB02} = {8243E028-F764-4BBB-BF5B-586EF517BACB}
+		{81D58BD4-C239-41E4-B174-1FDE276E177E} = {8243E028-F764-4BBB-BF5B-586EF517BACB}
 		{CFF217E7-9704-4364-A1CD-FDB4D784C008} = {D69E2491-6BFE-46FA-BAB5-879A6DC3E345}
 		{84907CE9-003E-4829-84B2-1A8AA48AA253} = {D69E2491-6BFE-46FA-BAB5-879A6DC3E345}
 		{FBE66702-8E81-4DE8-BA87-2E7BB7501901} = {D69E2491-6BFE-46FA-BAB5-879A6DC3E345}

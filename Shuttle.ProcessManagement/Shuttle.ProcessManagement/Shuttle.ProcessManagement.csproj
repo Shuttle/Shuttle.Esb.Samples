@@ -53,20 +53,7 @@
   <ItemGroup>
     <Compile Include="DataAccess\OrderProcessView\OrderProcessViewColumns.cs" />
     <Compile Include="DataAccess\ProcessManagementData.cs" />
-    <Compile Include="DataAccess\ProcessManager-HandRolled\OrderProcessStatusMapper.cs" />
-    <Compile Include="DataAccess\ProcessManager-HandRolled\OrderProcessItemMapper.cs" />
-    <Compile Include="DataAccess\ProcessManager-HandRolled\OrderProcessMapper.cs" />
-    <Compile Include="DataAccess\ProcessManager-HandRolled\OrderProcessStatusColumns.cs" />
-    <Compile Include="DataAccess\ProcessManager-HandRolled\OrderProcessItemColumns.cs" />
-    <Compile Include="DataAccess\ProcessManager-HandRolled\IOrderProcessQueryFactory.cs" />
-    <Compile Include="DataAccess\ProcessManager-HandRolled\OrderProcessColumns.cs" />
-    <Compile Include="DataAccess\ProcessManager-HandRolled\OrderProcessQueryFactory.cs" />
-    <Compile Include="DataAccess\ProcessManager-HandRolled\OrderProcessRepository.cs" />
     <Compile Include="Domain\IOrderProcessService.cs" />
-    <Compile Include="Domain\IOrderProcessRepository.cs" />
-    <Compile Include="Domain\OrderProcess.cs" />
-    <Compile Include="Domain\OrderProcessItem.cs" />
-    <Compile Include="Domain\OrderProcessStatus.cs" />
     <Compile Include="DataAccess\OrderProcessView\IOrderProcessViewQuery.cs" />
     <Compile Include="DataAccess\OrderProcessView\IOrderProcessViewQueryFactory.cs" />
     <Compile Include="DataAccess\OrderColumns.cs" />
@@ -86,6 +73,7 @@
       <Name>Shuttle.ProcessManagement.Messages</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

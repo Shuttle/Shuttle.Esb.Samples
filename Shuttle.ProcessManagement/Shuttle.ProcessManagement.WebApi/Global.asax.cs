@@ -6,9 +6,6 @@ using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Http;
 using System.Web.Http.Dispatcher;
-using System.Web.Mvc;
-using System.Web.Optimization;
-using System.Web.Routing;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 using log4net;
@@ -35,7 +32,7 @@ namespace Shuttle.ProcessManagement.WebApi
 
         public WebApiApplication()
         {
-            var logger = LogManager.GetLogger(typeof(WebApiApplication));
+            var logger = LogManager.GetLogger(typeof (WebApiApplication));
 
             Log.Assign(new Log4NetLog(logger));
 
@@ -52,18 +49,10 @@ namespace Shuttle.ProcessManagement.WebApi
 
                 ConfigureWindsorContainer();
 
-                MvcHandler.DisableMvcResponseHeader = true;
-
-                AreaRegistration.RegisterAllAreas();
-
-                WebApiConfig.Register(GlobalConfiguration.Configuration);
-                FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
-                RouteConfig.RegisterRoutes(RouteTable.Routes);
-                BundleConfig.RegisterBundles(BundleTable.Bundles);
+                WebApiConfiguration.Register(GlobalConfiguration.Configuration);
 
                 GlobalConfiguration.Configuration.DependencyResolver = new ApiResolver(_container);
                 GlobalConfiguration.Configuration.MessageHandlers.Add(new CorsMessageHandler());
-                ControllerBuilder.Current.SetControllerFactory(new CastleControllerFactory(_container));
 
                 _container.Register(
                     Component.For<IHttpControllerActivator>().Instance(new ShuttleApiControllerActivator(_container)));
@@ -230,7 +219,7 @@ namespace Shuttle.ProcessManagement.WebApi
             _container.RegisterDataAccessCore();
             _container.RegisterDataAccess("Shuttle.ProcessManagement");
 
-            var shuttleApiControllerType = typeof(ShuttleApiController);
+            var shuttleApiControllerType = typeof (ShuttleApiController);
 
             _container.Register(
                 Classes

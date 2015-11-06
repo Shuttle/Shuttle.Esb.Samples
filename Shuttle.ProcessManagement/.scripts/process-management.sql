@@ -1,6 +1,6 @@
-﻿USE [shuttle]
+﻿USE [ProcessManagement]
 GO
-/****** Object:  Table [dbo].[Invoice]    Script Date: 11/4/2015 4:39:46 PM ******/
+/****** Object:  Table [dbo].[Invoice]    Script Date: 11/6/2015 6:43:56 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -23,7 +23,7 @@ CREATE TABLE [dbo].[Invoice](
 GO
 SET ANSI_PADDING OFF
 GO
-/****** Object:  Table [dbo].[InvoiceItem]    Script Date: 11/4/2015 4:39:46 PM ******/
+/****** Object:  Table [dbo].[InvoiceItem]    Script Date: 11/6/2015 6:43:56 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -39,7 +39,7 @@ CREATE TABLE [dbo].[InvoiceItem](
 GO
 SET ANSI_PADDING OFF
 GO
-/****** Object:  Table [dbo].[Order]    Script Date: 11/4/2015 4:39:46 PM ******/
+/****** Object:  Table [dbo].[Order]    Script Date: 11/6/2015 6:43:56 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -61,7 +61,7 @@ CREATE TABLE [dbo].[Order](
 GO
 SET ANSI_PADDING OFF
 GO
-/****** Object:  Table [dbo].[OrderItem]    Script Date: 11/4/2015 4:39:46 PM ******/
+/****** Object:  Table [dbo].[OrderItem]    Script Date: 11/6/2015 6:43:56 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -77,7 +77,7 @@ CREATE TABLE [dbo].[OrderItem](
 GO
 SET ANSI_PADDING OFF
 GO
-/****** Object:  Table [dbo].[OrderProcess]    Script Date: 11/4/2015 4:39:46 PM ******/
+/****** Object:  Table [dbo].[OrderProcess]    Script Date: 11/6/2015 6:43:56 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -92,6 +92,8 @@ CREATE TABLE [dbo].[OrderProcess](
 	[CustomerEMail] [varchar](130) NOT NULL,
 	[DateRegistered] [datetime] NOT NULL,
 	[OrderNumber] [varchar](20) NOT NULL,
+	[TargetSystem] [varchar](65) NOT NULL,
+	[TargetSystemUri] [varchar](130) NOT NULL,
  CONSTRAINT [PK_OrderProcess] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
@@ -101,7 +103,7 @@ CREATE TABLE [dbo].[OrderProcess](
 GO
 SET ANSI_PADDING OFF
 GO
-/****** Object:  Table [dbo].[OrderProcessItem]    Script Date: 11/4/2015 4:39:46 PM ******/
+/****** Object:  Table [dbo].[OrderProcessItem]    Script Date: 11/6/2015 6:43:56 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -118,7 +120,7 @@ CREATE TABLE [dbo].[OrderProcessItem](
 GO
 SET ANSI_PADDING OFF
 GO
-/****** Object:  Table [dbo].[OrderProcessStatus]    Script Date: 11/4/2015 4:39:46 PM ******/
+/****** Object:  Table [dbo].[OrderProcessStatus]    Script Date: 11/6/2015 6:43:56 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -134,7 +136,7 @@ CREATE TABLE [dbo].[OrderProcessStatus](
 GO
 SET ANSI_PADDING OFF
 GO
-/****** Object:  Table [dbo].[OrderProcessView]    Script Date: 11/4/2015 4:39:46 PM ******/
+/****** Object:  Table [dbo].[OrderProcessView]    Script Date: 11/6/2015 6:43:56 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -155,7 +157,7 @@ CREATE TABLE [dbo].[OrderProcessView](
 GO
 SET ANSI_PADDING OFF
 GO
-/****** Object:  Index [IX_OrderItem]    Script Date: 11/4/2015 4:39:46 PM ******/
+/****** Object:  Index [IX_OrderItem]    Script Date: 11/6/2015 6:43:56 AM ******/
 CREATE CLUSTERED INDEX [IX_OrderItem] ON [dbo].[OrderItem]
 (
 	[OrderId] ASC
@@ -169,6 +171,7 @@ ALTER TABLE [dbo].[InvoiceItem] CHECK CONSTRAINT [FK_InvoiceItem_Invoice]
 GO
 ALTER TABLE [dbo].[OrderItem]  WITH CHECK ADD  CONSTRAINT [FK_OrderItem_Order] FOREIGN KEY([OrderId])
 REFERENCES [dbo].[Order] ([Id])
+ON DELETE CASCADE
 GO
 ALTER TABLE [dbo].[OrderItem] CHECK CONSTRAINT [FK_OrderItem_Order]
 GO

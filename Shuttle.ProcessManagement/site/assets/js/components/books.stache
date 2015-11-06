@@ -73,10 +73,13 @@
           </button>
           <ul class="dropdown-menu">
             <li>
-              <a href="#" can-click="orderHandRolled">Use hand-rolled process manager</a>
+              <a href="#" can-click="orderCustom">Custom</a>
             </li>
             <li>
-              <a href="#">Use module process manager implementation</a>
+              <a href="#" can-click="orderCustomEventSource">Custom / EventSource</a>
+            </li>
+            <li>
+              <a href="#" can-click="orderEventSourceModule">EventSource / Module</a>
             </li>
           </ul>
         </div>

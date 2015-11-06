@@ -32,17 +32,14 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArchiveOrderProcessRejectedEvent.cs" />
     <Compile Include="CancelOrderProcessCommand.cs" />
     <Compile Include="AcceptOrderProcessCommand.cs" />
     <Compile Include="CompleteOrderProcessCommand.cs" />
     <Compile Include="ArchiveOrderProcessCommand.cs" />
+    <Compile Include="CancelOrderProcessRejectedEvent.cs" />
     <Compile Include="OrderProcessArchivedEvent.cs" />
     <Compile Include="OrderProcessCompletedEvent.cs" />
     <Compile Include="OrderProcessAcceptedEvent.cs" />

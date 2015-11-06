@@ -6,21 +6,6 @@ namespace Shuttle.ProcessManagement.WebApi
 {
 	public class ShuttleApiController : ApiController
 	{
-		protected HttpResponseMessage BadRequest()
-		{
-			return Request.CreateResponse(HttpStatusCode.BadRequest);
-		}
-
-		protected HttpResponseMessage BadRequest(string message)
-		{
-			return Request.CreateResponse(HttpStatusCode.BadRequest, message);
-		}
-
-		protected HttpResponseMessage NotFound()
-		{
-			return Request.CreateResponse(HttpStatusCode.NotFound);
-		}
-
 		protected HttpResponseMessage NotFound(string message)
 		{
 			return Request.CreateResponse(HttpStatusCode.NotFound, message);
@@ -44,11 +29,6 @@ namespace Shuttle.ProcessManagement.WebApi
 		protected HttpResponseMessage Unauthorized(string message)
 		{
 			return Request.CreateResponse(HttpStatusCode.Unauthorized, message);
-		}
-
-		protected HttpResponseMessage InternalServerError()
-		{
-			return Request.CreateResponse(HttpStatusCode.InternalServerError);
 		}
 
 		protected HttpResponseMessage InternalServerError(string message)

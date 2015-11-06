@@ -52,15 +52,21 @@ namespace Shuttle.ProcessManagement.WebApi.Controllers
 
             switch (model.TargetSystem.ToLower(CultureInfo.InvariantCulture))
             {
-                case "handrolled":
+                case "custom":
                 {
-                    message.TargetSystemUri = "msmq://./process-handrolled-server";
+                    message.TargetSystemUri = "msmq://./process-custom-server";
 
                     break;
                 }
-                case "defaultmodule":
+                case "custom / event-source":
                 {
-                    message.TargetSystemUri = "msmq://./process-default-server";
+                    message.TargetSystemUri = "msmq://./process-custom-es-server";
+
+                    break;
+                }
+                case "event-source / module":
+                {
+                    message.TargetSystemUri = "msmq://./process-es-module-server";
 
                     break;
                 }
