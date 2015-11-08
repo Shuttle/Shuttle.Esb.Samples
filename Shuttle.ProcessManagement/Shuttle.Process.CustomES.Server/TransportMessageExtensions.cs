@@ -1,4 +1,5 @@
-﻿using Shuttle.Core.Infrastructure;
+﻿using System;
+using Shuttle.Core.Infrastructure;
 using Shuttle.ESB.Core;
 
 namespace Shuttle.Process.CustomES.Server
@@ -9,15 +10,8 @@ namespace Shuttle.Process.CustomES.Server
         {
             Guard.AgainstNull(transportMessage, "transportMessage");
 
-            foreach (var header in transportMessage.Headers)
-            {
-                if (header.Key.Equals("TargetSystem"))
-                {
-                    return header.Value.ToLower().Equals("custom / event-source");
-                }
-            }
-
-            return false;
+            return transportMessage.Headers.GetHeaderValue("TargetSystem")
+                .Equals("custom / event-source", StringComparison.InvariantCultureIgnoreCase);
         }
     }
 }

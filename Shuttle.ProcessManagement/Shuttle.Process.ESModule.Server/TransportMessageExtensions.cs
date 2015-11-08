@@ -2,7 +2,7 @@
 using Shuttle.Core.Infrastructure;
 using Shuttle.ESB.Core;
 
-namespace Shuttle.Process.Custom.Server
+namespace Shuttle.Process.ESModule.Server
 {
     public static class TransportMessageExtensions
     {
@@ -11,7 +11,7 @@ namespace Shuttle.Process.Custom.Server
             Guard.AgainstNull(transportMessage, "transportMessage");
 
             return transportMessage.Headers.GetHeaderValue("TargetSystem")
-                .Equals("custom", StringComparison.InvariantCultureIgnoreCase);
+                .Equals("event-source / module", StringComparison.InvariantCultureIgnoreCase);
         }
     }
 }
