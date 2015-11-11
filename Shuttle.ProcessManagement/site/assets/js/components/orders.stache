@@ -1,0 +1,41 @@
+﻿{{#if hasMessage}}
+<shuttle-message title='{{messageTitle}}' message='{{message}}' type='{{messageType}}'></shuttle-message>
+{{else}}
+{{#if fetching}}
+<shuttle-fetching title='(fetching active orders)'></shuttle-fetching>
+{{else}}
+<h3>Active orders</h3>
+<table class='table table-bordered table-hover'>
+  <thead>
+    <tr>
+      <th class='col-md-1'></th>
+      <th class='col-md-2'>Customer name</th>
+      <th class='col-md-2'>Order number</th>
+      <th class='col-md-2'>Order date</th>
+      <th class='col-md-3'>Status</th>
+      <th class='col-md-2 text-right'>Total</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each orders}}
+    <tr>
+      <td>
+		{{#if canCancel}}
+        <button class="btn btn-default btn-danger btn-xs" type="submit" can-click="cancelOrder">Cancel</button>
+		{{/if}}
+		{{#if canArchive}}
+        <button class="btn btn-default btn-danger btn-xs" type="submit" can-click="archiveOrder">Archive</button>
+		{{/if}}
+      </td>
+      <td>{{customerName}}</td>
+      <td>{{orderNumber}}</td>
+      <td>{{orderDate}}</td>
+      <td>{{status}}</td>
+      <td class="text-right">{{orderTotal}}</td>
+    </tr>
+    {{/each}}
+  </tbody>
+</table>
+</div>
+{{/if}}
+{{/if}}

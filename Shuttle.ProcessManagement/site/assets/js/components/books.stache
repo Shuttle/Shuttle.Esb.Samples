@@ -1,0 +1,92 @@
+﻿{{#if hasMessage}}
+<shuttle-message title='{{messageTitle}}' message='{{message}}' type='{{messageType}}'></shuttle-message>
+{{else}}
+{{#if fetching}}
+<shuttle-fetching title='(fetching books)'></shuttle-fetching>
+{{else}}
+<h3>Available titles</h3>
+<table class='table table-bordered table-hover'>
+  <thead>
+    <tr>
+      <th class='col-md-1'></th>
+      <th>Title</th>
+      <th class='col-md-2 text-right'>Price</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each books}}
+    <tr class='{{#if buying}}success{{/if}}'>
+      <td>
+        {{#if buying}}
+        <button class="btn btn-default btn-danger btn-xs" can-click="remove">Remove</button>
+        {{else}}
+        <button class="btn btn-default btn-success btn-xs" can-click="add">Add</button>
+        {{/if}}
+      </td>
+      <td>{{description}}</td>
+      <td class="text-right">{{price}}</td>
+    </tr>
+    {{/each}}
+  </tbody>
+  <tfoot>
+    <tr>
+      <tr>
+        <td colspan="2">
+        </td>
+        <td class="text-right info">{{total}}</td>
+      </tr>
+    </tr>
+  </tfoot>
+</table>
+{{#if canOrder}}
+<div class="panel panel-primary">
+  <div class="panel-heading">
+    <h3 class="panel-title">Checkout</h3>
+  </div>
+  <div class="panel-body">
+    <form>
+      <div class="form-group {{#if invalidCustomerName}}has-error{{/if}}">
+        <label for="CustomerName">Name</label>
+        <input type="text" class="form-control" id="CustomerName" placeholder="your name" can-value="{customerName}" />
+        {{#if invalidCustomerName}}
+        {{#each customerNameErrors}}
+        <span class="help-block">{{.}}</span>
+        {{/each}}
+        {{/if}}
+      </div>
+      <div class="form-group {{#if invalidCustomerEMail}}has-error{{/if}}">
+        <label for="exampleInputEmail2">Email</label>
+        <input type="email" class="form-control" id="CustomerEMail" placeholder="abc.xyz@example.com"
+               can-value="{customerEMail}" />
+        {{#if invalidCustomerEMail}}
+        {{#each customerEMailErrors}}
+        <span class="help-block">{{.}}</span>
+        {{/each}}
+        {{/if}}
+      </div>
+      <div class="shuttle-buttons clearfix">
+		<button type="button" class="btn btn-default" can-click="cancel">Cancel</button>
+        <div class="btn-group pull-right">
+          <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                  aria-expanded="false">
+            Order <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu">
+            <li>
+              <a href="#" can-click="orderCustom">Custom</a>
+            </li>
+            <li>
+              <a href="#" can-click="orderCustomEventSource">Custom / EventSource</a>
+            </li>
+            <li>
+              <a href="#" can-click="orderEventSourceModule">EventSource / Module</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+{{/if}}
+{{/if}}
+{{/if}}

@@ -34,9 +34,9 @@
       <HintPath>..\packages\shuttle-core-data.3.2.1\lib\net45-full\Shuttle.Core.Data.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Shuttle.Core.Host, Version=3.2.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\shuttle-core-host.3.2.1\lib\net45-full\Shuttle.Core.Host.exe</HintPath>
-      <Private>True</Private>
+    <Reference Include="Shuttle.Core.Host, Version=3.2.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\shuttle-core-host.3.2.2\lib\net45-full\Shuttle.Core.Host.exe</HintPath>
     </Reference>
     <Reference Include="Shuttle.Core.Infrastructure, Version=3.2.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\shuttle-core-infrastructure.3.2.0\lib\net45-full\Shuttle.Core.Infrastructure.dll</HintPath>
@@ -50,9 +50,9 @@
       <HintPath>..\packages\shuttle-esb-msmq.3.6.0\lib\net45-full\Shuttle.ESB.Msmq.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Shuttle.ESB.SqlServer, Version=3.6.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\shuttle-esb-sqlserver.3.6.0\lib\net45-full\Shuttle.ESB.SqlServer.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Shuttle.ESB.SqlServer, Version=3.6.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\shuttle-esb-sqlserver.3.6.1\lib\net45-full\Shuttle.ESB.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

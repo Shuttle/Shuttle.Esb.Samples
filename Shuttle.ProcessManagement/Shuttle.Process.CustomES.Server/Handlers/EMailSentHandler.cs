@@ -1,0 +1,66 @@
+﻿using System;
+using Shuttle.Core.Data;
+using Shuttle.Core.Infrastructure;
+using Shuttle.EMailSender.Messages;
+using Shuttle.ESB.Core;
+using Shuttle.Process.CustomES.Server.Domain;
+using Shuttle.ProcessManagement;
+using Shuttle.ProcessManagement.Messages;
+using Shuttle.Recall.Core;
+
+namespace Shuttle.Process.CustomES.Server
+{
+    public class EMailSentHandler : IMessageHandler<EMailSentEvent>
+    {
+        private readonly IDatabaseContextFactory _databaseContextFactory;
+        private readonly IEventStore _eventStore;
+
+        public EMailSentHandler(IDatabaseContextFactory databaseContextFactory, IEventStore eventStore)
+        {
+            Guard.AgainstNull(databaseContextFactory, "databaseContextFactory");
+            Guard.AgainstNull(eventStore, "eventStore");
+
+            _databaseContextFactory = databaseContextFactory;
+            _eventStore = eventStore;
+        }
+
+        public void ProcessMessage(HandlerContext<EMailSentEvent> context)
+        {
+            if (!context.TransportMessage.IsHandledHere())
+            {
+                return;
+            }
+
+            var orderProcessId = new Guid(context.TransportMessage.CorrelationId);
+
+            using (_databaseContextFactory.Create(ProcessManagementData.ConnectionStringName))
+            {
+                var stream = _eventStore.Get(orderProcessId);
+
+                if (stream.IsEmpty)
+                {
+                    throw new ApplicationException(
+                        string.Format("Could not find an order process with correlation id '{0}'.",
+                            context.TransportMessage.CorrelationId));
+                }
+
+                var orderProcess = new OrderProcess(orderProcessId);
+                stream.Apply(orderProcess);
+
+                stream.AddEvent(orderProcess.ChangeStatus("Dispatched-EMail Sent"));
+
+                _eventStore.SaveEventStream(stream);
+            }
+
+            context.Send(new CompleteOrderProcessCommand
+            {
+                OrderProcessId = orderProcessId
+            }, c => c.Local());
+        }
+
+        public bool IsReusable
+        {
+            get { return true; }
+        }
+    }
+}

@@ -1,0 +1,97 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{8CEB37AD-CB65-4A13-9946-00E780F04811}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Shuttle.EMailSender.Server</RootNamespace>
+    <AssemblyName>Shuttle.EMailSender.Server</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Castle.Core">
+      <HintPath>..\packages\Castle.Core.3.3.3\lib\net45\Castle.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.Windsor">
+      <HintPath>..\packages\Castle.Windsor.3.3.0\lib\net45\Castle.Windsor.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Shuttle.Core.Data">
+      <HintPath>..\packages\shuttle-core-data.3.2.1\lib\net45-full\Shuttle.Core.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Shuttle.Core.Host">
+      <HintPath>..\packages\shuttle-core-host.3.2.2\lib\net45-full\Shuttle.Core.Host.exe</HintPath>
+    </Reference>
+    <Reference Include="Shuttle.Core.Infrastructure">
+      <HintPath>..\packages\shuttle-core-infrastructure.3.2.0\lib\net45-full\Shuttle.Core.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="Shuttle.Core.Infrastructure.Log4Net">
+      <HintPath>..\packages\shuttle-core-infrastructure-log4net.3.2.0\lib\net45-full\Shuttle.Core.Infrastructure.Log4Net.dll</HintPath>
+    </Reference>
+    <Reference Include="Shuttle.ESB.Castle">
+      <HintPath>..\packages\shuttle-esb-castle.3.6.0\lib\net45-full\Shuttle.ESB.Castle.dll</HintPath>
+    </Reference>
+    <Reference Include="Shuttle.ESB.Core">
+      <HintPath>..\packages\shuttle-esb-core.3.8.1\lib\net45-full\Shuttle.ESB.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Shuttle.ESB.Msmq">
+      <HintPath>..\packages\shuttle-esb-msmq.3.6.0\lib\net45-full\Shuttle.ESB.Msmq.dll</HintPath>
+    </Reference>
+    <Reference Include="Shuttle.ESB.SqlServer">
+      <HintPath>..\packages\shuttle-esb-sqlserver.3.6.1\lib\net45-full\Shuttle.ESB.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Handlers\SendEMailHandler.cs" />
+    <Compile Include="Host.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Shuttle.EMailSender.Messages\Shuttle.EMailSender.Messages.csproj">
+      <Project>{DCD28B36-B38B-4AEE-8C08-E2A1449A6917}</Project>
+      <Name>Shuttle.EMailSender.Messages</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
