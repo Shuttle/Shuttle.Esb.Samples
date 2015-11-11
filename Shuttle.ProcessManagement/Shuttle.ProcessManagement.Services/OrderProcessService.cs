@@ -58,7 +58,16 @@ namespace Shuttle.ProcessManagement.Services
                 _bus.Send(new CancelOrderProcessCommand
                 {
                     OrderProcessId = id
-                }, c => c.WithRecipient(OrderProcessViewColumns.TargetSystemUri.MapFrom(row)));
+                }, c =>
+                {
+                    c.WithRecipient(OrderProcessViewColumns.TargetSystemUri.MapFrom(row));
+                    c.WithCorrelationId(id.ToString("N"));
+                    c.Headers.Add(new TransportHeader
+                    {
+                        Key = "TargetSystem",
+                        Value = OrderProcessViewColumns.TargetSystem.MapFrom(row)
+                    });
+                });
 
                 _orderProcessViewQuery.SaveStatus(id, "Cancelling");
             }
@@ -78,7 +87,16 @@ namespace Shuttle.ProcessManagement.Services
                 _bus.Send(new ArchiveOrderProcessCommand
                 {
                     OrderProcessId = id
-                }, c => c.WithRecipient(OrderProcessViewColumns.TargetSystemUri.MapFrom(row)));
+                }, c =>
+                {
+                    c.WithRecipient(OrderProcessViewColumns.TargetSystemUri.MapFrom(row));
+                    c.WithCorrelationId(id.ToString("N"));
+                    c.Headers.Add(new TransportHeader
+                    {
+                        Key = "TargetSystem",
+                        Value = OrderProcessViewColumns.TargetSystem.MapFrom(row)
+                    });
+                });
 
                 _orderProcessViewQuery.SaveStatus(id, "Archiving");
             }

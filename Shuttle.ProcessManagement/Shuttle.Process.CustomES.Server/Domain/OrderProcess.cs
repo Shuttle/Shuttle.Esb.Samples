@@ -43,7 +43,7 @@ namespace Shuttle.Process.CustomES.Server.Domain
 
         public bool CanCancel
         {
-            get { return Status.Equals("Colling Off", StringComparison.InvariantCultureIgnoreCase); }
+            get { return Status.Equals("Cooling Off", StringComparison.InvariantCultureIgnoreCase); }
         }
 
         public Events.Initialized Initialize()

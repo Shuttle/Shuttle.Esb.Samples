@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Shuttle.ESB.Process")]
+[assembly: AssemblyTitle("Shuttle.Process.ESModule")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Shuttle.ESB.Process")]
+[assembly: AssemblyProduct("Shuttle.Process.ESModule")]
 [assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("e6acd92c-c78b-4660-bdc9-86703913098c")]
+[assembly: Guid("93f2f6ff-ed73-46ef-8885-7f572191f293")]
 
 // Version information for an assembly consists of the following four values:
 //

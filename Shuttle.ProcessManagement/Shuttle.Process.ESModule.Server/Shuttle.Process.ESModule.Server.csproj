@@ -45,8 +45,9 @@
     <Reference Include="Shuttle.Core.Host">
       <HintPath>..\packages\shuttle-core-host.3.2.2\lib\net45-full\Shuttle.Core.Host.exe</HintPath>
     </Reference>
-    <Reference Include="Shuttle.Core.Infrastructure">
-      <HintPath>..\packages\shuttle-core-infrastructure.3.2.0\lib\net45-full\Shuttle.Core.Infrastructure.dll</HintPath>
+    <Reference Include="Shuttle.Core.Infrastructure, Version=3.3.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\shuttle-core-infrastructure.3.3.1\lib\net45-full\Shuttle.Core.Infrastructure.dll</HintPath>
     </Reference>
     <Reference Include="Shuttle.Core.Infrastructure.Log4Net">
       <HintPath>..\packages\shuttle-core-infrastructure-log4net.3.2.0\lib\net45-full\Shuttle.Core.Infrastructure.Log4Net.dll</HintPath>
@@ -54,23 +55,27 @@
     <Reference Include="Shuttle.ESB.Castle">
       <HintPath>..\packages\shuttle-esb-castle.3.6.0\lib\net45-full\Shuttle.ESB.Castle.dll</HintPath>
     </Reference>
-    <Reference Include="Shuttle.ESB.Core, Version=3.8.1.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Shuttle.ESB.Core, Version=4.0.2.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\shuttle-esb-core.3.8.1\lib\net45-full\Shuttle.ESB.Core.dll</HintPath>
+      <HintPath>..\packages\shuttle-esb-core.4.0.2\lib\net45-full\Shuttle.ESB.Core.dll</HintPath>
     </Reference>
     <Reference Include="Shuttle.ESB.Msmq">
       <HintPath>..\packages\shuttle-esb-msmq.3.6.0\lib\net45-full\Shuttle.ESB.Msmq.dll</HintPath>
     </Reference>
+    <Reference Include="Shuttle.ESB.Process, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\shuttle-esb-process.1.0.0\lib\net45-full\Shuttle.ESB.Process.dll</HintPath>
+    </Reference>
     <Reference Include="Shuttle.ESB.SqlServer">
       <HintPath>..\packages\shuttle-esb-sqlserver.3.6.1\lib\net45-full\Shuttle.ESB.SqlServer.dll</HintPath>
     </Reference>
-    <Reference Include="Shuttle.Recall.Core, Version=1.3.1.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Shuttle.Recall.Core, Version=1.4.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\shuttle-recall-core.1.3.1\lib\net45-full\Shuttle.Recall.Core.dll</HintPath>
+      <HintPath>..\packages\shuttle-recall-core.1.4.0\lib\net45-full\Shuttle.Recall.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Shuttle.Recall.SqlServer, Version=1.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Shuttle.Recall.SqlServer, Version=1.4.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\shuttle-recall-sqlserver.1.3.0\lib\net45-full\Shuttle.Recall.SqlServer.dll</HintPath>
+      <HintPath>..\packages\shuttle-recall-sqlserver.1.4.0\lib\net45-full\Shuttle.Recall.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -82,12 +87,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Domain\OrderProcess.cs" />
-    <Compile Include="Handlers\ArchiveOrderProcessHandler.cs" />
-    <Compile Include="Handlers\CancelOrderProcessHandler.cs" />
     <Compile Include="Host.cs" />
+    <Compile Include="OrderProcess.cs" />
+    <Compile Include="OrderProcessMessageAssessor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Handlers\RegisterOrderProcessHandler.cs" />
     <Compile Include="TransportMessageExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -105,10 +108,6 @@
       <Project>{DCD28B36-B38B-4AEE-8C08-E2A1449A6917}</Project>
       <Name>Shuttle.EMailSender.Messages</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Shuttle.ESB.Process\Shuttle.ESB.Process.csproj">
-      <Project>{2578701E-A8A6-4F80-BB22-F7636C350430}</Project>
-      <Name>Shuttle.ESB.Process</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Shuttle.Invoicing.Messages\Shuttle.Invoicing.Messages.csproj">
       <Project>{5DB0AE9F-9CA9-4955-900B-34AA625E24CE}</Project>
       <Name>Shuttle.Invoicing.Messages</Name>
@@ -116,6 +115,10 @@
     <ProjectReference Include="..\Shuttle.Ordering.Messages\Shuttle.Ordering.Messages.csproj">
       <Project>{CFF217E7-9704-4364-A1CD-FDB4D784C008}</Project>
       <Name>Shuttle.Ordering.Messages</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Shuttle.Process.ESModule\Shuttle.Process.ESModule.csproj">
+      <Project>{01CEC918-70D3-4870-BBFB-F1063563D253}</Project>
+      <Name>Shuttle.Process.ESModule</Name>
     </ProjectReference>
     <ProjectReference Include="..\Shuttle.ProcessManagement.Messages\Shuttle.ProcessManagement.Messages.csproj">
       <Project>{BF2F5A45-CC2E-4C09-B29F-FF265F56AC9C}</Project>

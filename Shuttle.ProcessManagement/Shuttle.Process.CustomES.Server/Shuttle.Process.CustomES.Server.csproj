@@ -64,13 +64,13 @@
     <Reference Include="Shuttle.ESB.SqlServer">
       <HintPath>..\packages\shuttle-esb-sqlserver.3.6.1\lib\net45-full\Shuttle.ESB.SqlServer.dll</HintPath>
     </Reference>
-    <Reference Include="Shuttle.Recall.Core, Version=1.3.1.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Shuttle.Recall.Core, Version=1.4.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\shuttle-recall-core.1.3.1\lib\net45-full\Shuttle.Recall.Core.dll</HintPath>
+      <HintPath>..\packages\shuttle-recall-core.1.4.0\lib\net45-full\Shuttle.Recall.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Shuttle.Recall.SqlServer, Version=1.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Shuttle.Recall.SqlServer, Version=1.4.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\shuttle-recall-sqlserver.1.3.0\lib\net45-full\Shuttle.Recall.SqlServer.dll</HintPath>
+      <HintPath>..\packages\shuttle-recall-sqlserver.1.4.0\lib\net45-full\Shuttle.Recall.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

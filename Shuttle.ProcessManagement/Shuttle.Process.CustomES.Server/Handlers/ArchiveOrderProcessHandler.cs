@@ -41,7 +41,7 @@ namespace Shuttle.Process.CustomES.Server
                     return;
                 }
 
-                stream.AddEvent(orderProcess.ChangeStatus("Order Accepted"));
+                stream.AddEvent(orderProcess.ChangeStatus("Order Archived"));
 
                 _eventStore.SaveEventStream(stream);
             }

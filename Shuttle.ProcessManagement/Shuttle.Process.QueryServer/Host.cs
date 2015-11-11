@@ -44,6 +44,8 @@ namespace Shuttle.Process.QueryServer
             subscriptionManager.Subscribe<OrderProcessCompletedEvent>();
             subscriptionManager.Subscribe<OrderProcessArchivedEvent>();
             subscriptionManager.Subscribe<OrderCreatedEvent>();
+            subscriptionManager.Subscribe<CancelOrderProcessRejectedEvent>();
+            subscriptionManager.Subscribe<ArchiveOrderProcessRejectedEvent>();
             subscriptionManager.Subscribe<InvoiceCreatedEvent>();
             subscriptionManager.Subscribe<EMailSentEvent>();
 

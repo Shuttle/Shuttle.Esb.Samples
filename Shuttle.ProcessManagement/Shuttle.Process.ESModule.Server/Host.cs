@@ -50,13 +50,19 @@ namespace Shuttle.Process.ESModule.Server
             subscriptionManager.Subscribe<InvoiceCreatedEvent>();
             subscriptionManager.Subscribe<EMailSentEvent>();
 
+            var processConfiguration = ProcessSection.Configuration();
+            var processActivator = new DefaultProcessActivator();
+
+            processActivator.RegisterMappings();
+
+            processConfiguration.ProcessActivator = processActivator;
+
             _bus = ServiceBus.Create(
                 c =>
                 {
                     c.MessageHandlerFactory(new CastleMessageHandlerFactory(_container).RegisterHandlers());
                     c.SubscriptionManager(subscriptionManager);
-                    c.AddModule(new ProcessModule(_container.Resolve<IDatabaseContextFactory>(),
-                        _container.Resolve<IEventStore>(), ProcessSection.Configuration()));
+                    c.AddModule(new ProcessModule(_container.Resolve<IDatabaseContextFactory>(), _container.Resolve<IEventStore>(), processConfiguration));
                 }).Start();
         }
     }

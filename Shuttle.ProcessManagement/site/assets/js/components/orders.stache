@@ -9,10 +9,10 @@
   <thead>
     <tr>
       <th class='col-md-1'></th>
-      <th>Customer name</th>
-      <th>Order number</th>
-      <th>Order date</th>
-      <th>Status</th>
+      <th class='col-md-2'>Customer name</th>
+      <th class='col-md-2'>Order number</th>
+      <th class='col-md-2'>Order date</th>
+      <th class='col-md-3'>Status</th>
       <th class='col-md-2 text-right'>Total</th>
     </tr>
   </thead>
