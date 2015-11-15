@@ -40,9 +40,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\shuttle-esb-core.4.0.3\lib\net45-full\Shuttle.ESB.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Shuttle.ESB.Msmq, Version=3.6.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\shuttle-esb-msmq.3.6.0\lib\net45-full\Shuttle.ESB.Msmq.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Shuttle.ESB.Msmq, Version=3.6.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\shuttle-esb-msmq.3.6.1\lib\net45-full\Shuttle.ESB.Msmq.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
