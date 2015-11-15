@@ -60,14 +60,14 @@ namespace Shuttle.Process.ESModule.Server
 
         public Guid CorrelationId { get; private set; }
 
-        public void ProcessMessage(HandlerContext<AcceptOrderProcessCommand> context, EventStream stream)
+        public void ProcessMessage(ProcessHandlerContext<AcceptOrderProcessCommand> context)
         {
-            if (stream.IsEmpty)
+            if (context.Stream.IsEmpty)
             {
                 return;
             }
 
-            stream.AddEvent(ChangeStatus("Order Accepted"));
+            context.Stream.AddEvent(ChangeStatus("Order Accepted"));
 
             var command = new CreateOrderCommand
             {
@@ -94,7 +94,7 @@ namespace Shuttle.Process.ESModule.Server
             });
         }
 
-        public void ProcessMessage(HandlerContext<CancelOrderProcessCommand> context, EventStream stream)
+        public void ProcessMessage(ProcessHandlerContext<CancelOrderProcessCommand> context)
         {
             if (!CanCancel)
             {
@@ -107,7 +107,7 @@ namespace Shuttle.Process.ESModule.Server
                 return;
             }
 
-            stream.Remove();
+            context.Stream.Remove();
 
             context.Publish(new OrderProcessCancelledEvent
             {
@@ -115,9 +115,9 @@ namespace Shuttle.Process.ESModule.Server
             });
         }
 
-        public void ProcessMessage(HandlerContext<CompleteOrderProcessCommand> context, EventStream stream)
+        public void ProcessMessage(ProcessHandlerContext<CompleteOrderProcessCommand> context)
         {
-            stream.AddEvent(ChangeStatus("Completed"));
+            context.Stream.AddEvent(ChangeStatus("Completed"));
 
             context.Publish(new OrderProcessCompletedEvent
             {
@@ -125,14 +125,14 @@ namespace Shuttle.Process.ESModule.Server
             });
         }
 
-        public void ProcessMessage(HandlerContext<EMailSentEvent> context, EventStream stream)
+        public void ProcessMessage(ProcessHandlerContext<EMailSentEvent> context)
         {
-            if (!ShouldProcess(context.TransportMessage, stream))
+            if (!ShouldProcess(context.TransportMessage, context.Stream))
             {
                 return;
             }
 
-            stream.AddEvent(ChangeStatus("Dispatched-EMail Sent"));
+            context.Stream.AddEvent(ChangeStatus("Dispatched-EMail Sent"));
 
             context.Send(new CompleteOrderProcessCommand
             {
@@ -140,15 +140,15 @@ namespace Shuttle.Process.ESModule.Server
             }, c => c.Local());
         }
 
-        public void ProcessMessage(HandlerContext<InvoiceCreatedEvent> context, EventStream stream)
+        public void ProcessMessage(ProcessHandlerContext<InvoiceCreatedEvent> context)
         {
-            if (!ShouldProcess(context.TransportMessage, stream))
+            if (!ShouldProcess(context.TransportMessage, context.Stream))
             {
                 return;
             }
 
-            stream.AddEvent(ChangeStatus("Invoice Created"));
-            stream.AddEvent(AssignInvoiceId(context.Message.InvoiceId));
+            context.Stream.AddEvent(ChangeStatus("Invoice Created"));
+            context.Stream.AddEvent(AssignInvoiceId(context.Message.InvoiceId));
 
             context.Send(new SendEMailCommand
             {
@@ -160,15 +160,15 @@ namespace Shuttle.Process.ESModule.Server
             });
         }
 
-        public void ProcessMessage(HandlerContext<OrderCreatedEvent> context, EventStream stream)
+        public void ProcessMessage(ProcessHandlerContext<OrderCreatedEvent> context)
         {
-            if (!ShouldProcess(context.TransportMessage, stream))
+            if (!ShouldProcess(context.TransportMessage, context.Stream))
             {
                 return;
             }
 
-            stream.AddEvent(ChangeStatus("Order Created"));
-            stream.AddEvent(AssignOrderId(context.Message.OrderId));
+            context.Stream.AddEvent(ChangeStatus("Order Created"));
+            context.Stream.AddEvent(AssignOrderId(context.Message.OrderId));
 
             var command = new CreateInvoiceCommand
             {
@@ -189,18 +189,18 @@ namespace Shuttle.Process.ESModule.Server
             context.Send(command);
         }
 
-        public void ProcessMessage(HandlerContext<RegisterOrderProcessCommand> context, EventStream stream)
+        public void ProcessMessage(ProcessHandlerContext<RegisterOrderProcessCommand> context)
         {
             var message = context.Message;
 
-            stream.AddEvent(Initialize());
-            stream.AddEvent(AssignCustomer(message.CustomerName, message.CustomerEMail));
-            stream.AddEvent(AssignTargetSystem(message.TargetSystem, message.TargetSystemUri));
-            stream.AddEvent(ChangeStatus("Cooling Off"));
+            context.Stream.AddEvent(Initialize());
+            context.Stream.AddEvent(AssignCustomer(message.CustomerName, message.CustomerEMail));
+            context.Stream.AddEvent(AssignTargetSystem(message.TargetSystem, message.TargetSystemUri));
+            context.Stream.AddEvent(ChangeStatus("Cooling Off"));
 
             foreach (var quotedProduct in message.QuotedProducts)
             {
-                stream.AddEvent(AddItem(quotedProduct.ProductId, quotedProduct.Description, quotedProduct.Price));
+                context.Stream.AddEvent(AddItem(quotedProduct.ProductId, quotedProduct.Description, quotedProduct.Price));
             }
 
             context.Publish(new OrderProcessRegisteredEvent
@@ -365,7 +365,7 @@ namespace Shuttle.Process.ESModule.Server
             return true;
         }
 
-        public void ProcessMessage(HandlerContext<ArchiveOrderProcessCommand> context, EventStream stream)
+        public void ProcessMessage(ProcessHandlerContext<ArchiveOrderProcessCommand> context)
         {
             if (!CanArchive)
             {
@@ -378,7 +378,7 @@ namespace Shuttle.Process.ESModule.Server
                 return;
             }
 
-            stream.AddEvent(ChangeStatus("Order Archived"));
+            context.Stream.AddEvent(ChangeStatus("Order Archived"));
 
             context.Publish(new OrderProcessArchivedEvent
             {

@@ -41,8 +41,10 @@ namespace Shuttle.Process.ESModule.Server
             _container.RegisterDataAccess("Shuttle.ProcessManagement");
 
             _container.Register(Component.For<IEventStore>().ImplementedBy<EventStore>());
+            _container.Register(Component.For<IKeyStore>().ImplementedBy<KeyStore>());
             _container.Register(Component.For<ISerializer>().ImplementedBy<DefaultSerializer>());
             _container.Register(Component.For<IEventStoreQueryFactory>().ImplementedBy<EventStoreQueryFactory>());
+            _container.Register(Component.For<IKeyStoreQueryFactory>().ImplementedBy<KeyStoreQueryFactory>());
 
             var subscriptionManager = SubscriptionManager.Default();
 
@@ -62,7 +64,7 @@ namespace Shuttle.Process.ESModule.Server
                 {
                     c.MessageHandlerFactory(new CastleMessageHandlerFactory(_container).RegisterHandlers());
                     c.SubscriptionManager(subscriptionManager);
-                    c.AddModule(new ProcessModule(_container.Resolve<IDatabaseContextFactory>(), _container.Resolve<IEventStore>(), processConfiguration));
+                    c.AddModule(new ProcessModule(_container.Resolve<IDatabaseContextFactory>(), _container.Resolve<IEventStore>(), _container.Resolve<IKeyStore>(), processConfiguration));
                 }).Start();
         }
     }

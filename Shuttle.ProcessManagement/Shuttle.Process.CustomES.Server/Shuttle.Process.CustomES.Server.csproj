@@ -36,41 +36,49 @@
     <Reference Include="Castle.Windsor">
       <HintPath>..\packages\Castle.Windsor.3.3.0\lib\net45\Castle.Windsor.dll</HintPath>
     </Reference>
-    <Reference Include="log4net">
-      <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
-    </Reference>
-    <Reference Include="Shuttle.Core.Data">
-      <HintPath>..\packages\shuttle-core-data.3.2.1\lib\net45-full\Shuttle.Core.Data.dll</HintPath>
-    </Reference>
-    <Reference Include="Shuttle.Core.Host">
-      <HintPath>..\packages\shuttle-core-host.3.2.2\lib\net45-full\Shuttle.Core.Host.exe</HintPath>
-    </Reference>
-    <Reference Include="Shuttle.Core.Infrastructure">
-      <HintPath>..\packages\shuttle-core-infrastructure.3.2.0\lib\net45-full\Shuttle.Core.Infrastructure.dll</HintPath>
-    </Reference>
-    <Reference Include="Shuttle.Core.Infrastructure.Log4Net">
-      <HintPath>..\packages\shuttle-core-infrastructure-log4net.3.2.0\lib\net45-full\Shuttle.Core.Infrastructure.Log4Net.dll</HintPath>
-    </Reference>
-    <Reference Include="Shuttle.ESB.Castle">
-      <HintPath>..\packages\shuttle-esb-castle.3.6.0\lib\net45-full\Shuttle.ESB.Castle.dll</HintPath>
-    </Reference>
-    <Reference Include="Shuttle.ESB.Core, Version=3.8.1.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="log4net, Version=1.2.14.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\shuttle-esb-core.3.8.1\lib\net45-full\Shuttle.ESB.Core.dll</HintPath>
+      <HintPath>..\packages\log4net.2.0.4\lib\net45-full\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="Shuttle.ESB.Msmq">
-      <HintPath>..\packages\shuttle-esb-msmq.3.6.0\lib\net45-full\Shuttle.ESB.Msmq.dll</HintPath>
-    </Reference>
-    <Reference Include="Shuttle.ESB.SqlServer">
-      <HintPath>..\packages\shuttle-esb-sqlserver.3.6.1\lib\net45-full\Shuttle.ESB.SqlServer.dll</HintPath>
-    </Reference>
-    <Reference Include="Shuttle.Recall.Core, Version=1.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Shuttle.Core.Data, Version=3.2.7.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\shuttle-recall-core.1.4.0\lib\net45-full\Shuttle.Recall.Core.dll</HintPath>
+      <HintPath>..\packages\shuttle-core-data.3.2.7\lib\net45-full\Shuttle.Core.Data.dll</HintPath>
     </Reference>
-    <Reference Include="Shuttle.Recall.SqlServer, Version=1.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Shuttle.Core.Host, Version=3.2.3.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\shuttle-recall-sqlserver.1.4.0\lib\net45-full\Shuttle.Recall.SqlServer.dll</HintPath>
+      <HintPath>..\packages\shuttle-core-host.3.2.3\lib\net45-full\Shuttle.Core.Host.exe</HintPath>
+    </Reference>
+    <Reference Include="Shuttle.Core.Infrastructure, Version=3.3.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\shuttle-core-infrastructure.3.3.1\lib\net45-full\Shuttle.Core.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="Shuttle.Core.Infrastructure.Log4Net, Version=3.2.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\shuttle-core-infrastructure-log4net.3.2.1\lib\net45-full\Shuttle.Core.Infrastructure.Log4Net.dll</HintPath>
+    </Reference>
+    <Reference Include="Shuttle.ESB.Castle, Version=3.6.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\shuttle-esb-castle.3.6.1\lib\net45-full\Shuttle.ESB.Castle.dll</HintPath>
+    </Reference>
+    <Reference Include="Shuttle.ESB.Core, Version=4.0.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\shuttle-esb-core.4.0.3\lib\net45-full\Shuttle.ESB.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Shuttle.ESB.Msmq, Version=3.6.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\shuttle-esb-msmq.3.6.1\lib\net45-full\Shuttle.ESB.Msmq.dll</HintPath>
+    </Reference>
+    <Reference Include="Shuttle.ESB.SqlServer, Version=3.6.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\shuttle-esb-sqlserver.3.6.4\lib\net45-full\Shuttle.ESB.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Shuttle.Recall.Core, Version=3.2.7.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\shuttle-recall-core.3.2.7\lib\net45-full\Shuttle.Recall.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Shuttle.Recall.SqlServer, Version=1.6.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\shuttle-recall-sqlserver.1.6.2\lib\net45-full\Shuttle.Recall.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
