@@ -20,7 +20,7 @@ namespace Shuttle.Process.QueryServer
             _orderProcessViewQuery = orderProcessViewQuery;
         }
 
-        public void ProcessMessage(HandlerContext<OrderProcessCancelledEvent> context)
+        public void ProcessMessage(IHandlerContext<OrderProcessCancelledEvent> context)
         {
             using (_databaseContextFactory.Create(ProcessManagementData.ConnectionStringName))
             {

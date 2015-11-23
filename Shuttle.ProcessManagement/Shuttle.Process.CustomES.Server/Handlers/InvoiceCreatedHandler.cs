@@ -24,7 +24,7 @@ namespace Shuttle.Process.CustomES.Server
             _eventStore = eventStore;
         }
 
-        public void ProcessMessage(HandlerContext<InvoiceCreatedEvent> context)
+        public void ProcessMessage(IHandlerContext<InvoiceCreatedEvent> context)
         {
             if (!context.TransportMessage.IsHandledHere())
             {

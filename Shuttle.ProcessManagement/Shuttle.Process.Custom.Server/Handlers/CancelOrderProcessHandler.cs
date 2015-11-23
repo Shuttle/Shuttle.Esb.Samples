@@ -20,7 +20,7 @@ namespace Shuttle.Process.Custom.Server
             _repository = repository;
         }
 
-        public void ProcessMessage(HandlerContext<CancelOrderProcessCommand> context)
+        public void ProcessMessage(IHandlerContext<CancelOrderProcessCommand> context)
         {
             using (_databaseContextFactory.Create(ProcessManagementData.ConnectionStringName))
             {

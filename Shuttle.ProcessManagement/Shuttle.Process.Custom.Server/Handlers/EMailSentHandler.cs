@@ -23,7 +23,7 @@ namespace Shuttle.Process.Custom.Server
             _repository = repository;
         }
 
-        public void ProcessMessage(HandlerContext<EMailSentEvent> context)
+        public void ProcessMessage(IHandlerContext<EMailSentEvent> context)
         {
             if (!context.TransportMessage.IsHandledHere())
             {

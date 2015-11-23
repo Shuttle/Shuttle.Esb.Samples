@@ -22,7 +22,7 @@ namespace Shuttle.Process.Custom.Server
             _repository = repository;
         }
 
-        public void ProcessMessage(HandlerContext<AcceptOrderProcessCommand> context)
+        public void ProcessMessage(IHandlerContext<AcceptOrderProcessCommand> context)
         {
             OrderProcess orderProcess;
 

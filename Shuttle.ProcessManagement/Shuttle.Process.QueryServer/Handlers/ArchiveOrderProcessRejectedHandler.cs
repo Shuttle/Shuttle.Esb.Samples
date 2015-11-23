@@ -20,7 +20,7 @@ namespace Shuttle.Process.QueryServer
             _orderProcessViewQuery = orderProcessViewQuery;
         }
 
-        public void ProcessMessage(HandlerContext<ArchiveOrderProcessRejectedEvent> context)
+        public void ProcessMessage(IHandlerContext<ArchiveOrderProcessRejectedEvent> context)
         {
             using (_databaseContextFactory.Create(ProcessManagementData.ConnectionStringName))
             {

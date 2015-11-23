@@ -23,7 +23,7 @@ namespace Shuttle.Process.CustomES.Server
             _eventStore = eventStore;
         }
 
-        public void ProcessMessage(HandlerContext<RegisterOrderProcessCommand> context)
+        public void ProcessMessage(IHandlerContext<RegisterOrderProcessCommand> context)
         {
             var message = context.Message;
 

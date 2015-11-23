@@ -22,7 +22,7 @@ namespace Shuttle.Process.CustomES.Server
             _eventStore = eventStore;
         }
 
-        public void ProcessMessage(HandlerContext<AcceptOrderProcessCommand> context)
+        public void ProcessMessage(IHandlerContext<AcceptOrderProcessCommand> context)
         {
             OrderProcess orderProcess;
 

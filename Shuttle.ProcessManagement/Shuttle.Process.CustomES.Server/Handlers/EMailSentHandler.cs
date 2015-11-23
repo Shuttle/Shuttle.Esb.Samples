@@ -24,7 +24,7 @@ namespace Shuttle.Process.CustomES.Server
             _eventStore = eventStore;
         }
 
-        public void ProcessMessage(HandlerContext<EMailSentEvent> context)
+        public void ProcessMessage(IHandlerContext<EMailSentEvent> context)
         {
             if (!context.TransportMessage.IsHandledHere())
             {

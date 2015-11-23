@@ -22,7 +22,7 @@ namespace Shuttle.Process.CustomES.Server
             _eventStore = eventStore;
         }
 
-        public void ProcessMessage(HandlerContext<CancelOrderProcessCommand> context)
+        public void ProcessMessage(IHandlerContext<CancelOrderProcessCommand> context)
         {
             using (_databaseContextFactory.Create(ProcessManagementData.ConnectionStringName))
             {

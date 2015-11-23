@@ -21,7 +21,7 @@ namespace Shuttle.Ordering.Server
             _repository = repository;
         }
 
-        public void ProcessMessage(HandlerContext<CreateOrderCommand> context)
+        public void ProcessMessage(IHandlerContext<CreateOrderCommand> context)
         {
             // simulate slow processing
             Thread.Sleep(1000);

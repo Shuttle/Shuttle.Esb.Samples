@@ -60,7 +60,7 @@ namespace Shuttle.Process.ESModule.Server
 
         public Guid CorrelationId { get; private set; }
 
-        public void ProcessMessage(ProcessHandlerContext<AcceptOrderProcessCommand> context)
+        public void ProcessMessage(IProcessHandlerContext<AcceptOrderProcessCommand> context)
         {
             if (context.Stream.IsEmpty)
             {
@@ -94,7 +94,7 @@ namespace Shuttle.Process.ESModule.Server
             });
         }
 
-        public void ProcessMessage(ProcessHandlerContext<CancelOrderProcessCommand> context)
+        public void ProcessMessage(IProcessHandlerContext<CancelOrderProcessCommand> context)
         {
             if (!CanCancel)
             {
@@ -115,7 +115,7 @@ namespace Shuttle.Process.ESModule.Server
             });
         }
 
-        public void ProcessMessage(ProcessHandlerContext<CompleteOrderProcessCommand> context)
+        public void ProcessMessage(IProcessHandlerContext<CompleteOrderProcessCommand> context)
         {
             context.Stream.AddEvent(ChangeStatus("Completed"));
 
@@ -125,7 +125,7 @@ namespace Shuttle.Process.ESModule.Server
             });
         }
 
-        public void ProcessMessage(ProcessHandlerContext<EMailSentEvent> context)
+        public void ProcessMessage(IProcessHandlerContext<EMailSentEvent> context)
         {
             if (!ShouldProcess(context.TransportMessage, context.Stream))
             {
@@ -140,7 +140,7 @@ namespace Shuttle.Process.ESModule.Server
             }, c => c.Local());
         }
 
-        public void ProcessMessage(ProcessHandlerContext<InvoiceCreatedEvent> context)
+        public void ProcessMessage(IProcessHandlerContext<InvoiceCreatedEvent> context)
         {
             if (!ShouldProcess(context.TransportMessage, context.Stream))
             {
@@ -160,7 +160,7 @@ namespace Shuttle.Process.ESModule.Server
             });
         }
 
-        public void ProcessMessage(ProcessHandlerContext<OrderCreatedEvent> context)
+        public void ProcessMessage(IProcessHandlerContext<OrderCreatedEvent> context)
         {
             if (!ShouldProcess(context.TransportMessage, context.Stream))
             {
@@ -189,7 +189,7 @@ namespace Shuttle.Process.ESModule.Server
             context.Send(command);
         }
 
-        public void ProcessMessage(ProcessHandlerContext<RegisterOrderProcessCommand> context)
+        public void ProcessMessage(IProcessHandlerContext<RegisterOrderProcessCommand> context)
         {
             var message = context.Message;
 
@@ -365,7 +365,7 @@ namespace Shuttle.Process.ESModule.Server
             return true;
         }
 
-        public void ProcessMessage(ProcessHandlerContext<ArchiveOrderProcessCommand> context)
+        public void ProcessMessage(IProcessHandlerContext<ArchiveOrderProcessCommand> context)
         {
             if (!CanArchive)
             {

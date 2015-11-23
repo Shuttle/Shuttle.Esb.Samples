@@ -23,7 +23,7 @@ namespace Shuttle.Process.Custom.Server
             _repository = repository;
         }
 
-        public void ProcessMessage(HandlerContext<InvoiceCreatedEvent> context)
+        public void ProcessMessage(IHandlerContext<InvoiceCreatedEvent> context)
         {
             if (!context.TransportMessage.IsHandledHere())
             {

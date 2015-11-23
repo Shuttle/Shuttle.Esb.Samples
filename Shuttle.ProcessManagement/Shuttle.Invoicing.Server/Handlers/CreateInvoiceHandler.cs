@@ -21,7 +21,7 @@ namespace Shuttle.Invoicing.Server
             _repository = repository;
         }
 
-        public void ProcessMessage(HandlerContext<CreateInvoiceCommand> context)
+        public void ProcessMessage(IHandlerContext<CreateInvoiceCommand> context)
         {
             // simulate slow processing
             Thread.Sleep(1000);

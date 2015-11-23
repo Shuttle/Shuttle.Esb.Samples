@@ -24,7 +24,7 @@ namespace Shuttle.Process.Custom.Server
             _repository = repository;
         }
 
-        public void ProcessMessage(HandlerContext<OrderCreatedEvent> context)
+        public void ProcessMessage(IHandlerContext<OrderCreatedEvent> context)
         {
             if (!context.TransportMessage.IsHandledHere())
             {

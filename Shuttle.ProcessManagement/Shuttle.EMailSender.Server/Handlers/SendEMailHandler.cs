@@ -6,7 +6,7 @@ namespace Shuttle.EMailSender.Server
 {
     public class SendEMailHandler : IMessageHandler<SendEMailCommand>
     {
-        public void ProcessMessage(HandlerContext<SendEMailCommand> context)
+        public void ProcessMessage(IHandlerContext<SendEMailCommand> context)
         {
             // simulate sending an e-mail
 

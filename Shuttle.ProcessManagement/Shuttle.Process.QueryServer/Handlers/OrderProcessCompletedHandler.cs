@@ -21,7 +21,7 @@ namespace Shuttle.Process.QueryServer
             _orderProcessViewQuery = orderProcessViewQuery;
         }
 
-        public void ProcessMessage(HandlerContext<OrderProcessCompletedEvent> context)
+        public void ProcessMessage(IHandlerContext<OrderProcessCompletedEvent> context)
         {
             using (_databaseContextFactory.Create(ProcessManagementData.ConnectionStringName))
             {
