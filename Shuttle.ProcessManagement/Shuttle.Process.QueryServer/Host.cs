@@ -12,7 +12,6 @@ using Shuttle.ESB.Core;
 using Shuttle.ESB.SqlServer;
 using Shuttle.Invoicing.Messages;
 using Shuttle.Ordering.Messages;
-using Shuttle.ProcessManagement;
 using Shuttle.ProcessManagement.Messages;
 
 namespace Shuttle.Process.QueryServer
