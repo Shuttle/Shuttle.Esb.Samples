@@ -16,8 +16,6 @@ using Shuttle.Invoicing.Messages;
 using Shuttle.Ordering.Messages;
 using Shuttle.Recall.Core;
 using Shuttle.Recall.SqlServer;
-using DefaultSerializer = Shuttle.Recall.Core.DefaultSerializer;
-using ISerializer = Shuttle.Recall.Core.ISerializer;
 
 namespace Shuttle.Process.ESModule.Server
 {
@@ -53,11 +51,8 @@ namespace Shuttle.Process.ESModule.Server
             subscriptionManager.Subscribe<EMailSentEvent>();
 
             var processConfiguration = ProcessSection.Configuration();
-            var processActivator = new DefaultProcessActivator();
 
-            processActivator.RegisterMappings();
-
-            processConfiguration.ProcessActivator = processActivator;
+	        ((DefaultProcessActivator)processConfiguration.ProcessActivator).RegisterMappings();
 
             _bus = ServiceBus.Create(
                 c =>

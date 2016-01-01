@@ -37,7 +37,7 @@ namespace Shuttle.Process.CustomES.Server
             _container.RegisterDataAccess("Shuttle.ProcessManagement");
 
             _container.Register(Component.For<IEventStore>().ImplementedBy<EventStore>());
-            _container.Register(Component.For<Recall.Core.ISerializer>().ImplementedBy<Recall.Core.DefaultSerializer>());
+            _container.Register(Component.For<ISerializer>().ImplementedBy<DefaultSerializer>());
             _container.Register(Component.For<IEventStoreQueryFactory>().ImplementedBy<EventStoreQueryFactory>());
 
             var subscriptionManager = SubscriptionManager.Default();

@@ -55,7 +55,7 @@ namespace Shuttle.ProcessManagement.WebApi
                 GlobalConfiguration.Configuration.MessageHandlers.Add(new CorsMessageHandler());
 
                 _container.Register(
-                    Component.For<IHttpControllerActivator>().Instance(new ShuttleApiControllerActivator(_container)));
+                    Component.For<IHttpControllerActivator>().Instance(new ApiControllerActivator(_container)));
 
                 ConfigureJson();
 

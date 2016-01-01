@@ -8,11 +8,11 @@ using Shuttle.Core.Infrastructure;
 
 namespace Shuttle.ProcessManagement.WebApi
 {
-	public class ShuttleApiControllerActivator : IHttpControllerActivator
+	public class ApiControllerActivator : IHttpControllerActivator
 	{
 		private readonly IWindsorContainer _container;
 
-		public ShuttleApiControllerActivator(IWindsorContainer container)
+		public ApiControllerActivator(IWindsorContainer container)
 		{
 			Guard.AgainstNull(container, "container");
 
