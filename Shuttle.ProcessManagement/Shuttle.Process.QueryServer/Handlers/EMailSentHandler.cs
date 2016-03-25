@@ -1,7 +1,7 @@
 ﻿using Shuttle.Core.Data;
 using Shuttle.Core.Infrastructure;
 using Shuttle.EMailSender.Messages;
-using Shuttle.ESB.Core;
+using Shuttle.Esb;
 using Shuttle.ProcessManagement;
 
 namespace Shuttle.Process.QueryServer

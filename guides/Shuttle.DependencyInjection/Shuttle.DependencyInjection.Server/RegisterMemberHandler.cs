@@ -1,7 +1,7 @@
 ﻿using System;
 using Shuttle.Core.Infrastructure;
 using Shuttle.DependencyInjection.EMail;
-using Shuttle.ESB.Core;
+using Shuttle.Esb;
 using Shuttle.DependencyInjection.Messages;
 
 namespace Shuttle.DependencyInjection.Server

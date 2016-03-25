@@ -2,11 +2,11 @@
 using Shuttle.Core.Data;
 using Shuttle.Core.Infrastructure;
 using Shuttle.EMailSender.Messages;
-using Shuttle.ESB.Core;
+using Shuttle.Esb;
 using Shuttle.Invoicing.Messages;
 using Shuttle.Process.CustomES.Server.Domain;
 using Shuttle.ProcessManagement;
-using Shuttle.Recall.Core;
+using Shuttle.Recall;
 
 namespace Shuttle.Process.CustomES.Server
 {

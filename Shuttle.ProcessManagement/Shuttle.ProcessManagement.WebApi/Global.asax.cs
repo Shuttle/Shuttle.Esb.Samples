@@ -13,9 +13,9 @@ using Newtonsoft.Json.Serialization;
 using Shuttle.Castle;
 using Shuttle.Core.Data;
 using Shuttle.Core.Infrastructure;
-using Shuttle.Core.Infrastructure.Log4Net;
-using Shuttle.ESB.Castle;
-using Shuttle.ESB.Core;
+using Shuttle.Core.Log4Net;
+using Shuttle.Esb.Castle;
+using Shuttle.Esb;
 using ILog = Shuttle.Core.Infrastructure.ILog;
 
 namespace Shuttle.ProcessManagement.WebApi

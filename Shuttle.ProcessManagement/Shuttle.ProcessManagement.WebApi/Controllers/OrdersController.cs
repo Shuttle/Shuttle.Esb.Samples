@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Net.Http;
 using System.Web.Http;
 using Shuttle.Core.Infrastructure;
-using Shuttle.ESB.Core;
+using Shuttle.Esb;
 using Shuttle.ProcessManagement.Messages;
 
 namespace Shuttle.ProcessManagement.WebApi.Controllers

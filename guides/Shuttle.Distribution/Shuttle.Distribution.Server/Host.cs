@@ -1,6 +1,6 @@
 ﻿using System;
 using Shuttle.Core.Host;
-using Shuttle.ESB.Core;
+using Shuttle.Esb;
 
 namespace Shuttle.Distribution.Server
 {

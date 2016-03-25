@@ -1,5 +1,5 @@
 ﻿using System;
-using Shuttle.ESB.Core;
+using Shuttle.Esb;
 using Shuttle.PublishSubscribe.Messages;
 
 namespace Shuttle.PublishSubscribe.Server

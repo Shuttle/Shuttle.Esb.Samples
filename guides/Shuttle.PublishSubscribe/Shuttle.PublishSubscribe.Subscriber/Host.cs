@@ -1,7 +1,7 @@
 ﻿using System;
 using Shuttle.Core.Host;
-using Shuttle.ESB.Core;
-using Shuttle.ESB.SqlServer;
+using Shuttle.Esb;
+using Shuttle.Esb.SqlServer;
 using Shuttle.PublishSubscribe.Messages;
 
 namespace Shuttle.PublishSubscribe.Subscriber

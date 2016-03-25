@@ -1,6 +1,6 @@
 ﻿using Shuttle.Core.Data;
 using Shuttle.Core.Infrastructure;
-using Shuttle.ESB.Core;
+using Shuttle.Esb;
 using Shuttle.Ordering.Messages;
 using Shuttle.Process.Custom.Server.Domain;
 using Shuttle.ProcessManagement;

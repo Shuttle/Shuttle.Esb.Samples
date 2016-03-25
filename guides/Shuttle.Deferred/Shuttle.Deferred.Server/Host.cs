@@ -2,8 +2,8 @@
 using log4net;
 using Shuttle.Core.Host;
 using Shuttle.Core.Infrastructure;
-using Shuttle.Core.Infrastructure.Log4Net;
-using Shuttle.ESB.Core;
+using Shuttle.Core.Log4Net;
+using Shuttle.Esb;
 
 namespace Shuttle.Deferred.Server
 {

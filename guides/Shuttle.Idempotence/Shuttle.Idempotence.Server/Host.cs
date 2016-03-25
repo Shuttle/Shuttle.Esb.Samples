@@ -1,7 +1,7 @@
 ﻿using System;
 using Shuttle.Core.Host;
-using Shuttle.ESB.Core;
-using Shuttle.ESB.SqlServer.Idempotence;
+using Shuttle.Esb;
+using Shuttle.Esb.SqlServer.Idempotence;
 
 namespace Shuttle.Idempotence.Server
 {

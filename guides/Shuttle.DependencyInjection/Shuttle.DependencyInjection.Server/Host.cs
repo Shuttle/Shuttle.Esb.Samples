@@ -3,8 +3,8 @@ using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 using Shuttle.Core.Host;
 using Shuttle.DependencyInjection.EMail;
-using Shuttle.ESB.Castle;
-using Shuttle.ESB.Core;
+using Shuttle.Esb.Castle;
+using Shuttle.Esb;
 
 namespace Shuttle.DependencyInjection.Server
 {

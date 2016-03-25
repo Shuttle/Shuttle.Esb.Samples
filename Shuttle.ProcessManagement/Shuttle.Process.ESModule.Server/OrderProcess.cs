@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using Shuttle.Core.Infrastructure;
 using Shuttle.EMailSender.Messages;
-using Shuttle.ESB.Core;
-using Shuttle.ESB.Process;
+using Shuttle.Esb;
+using Shuttle.Esb.Process;
 using Shuttle.Invoicing.Messages;
 using Shuttle.Ordering.Messages;
 using Shuttle.Process.ESModule.v1;
 using Shuttle.ProcessManagement.Messages;
-using Shuttle.Recall.Core;
+using Shuttle.Recall;
 
 namespace Shuttle.Process.ESModule.Server
 {

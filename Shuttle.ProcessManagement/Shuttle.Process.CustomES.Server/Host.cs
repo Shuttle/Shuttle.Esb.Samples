@@ -5,14 +5,14 @@ using log4net;
 using Shuttle.Castle;
 using Shuttle.Core.Host;
 using Shuttle.Core.Infrastructure;
-using Shuttle.Core.Infrastructure.Log4Net;
+using Shuttle.Core.Log4Net;
 using Shuttle.EMailSender.Messages;
-using Shuttle.ESB.Castle;
-using Shuttle.ESB.Core;
-using Shuttle.ESB.SqlServer;
+using Shuttle.Esb.Castle;
+using Shuttle.Esb;
+using Shuttle.Esb.SqlServer;
 using Shuttle.Invoicing.Messages;
 using Shuttle.Ordering.Messages;
-using Shuttle.Recall.Core;
+using Shuttle.Recall;
 using Shuttle.Recall.SqlServer;
 
 namespace Shuttle.Process.CustomES.Server

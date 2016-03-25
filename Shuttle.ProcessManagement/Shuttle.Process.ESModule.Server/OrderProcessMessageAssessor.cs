@@ -1,6 +1,6 @@
 ﻿using Shuttle.Core.Infrastructure;
-using Shuttle.ESB.Core;
-using Shuttle.ESB.Process;
+using Shuttle.Esb;
+using Shuttle.Esb.Process;
 
 namespace Shuttle.Process.ESModule.Server
 {

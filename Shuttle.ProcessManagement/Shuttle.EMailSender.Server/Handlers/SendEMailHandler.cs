@@ -1,6 +1,6 @@
 ﻿using System.Threading;
 using Shuttle.EMailSender.Messages;
-using Shuttle.ESB.Core;
+using Shuttle.Esb;
 
 namespace Shuttle.EMailSender.Server
 {
