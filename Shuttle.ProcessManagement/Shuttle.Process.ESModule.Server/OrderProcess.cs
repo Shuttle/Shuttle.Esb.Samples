@@ -58,7 +58,7 @@ namespace Shuttle.Process.ESModule.Server
             get { return Status.Equals("Cooling Off", StringComparison.InvariantCultureIgnoreCase); }
         }
 
-        public Guid CorrelationId { get; private set; }
+        public Guid CorrelationId { get; set; }
 
         public void ProcessMessage(IProcessHandlerContext<AcceptOrderProcessCommand> context)
         {
