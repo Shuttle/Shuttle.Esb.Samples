@@ -58,24 +58,24 @@
       <HintPath>..\packages\Shuttle.Core.Log4Net.3.2.8\lib\net45-full\Shuttle.Core.Log4Net.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Shuttle.Esb, Version=5.1.6.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Shuttle.Esb.5.1.6\lib\net45-full\Shuttle.Esb.dll</HintPath>
+    <Reference Include="Shuttle.Esb, Version=5.1.9.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Shuttle.Esb.5.1.9\lib\net45-full\Shuttle.Esb.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Shuttle.Esb.Castle, Version=3.8.7.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Shuttle.Esb.Castle.3.8.7\lib\net45-full\Shuttle.Esb.Castle.dll</HintPath>
+    <Reference Include="Shuttle.Esb.Castle, Version=3.8.8.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Shuttle.Esb.Castle.3.8.8\lib\net45-full\Shuttle.Esb.Castle.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Shuttle.Esb.Msmq, Version=3.8.5.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Shuttle.Esb.Msmq.3.8.5\lib\net45-full\Shuttle.Esb.Msmq.dll</HintPath>
+    <Reference Include="Shuttle.Esb.Msmq, Version=3.8.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Shuttle.Esb.Msmq.3.8.6\lib\net45-full\Shuttle.Esb.Msmq.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Shuttle.Esb.Process, Version=3.1.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Shuttle.Esb.Process.3.1.2\lib\net45-full\Shuttle.Esb.Process.dll</HintPath>
+    <Reference Include="Shuttle.Esb.Process, Version=3.1.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Shuttle.Esb.Process.3.1.3\lib\net45-full\Shuttle.Esb.Process.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Shuttle.Esb.SqlServer, Version=3.8.8.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Shuttle.Esb.SqlServer.3.8.8\lib\net45-full\Shuttle.Esb.SqlServer.dll</HintPath>
+    <Reference Include="Shuttle.Esb.SqlServer, Version=3.8.9.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Shuttle.Esb.SqlServer.3.8.9\lib\net45-full\Shuttle.Esb.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Shuttle.Recall, Version=3.5.1.0, Culture=neutral, processorArchitecture=MSIL">
