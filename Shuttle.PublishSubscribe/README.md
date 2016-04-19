@@ -364,3 +364,18 @@ This will write out some information to the console window.
 
 <div class='alert alert-info'>Before the reference <strong>Shuttle.Core.Host.exe</strong> will be available in the <strong>bin\debug</strong> folder you may need to build the project.</div>
 
+## Run
+
+> Set both the client and server projects as the startup.
+
+### Execute
+
+> Execute the application.
+
+> The **client** application will wait for you to input a user name.  For this example enter **my user name** and press enter:
+
+<div class='alert alert-info'>You will observe that the <strong>server</strong> application has processed the message.</div>
+
+<div class='alert alert-info'>The <strong>subscriber</strong> application will then process the event published by the <strong>server</strong>.</div>
+
+You have now completed a full publish / subscribe call chain.
