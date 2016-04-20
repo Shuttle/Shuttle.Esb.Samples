@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shuttle.Distribution.Messages", "Shuttle.Distribution.Messages\Shuttle.Distribution.Messages.csproj", "{7029C057-A500-4D5B-9D84-AA776BD16738}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shuttle.Distribution.Client", "Shuttle.Distribution.Client\Shuttle.Distribution.Client.csproj", "{82907483-A55B-4814-A355-5B89161FF6F9}"
@@ -8,6 +10,11 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shuttle.Distribution.Server", "Shuttle.Distribution.Server\Shuttle.Distribution.Server.csproj", "{A8DC0514-A539-4F74-8DAA-45DB9090B245}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shuttle.Distribution.Worker", "Shuttle.Distribution.Worker\Shuttle.Distribution.Worker.csproj", "{C2D144F6-3552-4D26-848C-8FB53537FD52}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{02284A3C-AF17-447B-BCD9-AB751E2C7541}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

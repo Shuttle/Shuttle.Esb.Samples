@@ -1,11 +1,18 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shuttle.Idempotence.Messages", "Shuttle.Idempotence.Messages\Shuttle.Idempotence.Messages.csproj", "{4026D2E3-14E8-45B2-A1C5-C695313013DF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shuttle.Idempotence.Client", "Shuttle.Idempotence.Client\Shuttle.Idempotence.Client.csproj", "{630B753C-B79C-4C19-BFAC-77F51129AE41}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shuttle.Idempotence.Server", "Shuttle.Idempotence.Server\Shuttle.Idempotence.Server.csproj", "{1217EDAC-4659-4CCC-8479-E3BBBF05D0CC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E88FFCE6-CEE6-4690-887C-603A5D99C8E9}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

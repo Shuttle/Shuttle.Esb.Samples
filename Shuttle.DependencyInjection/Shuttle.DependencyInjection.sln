@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shuttle.DependencyInjection.Messages", "Shuttle.DependencyInjection.Messages\Shuttle.DependencyInjection.Messages.csproj", "{78F7F9D7-DD0F-47D3-81A1-833BB6F36957}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shuttle.DependencyInjection.Client", "Shuttle.DependencyInjection.Client\Shuttle.DependencyInjection.Client.csproj", "{C41D3B83-C29D-49D8-97E1-87F1E8DC93DF}"
@@ -8,6 +10,11 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shuttle.DependencyInjection.Server", "Shuttle.DependencyInjection.Server\Shuttle.DependencyInjection.Server.csproj", "{447A77EA-0BDD-4A2B-AEA6-B3CD34168B8C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shuttle.DependencyInjection.EMail", "Shuttle.DependencyInjection.EMail\Shuttle.DependencyInjection.EMail.csproj", "{416E003A-EADF-441F-A5C7-C9F3367532C4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{45D703C6-5007-458A-A9BD-6C69C8D3C37C}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
