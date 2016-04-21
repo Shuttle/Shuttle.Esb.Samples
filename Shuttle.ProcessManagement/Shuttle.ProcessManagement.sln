@@ -1,15 +1,16 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".scripts", ".scripts", "{80ECD4F3-5719-4125-BBF7-E67A0702DB92}"
 	ProjectSection(SolutionItems) = preProject
-		clear-data.sql = clear-data.sql
+		.scripts\clear-data.sql = .scripts\clear-data.sql
 		.scripts\process-management.sql = .scripts\process-management.sql
 	EndProjectSection
 EndProject
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "site", "http://localhost:5760", "{C5BB3E7A-B4F8-4EFD-8432-6A5335524850}"
 	ProjectSection(WebsiteProperties) = preProject
-		Frontpage = "false"
 		UseIISExpress = "true"
 		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
 		Debug.AspNetCompiler.VirtualPath = "/localhost_5760"
@@ -70,6 +71,11 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shuttle.Process.ESModule.Server", "Shuttle.Process.ESModule.Server\Shuttle.Process.ESModule.Server.csproj", "{C0350AC4-662F-42A6-ADE7-044B649014EC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shuttle.Process.ESModule", "Shuttle.Process.ESModule\Shuttle.Process.ESModule.csproj", "{01CEC918-70D3-4870-BBFB-F1063563D253}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{68EE51E1-8A36-4D02-BE9C-B93D81012717}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -159,9 +165,6 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{C062676D-50FB-4D0A-B0CF-7DAB86E9CB02} = {8243E028-F764-4BBB-BF5B-586EF517BACB}
-		{81D58BD4-C239-41E4-B174-1FDE276E177E} = {8243E028-F764-4BBB-BF5B-586EF517BACB}
-		{C0350AC4-662F-42A6-ADE7-044B649014EC} = {8243E028-F764-4BBB-BF5B-586EF517BACB}
-		{01CEC918-70D3-4870-BBFB-F1063563D253} = {8243E028-F764-4BBB-BF5B-586EF517BACB}
 		{CFF217E7-9704-4364-A1CD-FDB4D784C008} = {D69E2491-6BFE-46FA-BAB5-879A6DC3E345}
 		{84907CE9-003E-4829-84B2-1A8AA48AA253} = {D69E2491-6BFE-46FA-BAB5-879A6DC3E345}
 		{FBE66702-8E81-4DE8-BA87-2E7BB7501901} = {D69E2491-6BFE-46FA-BAB5-879A6DC3E345}
@@ -171,5 +174,8 @@ Global
 		{DCD28B36-B38B-4AEE-8C08-E2A1449A6917} = {1B2E55FF-018F-4EE6-85F1-690BD145362D}
 		{8CEB37AD-CB65-4A13-9946-00E780F04811} = {1B2E55FF-018F-4EE6-85F1-690BD145362D}
 		{0052F712-70A6-400C-ACBE-CBED47C5AFD0} = {1B2E55FF-018F-4EE6-85F1-690BD145362D}
+		{81D58BD4-C239-41E4-B174-1FDE276E177E} = {8243E028-F764-4BBB-BF5B-586EF517BACB}
+		{C0350AC4-662F-42A6-ADE7-044B649014EC} = {8243E028-F764-4BBB-BF5B-586EF517BACB}
+		{01CEC918-70D3-4870-BBFB-F1063563D253} = {8243E028-F764-4BBB-BF5B-586EF517BACB}
 	EndGlobalSection
 EndGlobal
