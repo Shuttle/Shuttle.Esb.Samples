@@ -17,7 +17,7 @@ namespace Shuttle.RequestResponse.Client
 					bus.Send(new RegisterMemberCommand
 					{
 						UserName = userName
-					});
+					}, c=> c.WillExpire(DateTime.Now.AddSeconds(5)));
 				}
 			}
 		}
