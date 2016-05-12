@@ -10,4 +10,10 @@ cd {extraction-folder}\Shuttle.Esb.Samples\{sample-folder}
 nuget restore
 ~~~
 
+If that does not work try executing the following in the **Package Manager Console**:
+
+~~~
+update-package -reinstall
+~~~
+
 There is a `README.md` file in each sample project folder that will provide more information on running the sample along with additional information pertaining to the sample.
