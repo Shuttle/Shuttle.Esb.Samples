@@ -57,7 +57,7 @@ namespace Shuttle.Process.ESModule.Server
             _bus = ServiceBus.Create(
                 c =>
                 {
-                    c.MessageHandlerFactory(new CastleMessageHandlerFactory(_container).RegisterHandlers());
+                    c.MessageHandlerFactory(new CastleMessageHandlerFactory(_container));
                     c.SubscriptionManager(subscriptionManager);
                     c.AddModule(new ProcessModule(_container.Resolve<IDatabaseContextFactory>(), _container.Resolve<IEventStore>(), _container.Resolve<IKeyStore>(), processConfiguration));
                 }).Start();

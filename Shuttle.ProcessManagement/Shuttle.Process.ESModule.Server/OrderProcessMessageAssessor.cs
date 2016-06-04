@@ -6,7 +6,7 @@ namespace Shuttle.Process.ESModule.Server
 {
     public class OrderProcessMessageAssessor : IProcessMessageAssessor
     {
-        public bool IsSatisfiedBy(PipelineEvent candidate)
+        public bool IsSatisfiedBy(IPipelineEvent candidate)
         {
             return candidate.Pipeline.State.GetTransportMessage().IsHandledHere();
         }

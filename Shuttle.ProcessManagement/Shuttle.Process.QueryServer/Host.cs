@@ -52,7 +52,7 @@ namespace Shuttle.Process.QueryServer
                 c =>
                 {
                     c
-                        .MessageHandlerFactory(new CastleMessageHandlerFactory(_container).RegisterHandlers())
+                        .MessageHandlerFactory(new CastleMessageHandlerFactory(_container))
                         .SubscriptionManager(subscriptionManager);
                 }).Start();
         }

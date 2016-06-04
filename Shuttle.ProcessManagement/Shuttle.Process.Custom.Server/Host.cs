@@ -44,7 +44,7 @@ namespace Shuttle.Process.Custom.Server
                 c =>
                 {
                     c
-                        .MessageHandlerFactory(new CastleMessageHandlerFactory(_container).RegisterHandlers())
+                        .MessageHandlerFactory(new CastleMessageHandlerFactory(_container))
                         .SubscriptionManager(subscriptionManager);
                 }).Start();
         }

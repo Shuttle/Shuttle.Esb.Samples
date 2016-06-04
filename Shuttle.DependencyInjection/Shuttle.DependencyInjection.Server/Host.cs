@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 using Shuttle.Core.Host;
@@ -19,16 +20,9 @@ namespace Shuttle.DependencyInjection.Server
 
 			_container.Register(Component.For<IEMailService>().ImplementedBy<EMailService>());
 
-			// register all the message handler in this assembly
-			_container.Register(
-				Classes.FromThisAssembly()
-				.BasedOn(typeof(IMessageHandler<>))
-				.WithServiceFromInterface(typeof(IMessageHandler<>))
-				.LifestyleTransient()
-				);
-
+            // also calls RegisterHandlers to register handlers in this assembly
 			_bus = ServiceBus.Create(
-				c => c.MessageHandlerFactory(new CastleMessageHandlerFactory(_container))
+				c => c.MessageHandlerFactory(new CastleMessageHandlerFactory(_container).RegisterHandlers(Assembly.GetExecutingAssembly()))
 				).Start();
 		}
 

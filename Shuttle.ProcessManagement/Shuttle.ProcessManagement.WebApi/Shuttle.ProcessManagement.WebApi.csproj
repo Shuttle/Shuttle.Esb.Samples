@@ -57,28 +57,28 @@
       <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Shuttle.Core.Data, Version=3.2.19.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Shuttle.Core.Data.3.2.19\lib\net45-full\Shuttle.Core.Data.dll</HintPath>
+    <Reference Include="Shuttle.Core.Data, Version=4.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Shuttle.Core.Data.4.2.0\lib\net45-full\Shuttle.Core.Data.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Shuttle.Core.Infrastructure, Version=4.1.12.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Shuttle.Core.Infrastructure.4.1.12\lib\net45-full\Shuttle.Core.Infrastructure.dll</HintPath>
+    <Reference Include="Shuttle.Core.Infrastructure, Version=4.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Shuttle.Core.Infrastructure.4.2.0\lib\net45-full\Shuttle.Core.Infrastructure.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Shuttle.Core.Log4Net, Version=3.2.10.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Shuttle.Core.Log4Net.3.2.10\lib\net45-full\Shuttle.Core.Log4Net.dll</HintPath>
+    <Reference Include="Shuttle.Core.Log4Net, Version=3.2.11.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Shuttle.Core.Log4Net.3.2.11\lib\net45-full\Shuttle.Core.Log4Net.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Shuttle.Esb, Version=6.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Shuttle.Esb.6.0.0\lib\net45-full\Shuttle.Esb.dll</HintPath>
+    <Reference Include="Shuttle.Esb, Version=6.1.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Shuttle.Esb.6.1.2\lib\net45-full\Shuttle.Esb.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Shuttle.Esb.Castle, Version=6.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Shuttle.Esb.Castle.6.0.0\lib\net45-full\Shuttle.Esb.Castle.dll</HintPath>
+    <Reference Include="Shuttle.Esb.Castle, Version=6.1.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Shuttle.Esb.Castle.6.1.1\lib\net45-full\Shuttle.Esb.Castle.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Shuttle.Esb.Msmq, Version=6.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Shuttle.Esb.Msmq.6.0.0\lib\net45-full\Shuttle.Esb.Msmq.dll</HintPath>
+    <Reference Include="Shuttle.Esb.Msmq, Version=6.0.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Shuttle.Esb.Msmq.6.0.2\lib\net45-full\Shuttle.Esb.Msmq.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />

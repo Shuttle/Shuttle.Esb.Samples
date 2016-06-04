@@ -33,7 +33,7 @@ namespace Shuttle.Ordering.Server
 
             _bus = ServiceBus.Create(
                 c => c
-                    .MessageHandlerFactory(new CastleMessageHandlerFactory(_container).RegisterHandlers())
+                    .MessageHandlerFactory(new CastleMessageHandlerFactory(_container))
                     .SubscriptionManager(SubscriptionManager.Default())
                 ).Start();
         }

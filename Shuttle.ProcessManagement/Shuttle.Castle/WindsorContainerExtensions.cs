@@ -55,13 +55,20 @@ namespace Shuttle.Castle
             container.Register(Component.For<IDatabaseGateway>().ImplementedBy<DatabaseGateway>());
             container.Register(Component.For(typeof(IDataRepository<>)).ImplementedBy(typeof(DataRepository<>)));
 
+            //container.Register(
+            //    Classes
+            //        .FromAssemblyNamed("Shuttle.Core.Data")
+            //        .Pick()
+            //        .If(type => type.Name.EndsWith("Factory"))
+            //        .Configure(configurer => configurer.Named(configurer.Implementation.Name.ToLower()))
+            //        .WithService.Select((type, basetype) => new[] { type.InterfaceMatching(@".*Factory\Z") }));
+
             container.Register(
                 Classes
                     .FromAssemblyNamed("Shuttle.Core.Data")
                     .Pick()
                     .If(type => type.Name.EndsWith("Factory"))
-                    .Configure(configurer => configurer.Named(configurer.Implementation.Name.ToLower()))
-                    .WithService.Select((type, basetype) => new[] { type.InterfaceMatching(@".*Factory\Z") }));
+                    .WithServiceFirstInterface());
         }
     }
 }
