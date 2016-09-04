@@ -22,7 +22,7 @@ namespace Shuttle.DependencyInjection.Server
 
             // also calls RegisterHandlers to register handlers in this assembly
 			_bus = ServiceBus.Create(
-				c => c.MessageHandlerFactory(new CastleMessageHandlerFactory(_container).RegisterHandlers(Assembly.GetExecutingAssembly()))
+				c => c.MessageHandlerFactory(new CastleMessageHandlerFactory(_container))
 				).Start();
 		}
 
