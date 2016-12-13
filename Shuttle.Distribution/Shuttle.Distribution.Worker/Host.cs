@@ -1,5 +1,6 @@
 ﻿using System;
 using Shuttle.Core.Host;
+using Shuttle.Core.Infrastructure;
 using Shuttle.Esb;
 
 namespace Shuttle.Distribution.Worker
@@ -10,10 +11,14 @@ namespace Shuttle.Distribution.Worker
 
 		public void Start()
 		{
-			_bus = ServiceBus.Create().Start();
-		}
+            var container = new DefaultComponentContainer();
 
-		public void Dispose()
+            DefaultConfigurator.Configure(container);
+
+            _bus = ServiceBus.Create(container).Start();
+        }
+
+        public void Dispose()
 		{
 			_bus.Dispose();
 		}

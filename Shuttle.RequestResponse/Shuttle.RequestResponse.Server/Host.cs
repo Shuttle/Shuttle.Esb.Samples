@@ -1,5 +1,6 @@
 ﻿using System;
 using Shuttle.Core.Host;
+using Shuttle.Core.Infrastructure;
 using Shuttle.Esb;
 
 namespace Shuttle.RequestResponse.Server
@@ -10,10 +11,14 @@ namespace Shuttle.RequestResponse.Server
 
 		public void Start()
 		{
-			_bus = ServiceBus.Create().Start();
+		    var container = new DefaultComponentContainer();
+
+		    DefaultConfigurator.Configure(container);
+
+		    _bus = ServiceBus.Create(container).Start();
 		}
 
-		public void Dispose()
+	    public void Dispose()
 		{
 			_bus.Dispose();
 		}

@@ -1,4 +1,5 @@
 ﻿using System;
+using Shuttle.Core.Infrastructure;
 using Shuttle.Esb;
 using Shuttle.Idempotence.Messages;
 
@@ -8,9 +9,15 @@ namespace Shuttle.Idempotence.Client
 	{
 		static void Main(string[] args)
 		{
-			using (var bus = ServiceBus.Create().Start())
-			{
-				string userName;
+            var container = new DefaultComponentContainer();
+
+            DefaultConfigurator.Configure(container);
+
+		    var transportMessageFactory = container.Resolve<ITransportMessageFactory>();
+
+		    using (var bus = ServiceBus.Create(container).Start())
+            {
+                string userName;
 
 				while (!string.IsNullOrEmpty(userName = Console.ReadLine()))
 				{
@@ -19,7 +26,7 @@ namespace Shuttle.Idempotence.Client
 						UserName = userName
 					};
 
-					var transportMessage = bus.CreateTransportMessage(command, null);
+					var transportMessage = transportMessageFactory.Create(command, null);
 
 					for (var i = 0; i < 5; i++)
 					{

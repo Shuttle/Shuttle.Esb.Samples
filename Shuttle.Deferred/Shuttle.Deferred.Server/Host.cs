@@ -15,10 +15,14 @@ namespace Shuttle.Deferred.Server
 		{
 			Log.Assign(new Log4NetLog(LogManager.GetLogger(typeof(Host))));
 
-			_bus = ServiceBus.Create().Start();
+            var container = new DefaultComponentContainer();
+
+            DefaultConfigurator.Configure(container);
+
+		    _bus = ServiceBus.Create(container).Start();
 		}
 
-		public void Dispose()
+        public void Dispose()
 		{
 			_bus.Dispose();
 		}

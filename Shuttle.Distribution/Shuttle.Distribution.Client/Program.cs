@@ -1,4 +1,5 @@
 ﻿using System;
+using Shuttle.Core.Infrastructure;
 using Shuttle.Esb;
 using Shuttle.Distribution.Messages;
 
@@ -8,9 +9,13 @@ namespace Shuttle.Distribution.Client
 	{
 		static void Main(string[] args)
 		{
-			using (var bus = ServiceBus.Create().Start())
-			{
-				string userName;
+            var container = new DefaultComponentContainer();
+
+            DefaultConfigurator.Configure(container);
+
+            using (var bus = ServiceBus.Create(container).Start())
+            {
+                string userName;
 
 				while (!string.IsNullOrEmpty(userName = Console.ReadLine()))
 				{

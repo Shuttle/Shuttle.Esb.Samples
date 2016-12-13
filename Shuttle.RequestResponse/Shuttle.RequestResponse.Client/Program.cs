@@ -1,25 +1,30 @@
 ﻿using System;
+using Shuttle.Core.Infrastructure;
 using Shuttle.Esb;
 using Shuttle.RequestResponse.Messages;
 
 namespace Shuttle.RequestResponse.Client
 {
-	class Program
-	{
-		static void Main(string[] args)
-		{
-			using (var bus = ServiceBus.Create().Start())
-			{
-				string userName;
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            var container = new DefaultComponentContainer();
 
-				while (!string.IsNullOrEmpty(userName = Console.ReadLine()))
-				{
-					bus.Send(new RegisterMemberCommand
-					{
-						UserName = userName
-					}, c=> c.WillExpire(DateTime.Now.AddSeconds(5)));
-				}
-			}
-		}
-	}
+            DefaultConfigurator.Configure(container);
+
+            using (var bus = ServiceBus.Create(container).Start())
+            {
+                string userName;
+
+                while (!string.IsNullOrEmpty(userName = Console.ReadLine()))
+                {
+                    bus.Send(new RegisterMemberCommand
+                    {
+                        UserName = userName
+                    }, c => c.WillExpire(DateTime.Now.AddSeconds(5)));
+                }
+            }
+        }
+    }
 }
