@@ -1,35 +1,34 @@
 ﻿using System;
-using System.Reflection;
-using Castle.MicroKernel.Registration;
-using Castle.Windsor;
-using Shuttle.Core.Castle;
+using Ninject;
 using Shuttle.Core.Host;
+using Shuttle.Core.Ninject;
 using Shuttle.DependencyInjection.EMail;
 using Shuttle.Esb;
 
 namespace Shuttle.DependencyInjection.Server
 {
-	public class Host : IHost, IDisposable
-	{
-		private IServiceBus _bus;
-		private WindsorContainer _container;
+    public class Host : IHost, IDisposable
+    {
+        private IServiceBus _bus;
+        private StandardKernel _kernel;
 
-		public void Start()
-		{
-			_container = new WindsorContainer();
+        public void Dispose()
+        {
+            _kernel.Dispose();
+            _bus.Dispose();
+        }
 
-			_container.Register(Component.For<IEMailService>().ImplementedBy<EMailService>());
+        public void Start()
+        {
+            _kernel = new StandardKernel();
 
-            var _componentContainer = new WindsorComponentContainer(_container);
+            _kernel.Bind<IEMailService>().To<EMailService>();
 
-            DefaultConfigurator.Configure(_componentContainer);
+            var container = new NinjectComponentContainer(_kernel);
 
-            _bus = ServiceBus.Create(_componentContainer).Start();
-		}
+            ServiceBusConfigurator.Configure(container);
 
-		public void Dispose()
-		{
-			_bus.Dispose();
-		}
-	}
+            _bus = ServiceBus.Create(container).Start();
+        }
+    }
 }

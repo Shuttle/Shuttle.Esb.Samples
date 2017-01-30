@@ -32,12 +32,20 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Shuttle.Core.Infrastructure, Version=4.2.38.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Shuttle.Core.Infrastructure.4.2.38\lib\net45-full\Shuttle.Core.Infrastructure.dll</HintPath>
+    <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.3.2.2.0\lib\net45-full\Ninject.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Shuttle.Esb, Version=7.0.39.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Shuttle.Esb.7.0.39\lib\net45-full\Shuttle.Esb.dll</HintPath>
+    <Reference Include="Shuttle.Core.Infrastructure, Version=4.2.54.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Shuttle.Core.Infrastructure.4.2.54\lib\net45-full\Shuttle.Core.Infrastructure.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Shuttle.Core.Ninject, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Shuttle.Core.Ninject.1.0.1\lib\net45-full\Shuttle.Core.Ninject.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Shuttle.Esb, Version=7.0.45.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Shuttle.Esb.7.0.45\lib\net45-full\Shuttle.Esb.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Shuttle.Esb.Msmq, Version=6.0.5.0, Culture=neutral, processorArchitecture=MSIL">

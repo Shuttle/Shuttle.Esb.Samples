@@ -1,7 +1,9 @@
 ﻿using System;
 using Shuttle.Core.Infrastructure;
+using Shuttle.Core.SimpleInjector;
 using Shuttle.Esb;
 using Shuttle.Idempotence.Messages;
+using SimpleInjector;
 
 namespace Shuttle.Idempotence.Client
 {
@@ -9,9 +11,9 @@ namespace Shuttle.Idempotence.Client
 	{
 		static void Main(string[] args)
 		{
-            var container = new DefaultComponentContainer();
+            var container = new SimpleInjectorComponentContainer(new Container());
 
-            DefaultConfigurator.Configure(container);
+            ServiceBusConfigurator.Configure(container);
 
 		    var transportMessageFactory = container.Resolve<ITransportMessageFactory>();
 

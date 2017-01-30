@@ -14,7 +14,7 @@ namespace Shuttle.Deferred.Client
             var containerBuilder = new ContainerBuilder();
             var registry = new AutofacComponentRegistry(containerBuilder);
 
-            DefaultConfigurator.Configure(registry);
+            ServiceBusConfigurator.Configure(registry);
 
             using (var bus = ServiceBus.Create(new AutofacComponentResolver(containerBuilder.Build())).Start())
             {

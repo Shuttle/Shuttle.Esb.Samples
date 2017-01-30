@@ -1,7 +1,10 @@
 ﻿using System;
+using Microsoft.Practices.Unity;
 using Shuttle.Core.Host;
 using Shuttle.Core.Infrastructure;
+using Shuttle.Core.Unity;
 using Shuttle.Esb;
+using Shuttle.Esb.Msmq;
 
 namespace Shuttle.Distribution.Server
 {
@@ -11,9 +14,11 @@ namespace Shuttle.Distribution.Server
 
 		public void Start()
 		{
-            var container = new DefaultComponentContainer();
+            var container = new UnityComponentContainer(new UnityContainer());
 
-            DefaultConfigurator.Configure(container);
+            container.Register<IMsmqConfiguration, MsmqConfiguration>();
+
+            ServiceBusConfigurator.Configure(container);
 
             _bus = ServiceBus.Create(container).Start();
         }

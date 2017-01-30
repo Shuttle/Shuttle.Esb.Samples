@@ -20,7 +20,7 @@ namespace Shuttle.Deferred.Server
 		    var containerBuilder = new ContainerBuilder();
 		    var registry = new AutofacComponentRegistry(containerBuilder);
 
-            DefaultConfigurator.Configure(registry);
+            ServiceBusConfigurator.Configure(registry);
 
 		    _bus = ServiceBus.Create(new AutofacComponentResolver(containerBuilder.Build())).Start();
 		}

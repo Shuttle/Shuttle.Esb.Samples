@@ -2,9 +2,11 @@
 using Shuttle.Core.Data;
 using Shuttle.Core.Host;
 using Shuttle.Core.Infrastructure;
+using Shuttle.Core.SimpleInjector;
 using Shuttle.Esb;
 using Shuttle.Esb.SqlServer;
 using Shuttle.Esb.SqlServer.Idempotence;
+using SimpleInjector;
 
 namespace Shuttle.Idempotence.Server
 {
@@ -14,9 +16,9 @@ namespace Shuttle.Idempotence.Server
 
 		public void Start()
 		{
-            var container = new DefaultComponentContainer();
+            var container = new SimpleInjectorComponentContainer(new Container());
 
-		    var configurator = new DefaultConfigurator(container);
+            var configurator = new ServiceBusConfigurator(container);
 
 		    configurator.DontRegister<IIdempotenceService>();
 
