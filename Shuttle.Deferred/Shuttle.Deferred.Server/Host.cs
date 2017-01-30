@@ -1,5 +1,7 @@
 ﻿using System;
+using Autofac;
 using log4net;
+using Shuttle.Core.Autofac;
 using Shuttle.Core.Host;
 using Shuttle.Core.Infrastructure;
 using Shuttle.Core.Log4Net;
@@ -15,11 +17,12 @@ namespace Shuttle.Deferred.Server
 		{
 			Log.Assign(new Log4NetLog(LogManager.GetLogger(typeof(Host))));
 
-            var container = new DefaultComponentContainer();
+		    var containerBuilder = new ContainerBuilder();
+		    var registry = new AutofacComponentRegistry(containerBuilder);
 
-            DefaultConfigurator.Configure(container);
+            DefaultConfigurator.Configure(registry);
 
-		    _bus = ServiceBus.Create(container).Start();
+		    _bus = ServiceBus.Create(new AutofacComponentResolver(containerBuilder.Build())).Start();
 		}
 
         public void Dispose()

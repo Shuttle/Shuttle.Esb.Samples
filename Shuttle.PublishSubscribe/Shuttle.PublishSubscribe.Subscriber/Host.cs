@@ -1,5 +1,7 @@
 ﻿using System;
+using Shuttle.Core.Data;
 using Shuttle.Core.Host;
+using Shuttle.Core.Infrastructure;
 using Shuttle.Esb;
 using Shuttle.Esb.SqlServer;
 using Shuttle.PublishSubscribe.Messages;
@@ -12,14 +14,31 @@ namespace Shuttle.PublishSubscribe.Subscriber
 
 		public void Start()
 		{
-			var subscriptionManager = SubscriptionManager.Default();
+            var container = new DefaultComponentContainer();
 
-			subscriptionManager.Subscribe<MemberRegisteredEvent>();
+            var configurator = new DefaultConfigurator(container);
 
-			_bus = ServiceBus.Create(c => c.SubscriptionManager(subscriptionManager)).Start();
-		}
+            configurator.DontRegister<ISubscriptionManager>();
 
-		public void Dispose()
+            var sqlServerConfiguration = SqlServerSection.Configuration();
+
+            container.Register<ISqlServerConfiguration>(sqlServerConfiguration);
+            container.Register<IScriptProvider>(new ScriptProvider(sqlServerConfiguration.ScriptFolder));
+            container.Register<IDatabaseContextCache, ThreadStaticDatabaseContextCache>();
+            container.Register<IDatabaseContextFactory, DatabaseContextFactory>();
+            container.Register<IDbConnectionFactory, DbConnectionFactory>();
+            container.Register<IDbCommandFactory, DbCommandFactory>();
+            container.Register<IDatabaseGateway, DatabaseGateway>();
+            container.Register<ISubscriptionManager, SubscriptionManager>();
+
+            configurator.Configure();
+
+            container.Resolve<ISubscriptionManager>().Subscribe<MemberRegisteredEvent>();
+
+            _bus = ServiceBus.Create(container).Start();
+        }
+
+        public void Dispose()
 		{
 			_bus.Dispose();
 		}

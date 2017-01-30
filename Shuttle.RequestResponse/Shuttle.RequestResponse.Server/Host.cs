@@ -1,4 +1,6 @@
 ﻿using System;
+using Castle.Windsor;
+using Shuttle.Core.Castle;
 using Shuttle.Core.Host;
 using Shuttle.Core.Infrastructure;
 using Shuttle.Esb;
@@ -11,9 +13,9 @@ namespace Shuttle.RequestResponse.Server
 
 		public void Start()
 		{
-		    var container = new DefaultComponentContainer();
+		    var container = new WindsorComponentContainer(new WindsorContainer());
 
-		    DefaultConfigurator.Configure(container);
+		    ServiceBusConfigurator.Configure(container);
 
 		    _bus = ServiceBus.Create(container).Start();
 		}

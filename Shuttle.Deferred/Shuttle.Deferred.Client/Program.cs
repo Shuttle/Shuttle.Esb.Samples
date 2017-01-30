@@ -1,4 +1,6 @@
 ﻿using System;
+using Autofac;
+using Shuttle.Core.Autofac;
 using Shuttle.Core.Infrastructure;
 using Shuttle.Esb;
 using Shuttle.Deferred.Messages;
@@ -9,11 +11,12 @@ namespace Shuttle.Deferred.Client
 	{
 		static void Main(string[] args)
 		{
-            var container = new DefaultComponentContainer();
+            var containerBuilder = new ContainerBuilder();
+            var registry = new AutofacComponentRegistry(containerBuilder);
 
-            DefaultConfigurator.Configure(container);
+            DefaultConfigurator.Configure(registry);
 
-            using (var bus = ServiceBus.Create(container).Start())
+            using (var bus = ServiceBus.Create(new AutofacComponentResolver(containerBuilder.Build())).Start())
             {
                 string userName;
 
