@@ -11,11 +11,13 @@ using Castle.Windsor;
 using log4net;
 using Newtonsoft.Json.Serialization;
 using Shuttle.Castle;
+using Shuttle.Core.Castle;
 using Shuttle.Core.Data;
 using Shuttle.Core.Infrastructure;
 using Shuttle.Core.Log4Net;
 using Shuttle.Esb.Castle;
 using Shuttle.Esb;
+using Shuttle.Esb.Msmq;
 using ILog = Shuttle.Core.Infrastructure.ILog;
 
 namespace Shuttle.ProcessManagement.WebApi
@@ -59,16 +61,15 @@ namespace Shuttle.ProcessManagement.WebApi
 
                 ConfigureJson();
 
-                var serviceBusConfiguration = new ServiceBusConfiguration
-                {
-                    MessageHandlerFactory = new CastleMessageHandlerFactory(_container)
-                };
+				var container = new WindsorComponentContainer(_container);
 
-                serviceBusConfiguration.QueueManager.ScanForQueueFactories();
+				container.Register<IMsmqConfiguration, MsmqConfiguration>();
 
-                _bus = new ServiceBus(serviceBusConfiguration).Start();
+				ServiceBusConfigurator.Configure(container);
 
-                _log.Information("[started]");
+				_bus = ServiceBus.Create(container).Start();
+
+				_log.Information("[started]");
             }
             catch (Exception ex)
             {

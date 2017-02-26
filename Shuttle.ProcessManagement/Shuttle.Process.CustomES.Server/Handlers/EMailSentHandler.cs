@@ -49,7 +49,7 @@ namespace Shuttle.Process.CustomES.Server
 
                 stream.AddEvent(orderProcess.ChangeStatus("Dispatched-EMail Sent"));
 
-                _eventStore.SaveEventStream(stream);
+                _eventStore.Save(stream);
             }
 
             context.Send(new CompleteOrderProcessCommand

@@ -6,6 +6,7 @@ using Shuttle.Core.Host;
 using Shuttle.Core.Infrastructure;
 using Shuttle.Core.Log4Net;
 using Shuttle.Esb;
+using Shuttle.Esb.Msmq;
 
 namespace Shuttle.Deferred.Server
 {
@@ -19,6 +20,8 @@ namespace Shuttle.Deferred.Server
 
 		    var containerBuilder = new ContainerBuilder();
 		    var registry = new AutofacComponentRegistry(containerBuilder);
+
+			registry.Register<IMsmqConfiguration, MsmqConfiguration>();
 
             ServiceBusConfigurator.Configure(registry);
 

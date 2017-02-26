@@ -48,7 +48,7 @@ namespace Shuttle.Process.CustomES.Server
 
             using (_databaseContextFactory.Create(ProcessManagementData.ConnectionStringName))
             {
-                _eventStore.SaveEventStream(stream);
+                _eventStore.Save(stream);
             }
 
             context.Publish(new OrderProcessRegisteredEvent

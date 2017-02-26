@@ -2,6 +2,7 @@
 using Shuttle.Core.Infrastructure;
 using Shuttle.Core.SimpleInjector;
 using Shuttle.Esb;
+using Shuttle.Esb.Msmq;
 using Shuttle.Idempotence.Messages;
 using SimpleInjector;
 
@@ -13,7 +14,9 @@ namespace Shuttle.Idempotence.Client
 		{
             var container = new SimpleInjectorComponentContainer(new Container());
 
-            ServiceBusConfigurator.Configure(container);
+			container.Register<IMsmqConfiguration, MsmqConfiguration>();
+
+			ServiceBusConfigurator.Configure(container);
 
 		    var transportMessageFactory = container.Resolve<ITransportMessageFactory>();
 
@@ -28,7 +31,7 @@ namespace Shuttle.Idempotence.Client
 						UserName = userName
 					};
 
-					var transportMessage = transportMessageFactory.Create(command, null);
+					var transportMessage = transportMessageFactory.Create(command, c => { });
 
 					for (var i = 0; i < 5; i++)
 					{

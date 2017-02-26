@@ -40,7 +40,7 @@ namespace Shuttle.Process.CustomES.Server
 
                 stream.AddEvent(orderProcess.ChangeStatus("Order Accepted"));
 
-                _eventStore.SaveEventStream(stream);
+                _eventStore.Save(stream);
             }
 
             context.Send(orderProcess.CreateOrderCommand(), c => c.WithCorrelationId(orderProcess.Id.ToString()));

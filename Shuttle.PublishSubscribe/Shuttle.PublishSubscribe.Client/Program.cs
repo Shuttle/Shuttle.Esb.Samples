@@ -1,7 +1,10 @@
 ﻿using System;
 using Shuttle.Core.Infrastructure;
+using Shuttle.Core.StructureMap;
 using Shuttle.Esb;
+using Shuttle.Esb.Msmq;
 using Shuttle.PublishSubscribe.Messages;
+using StructureMap;
 
 namespace Shuttle.PublishSubscribe.Client
 {
@@ -9,11 +12,14 @@ namespace Shuttle.PublishSubscribe.Client
 	{
 		static void Main(string[] args)
 		{
-            var container = new DefaultComponentContainer();
+			var registry = new Registry();
+			var componentRegistry = new StructureMapComponentRegistry(registry);
 
-            DefaultConfigurator.Configure(container);
+			componentRegistry.Register<IMsmqConfiguration, MsmqConfiguration>();
 
-            using (var bus = ServiceBus.Create(container).Start())
+			ServiceBusConfigurator.Configure(componentRegistry);
+
+            using (var bus = ServiceBus.Create(new StructureMapComponentResolver(new Container(registry))).Start())
             {
                 string userName;
 

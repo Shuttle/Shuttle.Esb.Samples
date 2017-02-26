@@ -2,9 +2,12 @@
 using Shuttle.Core.Data;
 using Shuttle.Core.Host;
 using Shuttle.Core.Infrastructure;
+using Shuttle.Core.StructureMap;
 using Shuttle.Esb;
-using Shuttle.Esb.SqlServer;
+using Shuttle.Esb.Msmq;
+using Shuttle.Esb.Sql;
 using Shuttle.PublishSubscribe.Messages;
+using StructureMap;
 
 namespace Shuttle.PublishSubscribe.Subscriber
 {
@@ -14,28 +17,33 @@ namespace Shuttle.PublishSubscribe.Subscriber
 
 		public void Start()
 		{
-            var container = new DefaultComponentContainer();
+			var smRegistry = new Registry();
+			var registry = new StructureMapComponentRegistry(smRegistry);
 
-            var configurator = new DefaultConfigurator(container);
+			registry.Register<IMsmqConfiguration, MsmqConfiguration>();
 
-            configurator.DontRegister<ISubscriptionManager>();
+			var configurator = new ServiceBusConfigurator(registry);
 
-            var sqlServerConfiguration = SqlServerSection.Configuration();
+			configurator.DontRegister<ISubscriptionManager>();
 
-            container.Register<ISqlServerConfiguration>(sqlServerConfiguration);
-            container.Register<IScriptProvider>(new ScriptProvider(sqlServerConfiguration.ScriptFolder));
-            container.Register<IDatabaseContextCache, ThreadStaticDatabaseContextCache>();
-            container.Register<IDatabaseContextFactory, DatabaseContextFactory>();
-            container.Register<IDbConnectionFactory, DbConnectionFactory>();
-            container.Register<IDbCommandFactory, DbCommandFactory>();
-            container.Register<IDatabaseGateway, DatabaseGateway>();
-            container.Register<ISubscriptionManager, SubscriptionManager>();
+			registry.Register<Esb.Sql.IScriptProvider, Esb.Sql.ScriptProvider>();
+			registry.Register<Esb.Sql.IScriptProviderConfiguration, Esb.Sql.ScriptProviderConfiguration>();
 
-            configurator.Configure();
+			registry.Register<ISqlConfiguration>(SqlSection.Configuration());
+			registry.Register<IDatabaseContextCache, ThreadStaticDatabaseContextCache>();
+			registry.Register<IDatabaseContextFactory, DatabaseContextFactory>();
+			registry.Register<IDbConnectionFactory, DbConnectionFactory>();
+			registry.Register<IDbCommandFactory, DbCommandFactory>();
+			registry.Register<IDatabaseGateway, DatabaseGateway>();
+			registry.Register<ISubscriptionManager, SubscriptionManager>();
 
-            container.Resolve<ISubscriptionManager>().Subscribe<MemberRegisteredEvent>();
+			configurator.Configure();
 
-            _bus = ServiceBus.Create(container).Start();
+			var resolver = new StructureMapComponentResolver(new Container(smRegistry));
+
+			resolver.Resolve<ISubscriptionManager>().Subscribe<MemberRegisteredEvent>();
+
+			_bus = ServiceBus.Create(resolver).Start();
         }
 
         public void Dispose()

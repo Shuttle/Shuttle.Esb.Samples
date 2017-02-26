@@ -38,16 +38,20 @@
       <HintPath>..\packages\Castle.Windsor.3.3.0\lib\net45\Castle.Windsor.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Shuttle.Core.Data, Version=4.2.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Shuttle.Core.Data.4.2.1\lib\net45-full\Shuttle.Core.Data.dll</HintPath>
+    <Reference Include="Shuttle.Core.Castle, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Shuttle.Core.Castle.1.0.1\lib\net45-full\Shuttle.Core.Castle.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Shuttle.Core.Infrastructure, Version=4.2.4.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Shuttle.Core.Infrastructure.4.2.4\lib\net45-full\Shuttle.Core.Infrastructure.dll</HintPath>
+    <Reference Include="Shuttle.Core.Data, Version=4.2.11.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Shuttle.Core.Data.4.2.11\lib\net45-full\Shuttle.Core.Data.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Shuttle.Esb, Version=7.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Shuttle.Esb.7.0.0\lib\net45-full\Shuttle.Esb.dll</HintPath>
+    <Reference Include="Shuttle.Core.Infrastructure, Version=4.2.55.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Shuttle.Core.Infrastructure.4.2.55\lib\net45-full\Shuttle.Core.Infrastructure.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Shuttle.Esb, Version=7.0.47.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Shuttle.Esb.7.0.47\lib\net45-full\Shuttle.Esb.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Shuttle.Esb.Castle, Version=7.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -58,12 +62,12 @@
       <HintPath>..\packages\Shuttle.Esb.Process.6.0.3\lib\net45-full\Shuttle.Esb.Process.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Shuttle.Recall, Version=3.6.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Shuttle.Recall.3.6.2\lib\net45-full\Shuttle.Recall.dll</HintPath>
+    <Reference Include="Shuttle.Recall, Version=4.0.44.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Shuttle.Recall.4.0.44\lib\net45-full\Shuttle.Recall.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Shuttle.Recall.SqlServer, Version=1.8.6.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Shuttle.Recall.SqlServer.1.8.6\lib\net45-full\Shuttle.Recall.SqlServer.dll</HintPath>
+    <Reference Include="Shuttle.Recall.Sql, Version=4.0.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Shuttle.Recall.Sql.4.0.5\lib\net45-full\Shuttle.Recall.Sql.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />

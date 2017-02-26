@@ -4,6 +4,7 @@ using Shuttle.Core.Castle;
 using Shuttle.Core.Host;
 using Shuttle.Core.Infrastructure;
 using Shuttle.Esb;
+using Shuttle.Esb.Msmq;
 
 namespace Shuttle.RequestResponse.Server
 {
@@ -15,7 +16,9 @@ namespace Shuttle.RequestResponse.Server
 		{
 		    var container = new WindsorComponentContainer(new WindsorContainer());
 
-		    ServiceBusConfigurator.Configure(container);
+			container.Register<IMsmqConfiguration, MsmqConfiguration>();
+
+			ServiceBusConfigurator.Configure(container);
 
 		    _bus = ServiceBus.Create(container).Start();
 		}

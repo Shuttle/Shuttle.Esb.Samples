@@ -3,17 +3,19 @@ using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 using log4net;
 using Shuttle.Castle;
+using Shuttle.Core.Castle;
 using Shuttle.Core.Host;
 using Shuttle.Core.Infrastructure;
 using Shuttle.Core.Log4Net;
 using Shuttle.EMailSender.Messages;
 using Shuttle.Esb.Castle;
 using Shuttle.Esb;
-using Shuttle.Esb.SqlServer;
+using Shuttle.Esb.Msmq;
+using Shuttle.Esb.Sql;
 using Shuttle.Invoicing.Messages;
 using Shuttle.Ordering.Messages;
 using Shuttle.Recall;
-using Shuttle.Recall.SqlServer;
+using Shuttle.Recall.Sql;
 
 namespace Shuttle.Process.CustomES.Server
 {
@@ -31,28 +33,52 @@ namespace Shuttle.Process.CustomES.Server
         {
             Log.Assign(new Log4NetLog(LogManager.GetLogger(typeof (Host))));
 
-            _container = new WindsorContainer();
+			_container = new WindsorContainer();
 
-            _container.RegisterDataAccessCore();
-            _container.RegisterDataAccess("Shuttle.ProcessManagement");
+			_container.RegisterDataAccessCore();
+			_container.RegisterDataAccess("Shuttle.ProcessManagement");
 
-            _container.Register(Component.For<IEventStore>().ImplementedBy<EventStore>());
-            _container.Register(Component.For<ISerializer>().ImplementedBy<DefaultSerializer>());
-            _container.Register(Component.For<IEventStoreQueryFactory>().ImplementedBy<EventStoreQueryFactory>());
+			var container = new WindsorComponentContainer(_container);
 
-            var subscriptionManager = SubscriptionManager.Default();
+			container.Register<IMsmqConfiguration, MsmqConfiguration>();
 
-            subscriptionManager.Subscribe<OrderCreatedEvent>();
-            subscriptionManager.Subscribe<InvoiceCreatedEvent>();
-            subscriptionManager.Subscribe<EMailSentEvent>();
+			container.Register<Recall.Sql.IScriptProviderConfiguration, Recall.Sql.ScriptProviderConfiguration>();
+			container.Register<Recall.Sql.IScriptProvider, Recall.Sql.ScriptProvider>();
 
-            _bus = ServiceBus.Create(
-                c =>
-                {
-                    c
-                        .MessageHandlerFactory(new CastleMessageHandlerFactory(_container))
-                        .SubscriptionManager(subscriptionManager);
-                }).Start();
-        }
-    }
+			container.Register<IProjectionRepository, ProjectionRepository>();
+			container.Register<IProjectionQueryFactory, ProjectionQueryFactory>();
+			container.Register<IPrimitiveEventRepository, PrimitiveEventRepository>();
+			container.Register<IPrimitiveEventQueryFactory, PrimitiveEventQueryFactory>();
+
+			container.Register<IProjectionConfiguration>(ProjectionSection.Configuration());
+			container.Register<EventProcessingModule, EventProcessingModule>();
+
+			EventStoreConfigurator.Configure(container);
+
+			var esbConfigurator = new ServiceBusConfigurator(container);
+
+			esbConfigurator.DontRegister<ISubscriptionManager>();
+	        esbConfigurator.DontRegister<ISerializer>();
+	        esbConfigurator.DontRegister<ITransactionScopeFactory>();
+	        esbConfigurator.DontRegister<TransactionScopeObserver>();
+	        esbConfigurator.DontRegister<IPipelineFactory>();
+			esbConfigurator.DontRegisterObservers();
+
+			container.Register<Esb.Sql.IScriptProviderConfiguration, Esb.Sql.ScriptProviderConfiguration>();
+			container.Register<Esb.Sql.IScriptProvider, Esb.Sql.ScriptProvider>();
+
+			container.Register<ISqlConfiguration>(SqlSection.Configuration());
+			container.Register<ISubscriptionManager, SubscriptionManager>();
+
+			esbConfigurator.Configure();
+
+			var subscriptionManager = container.Resolve<ISubscriptionManager>();
+
+			subscriptionManager.Subscribe<OrderCreatedEvent>();
+			subscriptionManager.Subscribe<InvoiceCreatedEvent>();
+			subscriptionManager.Subscribe<EMailSentEvent>();
+
+			_bus = ServiceBus.Create(container).Start();
+		}
+	}
 }

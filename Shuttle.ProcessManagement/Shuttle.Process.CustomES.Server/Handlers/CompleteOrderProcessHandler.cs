@@ -34,7 +34,7 @@ namespace Shuttle.Process.CustomES.Server
 
                 stream.AddEvent(orderProcess.ChangeStatus("Completed"));
 
-                _eventStore.SaveEventStream(stream);
+                _eventStore.Save(stream);
             }
 
             context.Publish(new OrderProcessCompletedEvent

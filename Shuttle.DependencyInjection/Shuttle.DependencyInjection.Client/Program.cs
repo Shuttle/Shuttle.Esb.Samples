@@ -4,6 +4,7 @@ using Shuttle.Core.Infrastructure;
 using Shuttle.Core.Ninject;
 using Shuttle.Esb;
 using Shuttle.DependencyInjection.Messages;
+using Shuttle.Esb.Msmq;
 
 namespace Shuttle.DependencyInjection.Client
 {
@@ -12,6 +13,8 @@ namespace Shuttle.DependencyInjection.Client
 		static void Main(string[] args)
 		{
             var container = new NinjectComponentContainer(new StandardKernel());
+
+			container.Register<IMsmqConfiguration, MsmqConfiguration>();
 
             ServiceBusConfigurator.Configure(container);
 

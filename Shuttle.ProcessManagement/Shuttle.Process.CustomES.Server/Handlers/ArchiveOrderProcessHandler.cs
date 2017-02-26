@@ -43,7 +43,7 @@ namespace Shuttle.Process.CustomES.Server
 
                 stream.AddEvent(orderProcess.ChangeStatus("Order Archived"));
 
-                _eventStore.SaveEventStream(stream);
+                _eventStore.Save(stream);
             }
 
             context.Publish(new OrderProcessArchivedEvent

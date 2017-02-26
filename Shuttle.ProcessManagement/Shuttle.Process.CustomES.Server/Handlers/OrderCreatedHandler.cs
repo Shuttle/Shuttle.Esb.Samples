@@ -51,7 +51,7 @@ namespace Shuttle.Process.CustomES.Server
                 stream.AddEvent(orderProcess.ChangeStatus("Order Created"));
                 stream.AddEvent(orderProcess.AssignOrderId(context.Message.OrderId));
 
-                _eventStore.SaveEventStream(stream);
+                _eventStore.Save(stream);
             }
 
             context.Send(orderProcess.CreateInvoiceCommand());

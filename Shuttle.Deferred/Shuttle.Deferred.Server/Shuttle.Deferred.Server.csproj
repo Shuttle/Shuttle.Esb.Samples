@@ -61,8 +61,8 @@
       <HintPath>..\packages\Shuttle.Esb.7.0.45\lib\net45-full\Shuttle.Esb.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Shuttle.Esb.Msmq, Version=6.0.5.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Shuttle.Esb.Msmq.6.0.5\lib\net45-full\Shuttle.Esb.Msmq.dll</HintPath>
+    <Reference Include="Shuttle.Esb.Msmq, Version=6.0.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Shuttle.Esb.Msmq.6.0.6\lib\net45-full\Shuttle.Esb.Msmq.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />

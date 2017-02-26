@@ -1,66 +1,96 @@
 ﻿using System;
-using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 using log4net;
 using Shuttle.Castle;
+using Shuttle.Core.Castle;
 using Shuttle.Core.Data;
 using Shuttle.Core.Host;
 using Shuttle.Core.Infrastructure;
 using Shuttle.Core.Log4Net;
 using Shuttle.EMailSender.Messages;
-using Shuttle.Esb.Castle;
 using Shuttle.Esb;
+using Shuttle.Esb.Castle;
+using Shuttle.Esb.Msmq;
 using Shuttle.Esb.Process;
-using Shuttle.Esb.SqlServer;
+using Shuttle.Esb.Sql;
 using Shuttle.Invoicing.Messages;
 using Shuttle.Ordering.Messages;
 using Shuttle.Recall;
-using Shuttle.Recall.SqlServer;
+using Shuttle.Recall.Sql;
 
 namespace Shuttle.Process.ESModule.Server
 {
-    public class Host : IHost, IDisposable
-    {
-        private IServiceBus _bus;
-        private WindsorContainer _container;
+	public class Host : IHost, IDisposable
+	{
+		private IServiceBus _bus;
+		private IWindsorContainer _container;
 
-        public void Dispose()
-        {
-            _bus.Dispose();
-        }
+		public void Dispose()
+		{
+			if (_bus != null)
+			{
+				_bus.Dispose();
+			}
 
-        public void Start()
-        {
-            Log.Assign(new Log4NetLog(LogManager.GetLogger(typeof (Host))));
+			if (_container != null)
+			{
+				_container.Dispose();
+			}
+		}
 
-            _container = new WindsorContainer();
+		public void Start()
+		{
+			Log.Assign(new Log4NetLog(LogManager.GetLogger(typeof(Host))));
 
-            _container.RegisterDataAccessCore();
-            _container.RegisterDataAccess("Shuttle.ProcessManagement");
+			_container = new WindsorContainer();
 
-            _container.Register(Component.For<IEventStore>().ImplementedBy<EventStore>());
-            _container.Register(Component.For<IKeyStore>().ImplementedBy<KeyStore>());
-            _container.Register(Component.For<ISerializer>().ImplementedBy<DefaultSerializer>());
-            _container.Register(Component.For<IEventStoreQueryFactory>().ImplementedBy<EventStoreQueryFactory>());
-            _container.Register(Component.For<IKeyStoreQueryFactory>().ImplementedBy<KeyStoreQueryFactory>());
+			_container.RegisterDataAccessCore();
+			_container.RegisterDataAccess("Shuttle.ProcessManagement");
 
-            var subscriptionManager = SubscriptionManager.Default();
+			var container = new WindsorComponentContainer(_container);
 
-            subscriptionManager.Subscribe<OrderCreatedEvent>();
-            subscriptionManager.Subscribe<InvoiceCreatedEvent>();
-            subscriptionManager.Subscribe<EMailSentEvent>();
+			container.Register<Recall.Sql.IScriptProviderConfiguration, Recall.Sql.ScriptProviderConfiguration>();
+			container.Register<Recall.Sql.IScriptProvider, Recall.Sql.ScriptProvider>();
 
-            var processConfiguration = ProcessSection.Configuration();
+			container.Register<IProjectionRepository, ProjectionRepository>();
+			container.Register<IProjectionQueryFactory, ProjectionQueryFactory>();
+			container.Register<IPrimitiveEventRepository, PrimitiveEventRepository>();
+			container.Register<IPrimitiveEventQueryFactory, PrimitiveEventQueryFactory>();
 
-	        ((DefaultProcessActivator)processConfiguration.ProcessActivator).RegisterMappings();
+			container.Register<IProjectionConfiguration>(ProjectionSection.Configuration());
+			container.Register<EventProcessingModule, EventProcessingModule>();
+			container.Register<ProcessModule, ProcessModule>();
 
-            _bus = ServiceBus.Create(
-                c =>
-                {
-                    c.MessageHandlerFactory(new CastleMessageHandlerFactory(_container));
-                    c.SubscriptionManager(subscriptionManager);
-                    c.AddModule(new ProcessModule(_container.Resolve<IDatabaseContextFactory>(), _container.Resolve<IEventStore>(), _container.Resolve<IKeyStore>(), processConfiguration));
-                }).Start();
-        }
-    }
+			EventStoreConfigurator.Configure(container);
+
+			var processConfiguration = ProcessSection.Configuration();
+
+			((DefaultProcessActivator) processConfiguration.ProcessActivator).RegisterMappings();
+
+			container.Register<IMsmqConfiguration, MsmqConfiguration>();
+
+			var esbConfigurator = new ServiceBusConfigurator(container);
+
+			esbConfigurator.DontRegister<ISubscriptionManager>();
+
+			container.Register<Esb.Sql.IScriptProviderConfiguration, Esb.Sql.ScriptProviderConfiguration>();
+			container.Register<Esb.Sql.IScriptProvider, Esb.Sql.ScriptProvider>();
+
+			container.Register<ISqlConfiguration>(SqlSection.Configuration());
+			container.Register<ISubscriptionManager, SubscriptionManager>();
+
+			esbConfigurator.Configure();
+
+			container.Resolve<EventProcessingModule>();
+			container.Resolve<ProcessModule>();
+
+			var subscriptionManager = container.Resolve<ISubscriptionManager>();
+
+			subscriptionManager.Subscribe<OrderCreatedEvent>();
+			subscriptionManager.Subscribe<InvoiceCreatedEvent>();
+			subscriptionManager.Subscribe<EMailSentEvent>();
+
+			_bus = ServiceBus.Create(container).Start();
+		}
+	}
 }

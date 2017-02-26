@@ -4,8 +4,8 @@ using Shuttle.Core.Host;
 using Shuttle.Core.Infrastructure;
 using Shuttle.Core.SimpleInjector;
 using Shuttle.Esb;
-using Shuttle.Esb.SqlServer;
-using Shuttle.Esb.SqlServer.Idempotence;
+using Shuttle.Esb.Msmq;
+using Shuttle.Esb.Sql;
 using SimpleInjector;
 
 namespace Shuttle.Idempotence.Server
@@ -18,15 +18,17 @@ namespace Shuttle.Idempotence.Server
 		{
             var container = new SimpleInjectorComponentContainer(new Container());
 
-            var configurator = new ServiceBusConfigurator(container);
+			container.Register<IMsmqConfiguration, MsmqConfiguration>();
 
-		    configurator.DontRegister<IIdempotenceService>();
+				var configurator = new ServiceBusConfigurator(container);
 
-            var sqlServerConfiguration = SqlServerSection.Configuration();
+			configurator.DontRegister<IIdempotenceService>();
 
-            container.Register<ISqlServerConfiguration>(sqlServerConfiguration);
-            container.Register<IScriptProvider>(new ScriptProvider(sqlServerConfiguration.ScriptFolder));
-            container.Register<IDatabaseContextCache, ThreadStaticDatabaseContextCache>();
+			container.Register<Esb.Sql.IScriptProvider, Esb.Sql.ScriptProvider>();
+			container.Register<Esb.Sql.IScriptProviderConfiguration, Esb.Sql.ScriptProviderConfiguration>();
+
+			container.Register<ISqlConfiguration>(SqlSection.Configuration());
+			container.Register<IDatabaseContextCache, ThreadStaticDatabaseContextCache>();
             container.Register<IDatabaseContextFactory, DatabaseContextFactory>();
             container.Register<IDbConnectionFactory, DbConnectionFactory>();
             container.Register<IDbCommandFactory, DbCommandFactory>();

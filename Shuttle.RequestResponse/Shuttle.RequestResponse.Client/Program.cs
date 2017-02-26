@@ -1,7 +1,9 @@
 ﻿using System;
 using Castle.Windsor;
 using Shuttle.Core.Castle;
+using Shuttle.Core.Infrastructure;
 using Shuttle.Esb;
+using Shuttle.Esb.Msmq;
 using Shuttle.RequestResponse.Messages;
 
 namespace Shuttle.RequestResponse.Client
@@ -11,6 +13,8 @@ namespace Shuttle.RequestResponse.Client
         static void Main(string[] args)
         {
             var container = new WindsorComponentContainer(new WindsorContainer());
+
+	        container.Register<IMsmqConfiguration, MsmqConfiguration>();
 
             ServiceBusConfigurator.Configure(container);
 
