@@ -21,6 +21,7 @@ namespace Shuttle.PublishSubscribe.Subscriber
 			var registry = new StructureMapComponentRegistry(smRegistry);
 
 			registry.Register<IMsmqConfiguration, MsmqConfiguration>();
+			registry.Register<TransactionScopeObserver>();
 
 			var configurator = new ServiceBusConfigurator(registry);
 

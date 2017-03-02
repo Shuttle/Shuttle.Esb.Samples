@@ -17,8 +17,9 @@ namespace Shuttle.Distribution.Worker
             var container = new UnityComponentContainer(new UnityContainer());
 
             container.Register<IMsmqConfiguration, MsmqConfiguration>();
+			container.Register<TransactionScopeObserver>();
 
-            ServiceBusConfigurator.Configure(container);
+			ServiceBusConfigurator.Configure(container);
 
             _bus = ServiceBus.Create(container).Start();
         }

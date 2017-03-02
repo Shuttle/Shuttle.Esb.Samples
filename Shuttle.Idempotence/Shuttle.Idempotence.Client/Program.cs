@@ -15,6 +15,7 @@ namespace Shuttle.Idempotence.Client
             var container = new SimpleInjectorComponentContainer(new Container());
 
 			container.Register<IMsmqConfiguration, MsmqConfiguration>();
+			container.Register<TransactionScopeObserver>();
 
 			ServiceBusConfigurator.Configure(container);
 

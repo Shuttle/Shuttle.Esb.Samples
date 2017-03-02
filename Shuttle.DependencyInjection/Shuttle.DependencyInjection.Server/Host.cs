@@ -29,6 +29,7 @@ namespace Shuttle.DependencyInjection.Server
             var container = new NinjectComponentContainer(_kernel);
 
 			container.Register<IMsmqConfiguration, MsmqConfiguration>();
+			container.Register<TransactionScopeObserver>();
 
 			ServiceBusConfigurator.Configure(container);
 

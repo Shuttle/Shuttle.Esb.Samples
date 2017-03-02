@@ -12,14 +12,15 @@ namespace Shuttle.PublishSubscribe.Client
 	{
 		static void Main(string[] args)
 		{
-			var registry = new Registry();
-			var componentRegistry = new StructureMapComponentRegistry(registry);
+			var smRegistry = new Registry();
+			var registry = new StructureMapComponentRegistry(smRegistry);
 
-			componentRegistry.Register<IMsmqConfiguration, MsmqConfiguration>();
+			registry.Register<IMsmqConfiguration, MsmqConfiguration>();
+			registry.Register<TransactionScopeObserver>();
 
-			ServiceBusConfigurator.Configure(componentRegistry);
+			ServiceBusConfigurator.Configure(registry);
 
-            using (var bus = ServiceBus.Create(new StructureMapComponentResolver(new Container(registry))).Start())
+            using (var bus = ServiceBus.Create(new StructureMapComponentResolver(new Container(smRegistry))).Start())
             {
                 string userName;
 

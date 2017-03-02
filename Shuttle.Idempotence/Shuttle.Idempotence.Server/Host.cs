@@ -7,6 +7,10 @@ using Shuttle.Esb;
 using Shuttle.Esb.Msmq;
 using Shuttle.Esb.Sql;
 using SimpleInjector;
+using IScriptProvider = Shuttle.Esb.Sql.IScriptProvider;
+using IScriptProviderConfiguration = Shuttle.Esb.Sql.IScriptProviderConfiguration;
+using ScriptProvider = Shuttle.Esb.Sql.ScriptProvider;
+using ScriptProviderConfiguration = Shuttle.Esb.Sql.ScriptProviderConfiguration;
 
 namespace Shuttle.Idempotence.Server
 {
@@ -14,35 +18,36 @@ namespace Shuttle.Idempotence.Server
 	{
 		private IServiceBus _bus;
 
+		public void Dispose()
+		{
+			_bus.Dispose();
+		}
+
 		public void Start()
 		{
-            var container = new SimpleInjectorComponentContainer(new Container());
+			var container = new SimpleInjectorComponentContainer(new Container());
 
 			container.Register<IMsmqConfiguration, MsmqConfiguration>();
+			container.Register<TransactionScopeObserver>();
 
-				var configurator = new ServiceBusConfigurator(container);
+			var configurator = new ServiceBusConfigurator(container);
 
 			configurator.DontRegister<IIdempotenceService>();
 
-			container.Register<Esb.Sql.IScriptProvider, Esb.Sql.ScriptProvider>();
-			container.Register<Esb.Sql.IScriptProviderConfiguration, Esb.Sql.ScriptProviderConfiguration>();
+			container.Register<IScriptProvider, ScriptProvider>();
+			container.Register<IScriptProviderConfiguration, ScriptProviderConfiguration>();
 
 			container.Register<ISqlConfiguration>(SqlSection.Configuration());
 			container.Register<IDatabaseContextCache, ThreadStaticDatabaseContextCache>();
-            container.Register<IDatabaseContextFactory, DatabaseContextFactory>();
-            container.Register<IDbConnectionFactory, DbConnectionFactory>();
-            container.Register<IDbCommandFactory, DbCommandFactory>();
-            container.Register<IDatabaseGateway, DatabaseGateway>();
-            container.Register<IIdempotenceService, IdempotenceService>();
+			container.Register<IDatabaseContextFactory, DatabaseContextFactory>();
+			container.Register<IDbConnectionFactory, DbConnectionFactory>();
+			container.Register<IDbCommandFactory, DbCommandFactory>();
+			container.Register<IDatabaseGateway, DatabaseGateway>();
+			container.Register<IIdempotenceService, IdempotenceService>();
 
-            configurator.Configure();
+			configurator.Configure();
 
-            _bus = ServiceBus.Create(container).Start();
-        }
-
-        public void Dispose()
-		{
-			_bus.Dispose();
+			_bus = ServiceBus.Create(container).Start();
 		}
 	}
 }
