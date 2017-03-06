@@ -56,6 +56,8 @@ namespace Shuttle.Process.ESModule.Server
 			container.Register<IProjectionQueryFactory, ProjectionQueryFactory>();
 			container.Register<IPrimitiveEventRepository, PrimitiveEventRepository>();
 			container.Register<IPrimitiveEventQueryFactory, PrimitiveEventQueryFactory>();
+			container.Register<IKeyStoreQueryFactory, KeyStoreQueryFactory>();
+			container.Register<IKeyStore, KeyStore>();
 
 			container.Register<IProjectionConfiguration>(ProjectionSection.Configuration());
 

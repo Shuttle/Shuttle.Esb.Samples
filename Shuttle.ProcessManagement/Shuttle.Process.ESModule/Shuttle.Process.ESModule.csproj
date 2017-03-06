@@ -58,8 +58,8 @@
       <HintPath>..\packages\Shuttle.Esb.Castle.7.0.0\lib\net45-full\Shuttle.Esb.Castle.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Shuttle.Esb.Process, Version=6.0.6.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Shuttle.Esb.Process.6.0.6\lib\net45-full\Shuttle.Esb.Process.dll</HintPath>
+    <Reference Include="Shuttle.Esb.Process, Version=6.0.7.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Shuttle.Esb.Process.6.0.7\lib\net45-full\Shuttle.Esb.Process.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Shuttle.Recall, Version=7.0.64.0, Culture=neutral, processorArchitecture=MSIL">
