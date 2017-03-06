@@ -65,7 +65,7 @@ namespace Shuttle.ProcessManagement.WebApi
 
 				container.Register<IMsmqConfiguration, MsmqConfiguration>();
 
-				ServiceBusConfigurator.Configure(container);
+				ServiceBus.RegisterComponents(container);
 
 				_bus = ServiceBus.Create(container).Start();
 

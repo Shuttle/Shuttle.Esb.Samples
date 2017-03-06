@@ -40,10 +40,6 @@ namespace Shuttle.EMailSender.Server
 
 			_container.RegisterDataAccessCore();
 
-			var configurator = new ServiceBusConfigurator(container);
-
-			configurator.DontRegister<ISubscriptionManager>();
-
 			container.Register<IMsmqConfiguration, MsmqConfiguration>();
 
 			container.Register<IScriptProvider, ScriptProvider>();
@@ -52,7 +48,7 @@ namespace Shuttle.EMailSender.Server
 			container.Register<ISqlConfiguration>(SqlSection.Configuration());
 			container.Register<ISubscriptionManager, SubscriptionManager>();
 
-			configurator.Configure();
+			ServiceBus.RegisterComponents(container);
 
 			_bus = ServiceBus.Create(container).Start();
 		}

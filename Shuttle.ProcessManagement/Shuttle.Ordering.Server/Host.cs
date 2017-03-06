@@ -35,10 +35,6 @@ namespace Shuttle.Ordering.Server
 			_container.RegisterDataAccessCore();
 			_container.RegisterDataAccess("Shuttle.Ordering");
 
-			var configurator = new ServiceBusConfigurator(container);
-
-			configurator.DontRegister<ISubscriptionManager>();
-
 			container.Register<IMsmqConfiguration, MsmqConfiguration>();
 
 			container.Register<IScriptProvider, ScriptProvider>();
@@ -47,7 +43,7 @@ namespace Shuttle.Ordering.Server
 			container.Register<ISqlConfiguration>(SqlSection.Configuration());
 			container.Register<ISubscriptionManager, SubscriptionManager>();
 
-			configurator.Configure();
+			ServiceBus.RegisterComponents(container);
 
 			_bus = ServiceBus.Create(container).Start();
 

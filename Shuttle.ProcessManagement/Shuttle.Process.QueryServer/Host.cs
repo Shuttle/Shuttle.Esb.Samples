@@ -45,10 +45,6 @@ namespace Shuttle.Process.QueryServer
 
 			var container = new WindsorComponentContainer(_container);
 
-			var configurator = new ServiceBusConfigurator(container);
-
-			configurator.DontRegister<ISubscriptionManager>();
-
 			container.Register<IMsmqConfiguration, MsmqConfiguration>();
 
 			container.Register<IScriptProvider, ScriptProvider>();
@@ -57,7 +53,7 @@ namespace Shuttle.Process.QueryServer
 			container.Register<ISqlConfiguration>(SqlSection.Configuration());
 			container.Register<ISubscriptionManager, SubscriptionManager>();
 
-			configurator.Configure();
+			ServiceBus.RegisterComponents(container);
 
 			var subscriptionManager = container.Resolve<ISubscriptionManager>();
 

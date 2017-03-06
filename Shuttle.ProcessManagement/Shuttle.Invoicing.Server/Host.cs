@@ -33,10 +33,6 @@ namespace Shuttle.Invoicing.Server
 
 			var container = new WindsorComponentContainer(_container);
 
-			var configurator = new ServiceBusConfigurator(container);
-
-			configurator.DontRegister<ISubscriptionManager>();
-
 			container.Register<IMsmqConfiguration, MsmqConfiguration>();
 
 			container.Register<IScriptProvider, ScriptProvider>();
@@ -45,7 +41,7 @@ namespace Shuttle.Invoicing.Server
 			container.Register<ISqlConfiguration>(SqlSection.Configuration());
 			container.Register<ISubscriptionManager, SubscriptionManager>();
 
-			configurator.Configure();
+			ServiceBus.RegisterComponents(container);
 
 			_bus = ServiceBus.Create(container).Start();
 		}

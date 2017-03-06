@@ -53,16 +53,7 @@ namespace Shuttle.Process.CustomES.Server
 			container.Register<IProjectionConfiguration>(ProjectionSection.Configuration());
 			container.Register<EventProcessingModule, EventProcessingModule>();
 
-			EventStoreConfigurator.Configure(container);
-
-			var esbConfigurator = new ServiceBusConfigurator(container);
-
-			esbConfigurator.DontRegister<ISubscriptionManager>();
-	        esbConfigurator.DontRegister<ISerializer>();
-	        esbConfigurator.DontRegister<ITransactionScopeFactory>();
-	        esbConfigurator.DontRegister<TransactionScopeObserver>();
-	        esbConfigurator.DontRegister<IPipelineFactory>();
-			esbConfigurator.DontRegisterObservers();
+			EventStore.RegisterComponents(container);
 
 			container.Register<Esb.Sql.IScriptProviderConfiguration, Esb.Sql.ScriptProviderConfiguration>();
 			container.Register<Esb.Sql.IScriptProvider, Esb.Sql.ScriptProvider>();
@@ -70,7 +61,7 @@ namespace Shuttle.Process.CustomES.Server
 			container.Register<ISqlConfiguration>(SqlSection.Configuration());
 			container.Register<ISubscriptionManager, SubscriptionManager>();
 
-			esbConfigurator.Configure();
+			ServiceBus.RegisterComponents(container);
 
 			var subscriptionManager = container.Resolve<ISubscriptionManager>();
 

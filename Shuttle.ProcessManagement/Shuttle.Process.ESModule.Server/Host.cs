@@ -58,20 +58,15 @@ namespace Shuttle.Process.ESModule.Server
 			container.Register<IPrimitiveEventQueryFactory, PrimitiveEventQueryFactory>();
 
 			container.Register<IProjectionConfiguration>(ProjectionSection.Configuration());
-			container.Register<EventProcessingModule, EventProcessingModule>();
-			container.Register<ProcessModule, ProcessModule>();
 
-			EventStoreConfigurator.Configure(container);
+			EventProcessingModule.RegisterComponents(container);
+			EventStore.RegisterComponents(container);
 
-			var processConfiguration = ProcessSection.Configuration();
-
-			((DefaultProcessActivator) processConfiguration.ProcessActivator).RegisterMappings();
+			container.Register<IProcessConfiguration>(ProcessSection.Configuration());
+			container.Register<IProcessActivator, DefaultProcessActivator>();
+			container.Register<IMessageHandlerInvoker, ProcessMessageHandlerInvoker>();
 
 			container.Register<IMsmqConfiguration, MsmqConfiguration>();
-
-			var esbConfigurator = new ServiceBusConfigurator(container);
-
-			esbConfigurator.DontRegister<ISubscriptionManager>();
 
 			container.Register<Esb.Sql.IScriptProviderConfiguration, Esb.Sql.ScriptProviderConfiguration>();
 			container.Register<Esb.Sql.IScriptProvider, Esb.Sql.ScriptProvider>();
@@ -79,10 +74,16 @@ namespace Shuttle.Process.ESModule.Server
 			container.Register<ISqlConfiguration>(SqlSection.Configuration());
 			container.Register<ISubscriptionManager, SubscriptionManager>();
 
-			esbConfigurator.Configure();
+			ServiceBus.RegisterComponents(container);
 
 			container.Resolve<EventProcessingModule>();
-			container.Resolve<ProcessModule>();
+
+			var processActivator = container.Resolve<IProcessActivator>() as DefaultProcessActivator;
+
+			if (processActivator != null)
+			{
+				processActivator.RegisterMappings();
+			}
 
 			var subscriptionManager = container.Resolve<ISubscriptionManager>();
 
