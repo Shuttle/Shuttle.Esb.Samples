@@ -28,11 +28,6 @@ namespace Shuttle.Idempotence.Server
 			var container = new SimpleInjectorComponentContainer(new Container());
 
 			container.Register<IMsmqConfiguration, MsmqConfiguration>();
-			container.Register<TransactionScopeObserver>();
-
-			var configurator = new ServiceBusConfigurator(container);
-
-			configurator.DontRegister<IIdempotenceService>();
 
 			container.Register<IScriptProvider, ScriptProvider>();
 			container.Register<IScriptProviderConfiguration, ScriptProviderConfiguration>();
@@ -45,7 +40,7 @@ namespace Shuttle.Idempotence.Server
 			container.Register<IDatabaseGateway, DatabaseGateway>();
 			container.Register<IIdempotenceService, IdempotenceService>();
 
-			configurator.Configure();
+			ServiceBus.Register(container);
 
 			_bus = ServiceBus.Create(container).Start();
 		}

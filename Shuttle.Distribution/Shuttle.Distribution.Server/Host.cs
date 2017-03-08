@@ -17,11 +17,10 @@ namespace Shuttle.Distribution.Server
             var container = new UnityComponentContainer(new UnityContainer());
 
             container.Register<IMsmqConfiguration, MsmqConfiguration>();
-			container.Register<TransactionScopeObserver>();
 
-			ServiceBusConfigurator.Configure(container);
+			ServiceBus.Register(container);
 
-            _bus = ServiceBus.Create(container).Start();
+			_bus = ServiceBus.Create(container).Start();
         }
 
         public void Dispose()

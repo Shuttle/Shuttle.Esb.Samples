@@ -46,12 +46,12 @@
       <HintPath>..\packages\Shuttle.Core.Host.3.2.15\lib\net45-full\Shuttle.Core.Host.exe</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Shuttle.Core.Infrastructure, Version=4.2.64.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Shuttle.Core.Infrastructure.4.2.64\lib\net45-full\Shuttle.Core.Infrastructure.dll</HintPath>
+    <Reference Include="Shuttle.Core.Infrastructure, Version=4.2.66.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Shuttle.Core.Infrastructure.4.2.66\lib\net45-full\Shuttle.Core.Infrastructure.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Shuttle.Esb, Version=7.0.51.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Shuttle.Esb.7.0.51\lib\net45-full\Shuttle.Esb.dll</HintPath>
+    <Reference Include="Shuttle.Esb, Version=7.0.56.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Shuttle.Esb.7.0.56\lib\net45-full\Shuttle.Esb.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Shuttle.Esb.Msmq, Version=6.0.7.0, Culture=neutral, processorArchitecture=MSIL">

@@ -41,7 +41,7 @@ namespace Shuttle.Invoicing.Server
 			container.Register<ISqlConfiguration>(SqlSection.Configuration());
 			container.Register<ISubscriptionManager, SubscriptionManager>();
 
-			ServiceBus.RegisterComponents(container);
+			ServiceBus.Register(container);
 
 			_bus = ServiceBus.Create(container).Start();
 		}

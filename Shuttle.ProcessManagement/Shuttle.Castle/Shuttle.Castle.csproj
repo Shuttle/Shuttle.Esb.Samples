@@ -50,8 +50,8 @@
       <HintPath>..\packages\Shuttle.Core.Infrastructure.4.2.66\lib\net45-full\Shuttle.Core.Infrastructure.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Shuttle.Esb, Version=7.0.54.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Shuttle.Esb.7.0.54\lib\net45-full\Shuttle.Esb.dll</HintPath>
+    <Reference Include="Shuttle.Esb, Version=7.0.57.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Shuttle.Esb.7.0.57\lib\net45-full\Shuttle.Esb.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Shuttle.Esb.Castle, Version=7.0.0.0, Culture=neutral, processorArchitecture=MSIL">

@@ -53,7 +53,7 @@ namespace Shuttle.Process.CustomES.Server
 			container.Register<IProjectionConfiguration>(ProjectionSection.Configuration());
 			container.Register<EventProcessingModule, EventProcessingModule>();
 
-			EventStore.RegisterComponents(container);
+			EventStore.Register(container);
 
 			container.Register<Esb.Sql.IScriptProviderConfiguration, Esb.Sql.ScriptProviderConfiguration>();
 			container.Register<Esb.Sql.IScriptProvider, Esb.Sql.ScriptProvider>();
@@ -61,7 +61,7 @@ namespace Shuttle.Process.CustomES.Server
 			container.Register<ISqlConfiguration>(SqlSection.Configuration());
 			container.Register<ISubscriptionManager, SubscriptionManager>();
 
-			ServiceBus.RegisterComponents(container);
+			ServiceBus.Register(container);
 
 			var subscriptionManager = container.Resolve<ISubscriptionManager>();
 

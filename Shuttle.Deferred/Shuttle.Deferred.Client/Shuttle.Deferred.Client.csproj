@@ -32,24 +32,24 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Autofac, Version=4.2.1.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
-      <HintPath>..\packages\Autofac.4.2.1\lib\net45\Autofac.dll</HintPath>
+    <Reference Include="Autofac, Version=4.4.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\packages\Autofac.4.4.0\lib\net45\Autofac.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Shuttle.Core.AutoFac, Version=1.0.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Shuttle.Core.Autofac.1.0.3\lib\net45-full\Shuttle.Core.AutoFac.dll</HintPath>
+    <Reference Include="Shuttle.Core.AutoFac, Version=1.0.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Shuttle.Core.Autofac.1.0.6\lib\net45-full\Shuttle.Core.AutoFac.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Shuttle.Core.Infrastructure, Version=4.2.58.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Shuttle.Core.Infrastructure.4.2.58\lib\net45-full\Shuttle.Core.Infrastructure.dll</HintPath>
+    <Reference Include="Shuttle.Core.Infrastructure, Version=4.2.66.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Shuttle.Core.Infrastructure.4.2.66\lib\net45-full\Shuttle.Core.Infrastructure.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Shuttle.Esb, Version=7.0.48.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Shuttle.Esb.7.0.48\lib\net45-full\Shuttle.Esb.dll</HintPath>
+    <Reference Include="Shuttle.Esb, Version=7.0.56.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Shuttle.Esb.7.0.56\lib\net45-full\Shuttle.Esb.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Shuttle.Esb.Msmq, Version=6.0.6.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Shuttle.Esb.Msmq.6.0.6\lib\net45-full\Shuttle.Esb.Msmq.dll</HintPath>
+    <Reference Include="Shuttle.Esb.Msmq, Version=6.0.7.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Shuttle.Esb.Msmq.6.0.7\lib\net45-full\Shuttle.Esb.Msmq.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />

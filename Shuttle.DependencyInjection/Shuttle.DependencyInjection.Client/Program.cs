@@ -15,11 +15,10 @@ namespace Shuttle.DependencyInjection.Client
             var container = new NinjectComponentContainer(new StandardKernel());
 
 			container.Register<IMsmqConfiguration, MsmqConfiguration>();
-			container.Register<TransactionScopeObserver>();
 
-			ServiceBusConfigurator.Configure(container);
+			ServiceBus.Register(container);
 
-            using (var bus = ServiceBus.Create(container).Start())
+			using (var bus = ServiceBus.Create(container).Start())
             {
                 string userName;
 

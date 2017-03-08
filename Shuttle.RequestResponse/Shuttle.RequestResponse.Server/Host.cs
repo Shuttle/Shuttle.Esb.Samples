@@ -19,7 +19,7 @@ namespace Shuttle.RequestResponse.Server
 			container.Register<IMsmqConfiguration, MsmqConfiguration>();
 			container.Register<TransactionScopeObserver>();
 
-			ServiceBusConfigurator.Configure(container);
+			ServiceBus.Register(container);
 
 		    _bus = ServiceBus.Create(container).Start();
 		}

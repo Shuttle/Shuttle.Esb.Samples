@@ -62,8 +62,8 @@
       <HintPath>..\packages\Shuttle.Core.Log4Net.3.2.13\lib\net45-full\Shuttle.Core.Log4Net.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Shuttle.Esb, Version=7.0.54.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Shuttle.Esb.7.0.54\lib\net45-full\Shuttle.Esb.dll</HintPath>
+    <Reference Include="Shuttle.Esb, Version=7.0.57.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Shuttle.Esb.7.0.57\lib\net45-full\Shuttle.Esb.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Shuttle.Esb.Castle, Version=7.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -82,12 +82,12 @@
       <HintPath>..\packages\Shuttle.Esb.Sql.6.0.15\lib\net45-full\Shuttle.Esb.Sql.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Shuttle.Recall, Version=7.0.64.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Shuttle.Recall.7.0.64\lib\net45-full\Shuttle.Recall.dll</HintPath>
+    <Reference Include="Shuttle.Recall, Version=7.0.66.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Shuttle.Recall.7.0.66\lib\net45-full\Shuttle.Recall.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Shuttle.Recall.Sql, Version=4.0.6.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Shuttle.Recall.Sql.4.0.6\lib\net45-full\Shuttle.Recall.Sql.dll</HintPath>
+    <Reference Include="Shuttle.Recall.Sql, Version=4.0.7.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Shuttle.Recall.Sql.4.0.7\lib\net45-full\Shuttle.Recall.Sql.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />

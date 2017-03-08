@@ -61,8 +61,8 @@ namespace Shuttle.Process.ESModule.Server
 
 			container.Register<IProjectionConfiguration>(ProjectionSection.Configuration());
 
-			EventProcessingModule.RegisterComponents(container);
-			EventStore.RegisterComponents(container);
+			EventProcessingModule.Register(container);
+			EventStore.Register(container);
 
 			container.Register<IProcessConfiguration>(ProcessSection.Configuration());
 			container.Register<IProcessActivator, DefaultProcessActivator>();
@@ -76,7 +76,7 @@ namespace Shuttle.Process.ESModule.Server
 			container.Register<ISqlConfiguration>(SqlSection.Configuration());
 			container.Register<ISubscriptionManager, SubscriptionManager>();
 
-			ServiceBus.RegisterComponents(container);
+			ServiceBus.Register(container);
 
 			container.Resolve<EventProcessingModule>();
 

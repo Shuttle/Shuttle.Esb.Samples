@@ -22,11 +22,10 @@ namespace Shuttle.Deferred.Server
 		    var registry = new AutofacComponentRegistry(containerBuilder);
 
 			registry.Register<IMsmqConfiguration, MsmqConfiguration>();
-			registry.Register<TransactionScopeObserver>();
 
-			ServiceBusConfigurator.Configure(registry);
+			ServiceBus.Register(registry);
 
-		    _bus = ServiceBus.Create(new AutofacComponentResolver(containerBuilder.Build())).Start();
+			_bus = ServiceBus.Create(new AutofacComponentResolver(containerBuilder.Build())).Start();
 		}
 
         public void Dispose()

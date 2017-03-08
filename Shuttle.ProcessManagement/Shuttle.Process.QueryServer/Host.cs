@@ -53,7 +53,7 @@ namespace Shuttle.Process.QueryServer
 			container.Register<ISqlConfiguration>(SqlSection.Configuration());
 			container.Register<ISubscriptionManager, SubscriptionManager>();
 
-			ServiceBus.RegisterComponents(container);
+			ServiceBus.Register(container);
 
 			var subscriptionManager = container.Resolve<ISubscriptionManager>();
 
