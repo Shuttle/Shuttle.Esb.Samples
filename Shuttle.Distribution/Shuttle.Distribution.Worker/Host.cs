@@ -1,10 +1,8 @@
 ﻿using System;
 using Microsoft.Practices.Unity;
 using Shuttle.Core.Host;
-using Shuttle.Core.Infrastructure;
 using Shuttle.Core.Unity;
 using Shuttle.Esb;
-using Shuttle.Esb.Msmq;
 
 namespace Shuttle.Distribution.Worker
 {
@@ -12,20 +10,18 @@ namespace Shuttle.Distribution.Worker
 	{
 		private IServiceBus _bus;
 
+		public void Dispose()
+		{
+			_bus.Dispose();
+		}
+
 		public void Start()
 		{
-            var container = new UnityComponentContainer(new UnityContainer());
-
-            container.Register<IMsmqConfiguration, MsmqConfiguration>();
+			var container = new UnityComponentContainer(new UnityContainer());
 
 			ServiceBus.Register(container);
 
 			_bus = ServiceBus.Create(container).Start();
-        }
-
-        public void Dispose()
-		{
-			_bus.Dispose();
 		}
 	}
 }

@@ -1,27 +1,23 @@
 ﻿using System;
 using Autofac;
 using Shuttle.Core.Autofac;
-using Shuttle.Core.Infrastructure;
-using Shuttle.Esb;
 using Shuttle.Deferred.Messages;
-using Shuttle.Esb.Msmq;
+using Shuttle.Esb;
 
 namespace Shuttle.Deferred.Client
 {
-	class Program
+	internal class Program
 	{
-		static void Main(string[] args)
+		private static void Main(string[] args)
 		{
-            var containerBuilder = new ContainerBuilder();
-            var registry = new AutofacComponentRegistry(containerBuilder);
-
-			registry.Register<IMsmqConfiguration, MsmqConfiguration>();
+			var containerBuilder = new ContainerBuilder();
+			var registry = new AutofacComponentRegistry(containerBuilder);
 
 			ServiceBus.Register(registry);
 
-            using (var bus = ServiceBus.Create(new AutofacComponentResolver(containerBuilder.Build())).Start())
-            {
-                string userName;
+			using (var bus = ServiceBus.Create(new AutofacComponentResolver(containerBuilder.Build())).Start())
+			{
+				string userName;
 
 				while (!string.IsNullOrEmpty(userName = Console.ReadLine()))
 				{

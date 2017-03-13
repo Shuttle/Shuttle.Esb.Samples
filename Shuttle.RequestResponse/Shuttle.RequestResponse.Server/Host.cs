@@ -16,9 +16,6 @@ namespace Shuttle.RequestResponse.Server
 		{
 		    var container = new WindsorComponentContainer(new WindsorContainer());
 
-			container.Register<IMsmqConfiguration, MsmqConfiguration>();
-			container.Register<TransactionScopeObserver>();
-
 			ServiceBus.Register(container);
 
 		    _bus = ServiceBus.Create(container).Start();
