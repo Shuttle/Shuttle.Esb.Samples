@@ -35,32 +35,11 @@ namespace Shuttle.Process.CustomES.Server
 
 			_container = new WindsorContainer();
 
-			_container.RegisterDataAccessCore();
 			_container.RegisterDataAccess("Shuttle.ProcessManagement");
 
 			var container = new WindsorComponentContainer(_container);
 
-			container.Register<IMsmqConfiguration, MsmqConfiguration>();
-
-			container.Register<Recall.Sql.IScriptProviderConfiguration, Recall.Sql.ScriptProviderConfiguration>();
-			container.Register<Recall.Sql.IScriptProvider, Recall.Sql.ScriptProvider>();
-
-			container.Register<IProjectionRepository, ProjectionRepository>();
-			container.Register<IProjectionQueryFactory, ProjectionQueryFactory>();
-			container.Register<IPrimitiveEventRepository, PrimitiveEventRepository>();
-			container.Register<IPrimitiveEventQueryFactory, PrimitiveEventQueryFactory>();
-
-			container.Register<IProjectionConfiguration>(ProjectionSection.Configuration());
-			container.Register<EventProcessingModule, EventProcessingModule>();
-
 			EventStore.Register(container);
-
-			container.Register<Esb.Sql.IScriptProviderConfiguration, Esb.Sql.ScriptProviderConfiguration>();
-			container.Register<Esb.Sql.IScriptProvider, Esb.Sql.ScriptProvider>();
-
-			container.Register<ISqlConfiguration>(SqlSection.Configuration());
-			container.Register<ISubscriptionManager, SubscriptionManager>();
-
 			ServiceBus.Register(container);
 
 			var subscriptionManager = container.Resolve<ISubscriptionManager>();

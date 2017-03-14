@@ -40,18 +40,9 @@ namespace Shuttle.Process.QueryServer
 
 			_container = new WindsorContainer();
 
-			_container.RegisterDataAccessCore();
 			_container.RegisterDataAccess("Shuttle.ProcessManagement");
 
 			var container = new WindsorComponentContainer(_container);
-
-			container.Register<IMsmqConfiguration, MsmqConfiguration>();
-
-			container.Register<IScriptProvider, ScriptProvider>();
-			container.Register<IScriptProviderConfiguration, ScriptProviderConfiguration>();
-
-			container.Register<ISqlConfiguration>(SqlSection.Configuration());
-			container.Register<ISubscriptionManager, SubscriptionManager>();
 
 			ServiceBus.Register(container);
 

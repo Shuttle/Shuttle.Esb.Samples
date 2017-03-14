@@ -46,22 +46,5 @@ namespace Shuttle.Castle
                     .If(type => type.Name.EndsWith("Factory"))
                     .WithServiceFirstInterface());
         }
-
-        public static void RegisterDataAccessCore(this IWindsorContainer container)
-        {
-            Guard.AgainstNull(container, "container");
-
-            container.Register(Component.For<IDatabaseContextCache>().ImplementedBy<ThreadStaticDatabaseContextCache>());
-            container.Register(Component.For<IDatabaseGateway>().ImplementedBy<DatabaseGateway>());
-            container.Register(Component.For(typeof(IDataRepository<>)).ImplementedBy(typeof(DataRepository<>)));
-            container.Register(Component.For<IQueryMapper, QueryMapper>());
-
-			container.Register(
-                Classes
-                    .FromAssemblyNamed("Shuttle.Core.Data")
-                    .Pick()
-                    .If(type => type.Name.EndsWith("Factory"))
-                    .WithServiceFirstInterface());
-        }
     }
 }

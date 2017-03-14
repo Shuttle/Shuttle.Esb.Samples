@@ -30,28 +30,15 @@ namespace Shuttle.Ordering.Server
 
 			_container = new WindsorContainer();
 
-			var container = new WindsorComponentContainer(_container);
-
-			_container.RegisterDataAccessCore();
 			_container.RegisterDataAccess("Shuttle.Ordering");
 
-			container.Register<IMsmqConfiguration, MsmqConfiguration>();
-
-			container.Register<IScriptProvider, ScriptProvider>();
-			container.Register<IScriptProviderConfiguration, ScriptProviderConfiguration>();
-
-			container.Register<ISqlConfiguration>(SqlSection.Configuration());
-			container.Register<ISubscriptionManager, SubscriptionManager>();
+			var container = new WindsorComponentContainer(_container);
 
 			ServiceBus.Register(container);
 
 			_bus = ServiceBus.Create(container).Start();
 
 			Log.Assign(new Log4NetLog(LogManager.GetLogger(typeof (Host))));
-
-            _container = new WindsorContainer();
-
-            _container.RegisterDataAccessCore();
        }
     }
 }

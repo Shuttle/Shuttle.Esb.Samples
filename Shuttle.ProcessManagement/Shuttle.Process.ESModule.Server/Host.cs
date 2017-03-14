@@ -44,41 +44,34 @@ namespace Shuttle.Process.ESModule.Server
 
 			_container = new WindsorContainer();
 
-			_container.RegisterDataAccessCore();
 			_container.RegisterDataAccess("Shuttle.ProcessManagement");
 
 			var container = new WindsorComponentContainer(_container);
 
-			container.Register<Recall.Sql.IScriptProviderConfiguration, Recall.Sql.ScriptProviderConfiguration>();
-			container.Register<Recall.Sql.IScriptProvider, Recall.Sql.ScriptProvider>();
+			//container.Register<Recall.Sql.IScriptProviderConfiguration, Recall.Sql.ScriptProviderConfiguration>();
+			//container.Register<Recall.Sql.IScriptProvider, Recall.Sql.ScriptProvider>();
 
-			container.Register<IProjectionRepository, ProjectionRepository>();
-			container.Register<IProjectionQueryFactory, ProjectionQueryFactory>();
-			container.Register<IPrimitiveEventRepository, PrimitiveEventRepository>();
-			container.Register<IPrimitiveEventQueryFactory, PrimitiveEventQueryFactory>();
-			container.Register<IKeyStoreQueryFactory, KeyStoreQueryFactory>();
-			container.Register<IKeyStore, KeyStore>();
+			//container.Register<IProjectionRepository, ProjectionRepository>();
+			//container.Register<IProjectionQueryFactory, ProjectionQueryFactory>();
+			//container.Register<IPrimitiveEventRepository, PrimitiveEventRepository>();
+			//container.Register<IPrimitiveEventQueryFactory, PrimitiveEventQueryFactory>();
+			//container.Register<IKeyStoreQueryFactory, KeyStoreQueryFactory>();
+			//container.Register<IKeyStore, KeyStore>();
 
-			container.Register<IProjectionConfiguration>(ProjectionSection.Configuration());
+			//container.Register<IProjectionConfiguration>(ProjectionSection.Configuration());
 
-			EventProcessingModule.Register(container);
 			EventStore.Register(container);
 
-			container.Register<IProcessConfiguration>(ProcessSection.Configuration());
-			container.Register<IProcessActivator, DefaultProcessActivator>();
-			container.Register<IMessageHandlerInvoker, ProcessMessageHandlerInvoker>();
 
-			container.Register<IMsmqConfiguration, MsmqConfiguration>();
+			//container.Register<Esb.Sql.IScriptProviderConfiguration, Esb.Sql.ScriptProviderConfiguration>();
+			//container.Register<Esb.Sql.IScriptProvider, Esb.Sql.ScriptProvider>();
 
-			container.Register<Esb.Sql.IScriptProviderConfiguration, Esb.Sql.ScriptProviderConfiguration>();
-			container.Register<Esb.Sql.IScriptProvider, Esb.Sql.ScriptProvider>();
-
-			container.Register<ISqlConfiguration>(SqlSection.Configuration());
-			container.Register<ISubscriptionManager, SubscriptionManager>();
+			//container.Register<ISqlConfiguration>(SqlSection.Configuration());
+			//container.Register<ISubscriptionManager, SubscriptionManager>();
 
 			ServiceBus.Register(container);
 
-			container.Resolve<EventProcessingModule>();
+			//container.Resolve<EventProcessingModule>();
 
 			var processActivator = container.Resolve<IProcessActivator>() as DefaultProcessActivator;
 

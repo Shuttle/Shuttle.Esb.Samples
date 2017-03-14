@@ -38,16 +38,6 @@ namespace Shuttle.EMailSender.Server
 
 			var container = new WindsorComponentContainer(_container);
 
-			_container.RegisterDataAccessCore();
-
-			container.Register<IMsmqConfiguration, MsmqConfiguration>();
-
-			container.Register<IScriptProvider, ScriptProvider>();
-			container.Register<IScriptProviderConfiguration, ScriptProviderConfiguration>();
-
-			container.Register<ISqlConfiguration>(SqlSection.Configuration());
-			container.Register<ISubscriptionManager, SubscriptionManager>();
-
 			ServiceBus.Register(container);
 
 			_bus = ServiceBus.Create(container).Start();

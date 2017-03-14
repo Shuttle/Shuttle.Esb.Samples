@@ -63,8 +63,6 @@ namespace Shuttle.ProcessManagement.WebApi
 
 				var container = new WindsorComponentContainer(_container);
 
-				container.Register<IMsmqConfiguration, MsmqConfiguration>();
-
 				ServiceBus.Register(container);
 
 				_bus = ServiceBus.Create(container).Start();
@@ -217,7 +215,6 @@ namespace Shuttle.ProcessManagement.WebApi
         {
             _container = new WindsorContainer();
 
-            _container.RegisterDataAccessCore();
             _container.RegisterDataAccess("Shuttle.ProcessManagement");
 
             var shuttleApiControllerType = typeof (ShuttleApiController);
