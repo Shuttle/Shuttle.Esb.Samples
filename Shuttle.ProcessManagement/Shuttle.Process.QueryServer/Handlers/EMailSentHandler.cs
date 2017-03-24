@@ -25,7 +25,7 @@ namespace Shuttle.Process.QueryServer
         {
             using (_databaseContextFactory.Create(ProcessManagementData.ConnectionStringName))
             {
-                _orderProcessViewQuery.SaveStatus(context.TransportMessage.OrderProcessId(), "Dispatched E-Mail Sent");
+                _orderProcessViewQuery.SaveStatus(context.TransportMessage.OrderProcessId(), "E-Mail Sent");
             }
         }
 

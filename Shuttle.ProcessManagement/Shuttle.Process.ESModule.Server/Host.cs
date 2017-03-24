@@ -48,37 +48,8 @@ namespace Shuttle.Process.ESModule.Server
 
 			var container = new WindsorComponentContainer(_container);
 
-			//container.Register<Recall.Sql.IScriptProviderConfiguration, Recall.Sql.ScriptProviderConfiguration>();
-			//container.Register<Recall.Sql.IScriptProvider, Recall.Sql.ScriptProvider>();
-
-			//container.Register<IProjectionRepository, ProjectionRepository>();
-			//container.Register<IProjectionQueryFactory, ProjectionQueryFactory>();
-			//container.Register<IPrimitiveEventRepository, PrimitiveEventRepository>();
-			//container.Register<IPrimitiveEventQueryFactory, PrimitiveEventQueryFactory>();
-			//container.Register<IKeyStoreQueryFactory, KeyStoreQueryFactory>();
-			//container.Register<IKeyStore, KeyStore>();
-
-			//container.Register<IProjectionConfiguration>(ProjectionSection.Configuration());
-
 			EventStore.Register(container);
-
-
-			//container.Register<Esb.Sql.IScriptProviderConfiguration, Esb.Sql.ScriptProviderConfiguration>();
-			//container.Register<Esb.Sql.IScriptProvider, Esb.Sql.ScriptProvider>();
-
-			//container.Register<ISqlConfiguration>(SqlSection.Configuration());
-			//container.Register<ISubscriptionManager, SubscriptionManager>();
-
 			ServiceBus.Register(container);
-
-			//container.Resolve<EventProcessingModule>();
-
-			var processActivator = container.Resolve<IProcessActivator>() as DefaultProcessActivator;
-
-			if (processActivator != null)
-			{
-				processActivator.RegisterMappings();
-			}
 
 			var subscriptionManager = container.Resolve<ISubscriptionManager>();
 

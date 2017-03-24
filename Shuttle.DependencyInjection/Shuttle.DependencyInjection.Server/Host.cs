@@ -1,11 +1,9 @@
 ﻿using System;
 using Ninject;
 using Shuttle.Core.Host;
-using Shuttle.Core.Infrastructure;
 using Shuttle.Core.Ninject;
 using Shuttle.DependencyInjection.EMail;
 using Shuttle.Esb;
-using Shuttle.Esb.Msmq;
 
 namespace Shuttle.DependencyInjection.Server
 {
@@ -28,11 +26,9 @@ namespace Shuttle.DependencyInjection.Server
 
             var container = new NinjectComponentContainer(_kernel);
 
-			container.Register<IMsmqConfiguration, MsmqConfiguration>();
+            ServiceBus.Register(container);
 
-			ServiceBus.Register(container);
-
-			_bus = ServiceBus.Create(container).Start();
+            _bus = ServiceBus.Create(container).Start();
         }
     }
 }

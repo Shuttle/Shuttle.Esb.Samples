@@ -19,12 +19,12 @@ namespace Shuttle.PublishSubscribe.Subscriber
 
 		public void Start()
 		{
-			var smRegistry = new Registry();
-			var registry = new StructureMapComponentRegistry(smRegistry);
+			var structureMapRegistry = new Registry();
+			var registry = new StructureMapComponentRegistry(structureMapRegistry);
 
 			ServiceBus.Register(registry);
 
-			var resolver = new StructureMapComponentResolver(new Container(smRegistry));
+			var resolver = new StructureMapComponentResolver(new Container(structureMapRegistry));
 
 			resolver.Resolve<ISubscriptionManager>().Subscribe<MemberRegisteredEvent>();
 

@@ -2,28 +2,26 @@
 using Castle.Windsor;
 using Shuttle.Core.Castle;
 using Shuttle.Core.Host;
-using Shuttle.Core.Infrastructure;
 using Shuttle.Esb;
-using Shuttle.Esb.Msmq;
 
 namespace Shuttle.RequestResponse.Server
 {
-	public class Host : IHost, IDisposable
-	{
-		private IServiceBus _bus;
+    public class Host : IHost, IDisposable
+    {
+        private IServiceBus _bus;
 
-		public void Start()
-		{
-		    var container = new WindsorComponentContainer(new WindsorContainer());
+        public void Dispose()
+        {
+            _bus.Dispose();
+        }
 
-			ServiceBus.Register(container);
+        public void Start()
+        {
+            var container = new WindsorComponentContainer(new WindsorContainer());
 
-		    _bus = ServiceBus.Create(container).Start();
-		}
+            ServiceBus.Register(container);
 
-	    public void Dispose()
-		{
-			_bus.Dispose();
-		}
-	}
+            _bus = ServiceBus.Create(container).Start();
+        }
+    }
 }

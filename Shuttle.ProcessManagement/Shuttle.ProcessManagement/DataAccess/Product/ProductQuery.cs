@@ -16,6 +16,7 @@ namespace Shuttle.ProcessManagement
             table.Columns.Add("Description", typeof (string));
             table.Columns.Add("Price", typeof (decimal));
 
+            table.Rows.Add(new Guid("{34D0AFA4-B4F5-44BC-8303-48AB233B4DB9}"), "Hard Edges, Practical Domain-Driven Design using C# - Eben Roux", 30);
             table.Rows.Add(new Guid("{BEE9B8F5-FE30-4C3E-BC3C-AACEB3D3B02C}"), "Patterns of Enterprise Application Architecture - Martin Fowler", 50);
             table.Rows.Add(new Guid("{9516EB77-5113-4D82-B638-692F10018B43}"), "Applying Domain-Driven Design Patterns - Jimmy Nilsson", 50);
             table.Rows.Add(new Guid("{BABE9376-ACBE-4706-87E3-C7BAC02FF940}"), "Implementing Domain-Driven Design - Vaughn Vernon", 45);

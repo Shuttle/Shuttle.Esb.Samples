@@ -16,8 +16,6 @@ namespace Shuttle.Distribution.Server
 		{
             var container = new UnityComponentContainer(new UnityContainer());
 
-            container.Register<IMsmqConfiguration, MsmqConfiguration>();
-
 			ServiceBus.Register(container);
 
 			_bus = ServiceBus.Create(container).Start();
