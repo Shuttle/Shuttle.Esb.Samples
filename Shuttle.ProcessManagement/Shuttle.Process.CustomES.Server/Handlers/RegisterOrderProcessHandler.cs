@@ -29,7 +29,7 @@ namespace Shuttle.Process.CustomES.Server
 
             var orderProcess = new OrderProcess();
 
-            var stream = new EventStream(orderProcess.Id);
+            var stream = _eventStore.CreateEventStream(orderProcess.Id);
 
             var initialized = orderProcess.Initialize();
 
