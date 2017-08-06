@@ -1,46 +1,35 @@
-﻿using System;
-using Castle.Windsor;
+﻿using Castle.Windsor;
 using log4net;
-using Shuttle.Castle;
 using Shuttle.Core.Castle;
-using Shuttle.Core.Host;
 using Shuttle.Core.Infrastructure;
 using Shuttle.Core.Log4Net;
+using Shuttle.Core.ServiceHost;
 using Shuttle.Esb;
-using Shuttle.Esb.Msmq;
-using Shuttle.Esb.Sql;
 
 namespace Shuttle.EMailSender.Server
 {
-	public class Host : IHost, IDisposable
-	{
-		private IServiceBus _bus;
-		private WindsorContainer _container;
+    public class Host : IServiceHost
+    {
+        private IServiceBus _bus;
+        private WindsorContainer _container;
 
-		public void Dispose()
-		{
-			if (_bus != null)
-			{
-				_bus.Dispose();
-			}
+        public void Start()
+        {
+            Log.Assign(new Log4NetLog(LogManager.GetLogger(typeof(Host))));
 
-			if (_container != null)
-			{
-				_container.Dispose();
-			}
-		}
+            _container = new WindsorContainer();
 
-		public void Start()
-		{
-			Log.Assign(new Log4NetLog(LogManager.GetLogger(typeof(Host))));
+            var container = new WindsorComponentContainer(_container);
 
-			_container = new WindsorContainer();
+            ServiceBus.Register(container);
 
-			var container = new WindsorComponentContainer(_container);
+            _bus = ServiceBus.Create(container).Start();
+        }
 
-			ServiceBus.Register(container);
-
-			_bus = ServiceBus.Create(container).Start();
-		}
-	}
+        public void Stop()
+        {
+            _bus?.Dispose();
+            _container?.Dispose();
+        }
+    }
 }

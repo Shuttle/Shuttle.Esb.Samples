@@ -1,18 +1,18 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shuttle.RequestResponse.Messages", "Shuttle.RequestResponse.Messages\Shuttle.RequestResponse.Messages.csproj", "{23387036-B9B6-4C3C-94E3-ECD016C2A8BF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shuttle.RequestResponse.Client", "Shuttle.RequestResponse.Client\Shuttle.RequestResponse.Client.csproj", "{36906F3D-24BF-4CBC-954B-D858A04F43BA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shuttle.RequestResponse.Server", "Shuttle.RequestResponse.Server\Shuttle.RequestResponse.Server.csproj", "{100E53CC-6ECF-402A-9DCB-E37E879013F3}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F55831FD-92AD-4B53-8622-5E54B4680402}"
 	ProjectSection(SolutionItems) = preProject
 		README.md = README.md
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shuttle.RequestResponse.Server", "Shuttle.RequestResponse.Server\Shuttle.RequestResponse.Server.csproj", "{6E502D09-F806-463F-88C2-749FF1E8E4F9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -28,10 +28,10 @@ Global
 		{36906F3D-24BF-4CBC-954B-D858A04F43BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{36906F3D-24BF-4CBC-954B-D858A04F43BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{36906F3D-24BF-4CBC-954B-D858A04F43BA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{100E53CC-6ECF-402A-9DCB-E37E879013F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{100E53CC-6ECF-402A-9DCB-E37E879013F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{100E53CC-6ECF-402A-9DCB-E37E879013F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{100E53CC-6ECF-402A-9DCB-E37E879013F3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E502D09-F806-463F-88C2-749FF1E8E4F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E502D09-F806-463F-88C2-749FF1E8E4F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E502D09-F806-463F-88C2-749FF1E8E4F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E502D09-F806-463F-88C2-749FF1E8E4F9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

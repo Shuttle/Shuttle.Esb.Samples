@@ -1,18 +1,17 @@
-﻿using System;
-using Ninject;
-using Shuttle.Core.Host;
+﻿using Ninject;
 using Shuttle.Core.Ninject;
+using Shuttle.Core.ServiceHost;
 using Shuttle.DependencyInjection.EMail;
 using Shuttle.Esb;
 
 namespace Shuttle.DependencyInjection.Server
 {
-    public class Host : IHost, IDisposable
+    public class Host : IServiceHost
     {
         private IServiceBus _bus;
         private StandardKernel _kernel;
 
-        public void Dispose()
+        public void Stop()
         {
             _kernel.Dispose();
             _bus.Dispose();

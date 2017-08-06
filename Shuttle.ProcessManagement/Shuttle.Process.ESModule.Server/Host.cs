@@ -1,11 +1,10 @@
-﻿using System;
-using Castle.Windsor;
+﻿using Castle.Windsor;
 using log4net;
 using Shuttle.Castle;
 using Shuttle.Core.Castle;
-using Shuttle.Core.Host;
 using Shuttle.Core.Infrastructure;
 using Shuttle.Core.Log4Net;
+using Shuttle.Core.ServiceHost;
 using Shuttle.EMailSender.Messages;
 using Shuttle.Esb;
 using Shuttle.Invoicing.Messages;
@@ -14,23 +13,10 @@ using Shuttle.Recall;
 
 namespace Shuttle.Process.ESModule.Server
 {
-    public class Host : IHost, IDisposable
+    public class Host : IServiceHost
     {
         private IServiceBus _bus;
         private IWindsorContainer _container;
-
-        public void Dispose()
-        {
-            if (_bus != null)
-            {
-                _bus.Dispose();
-            }
-
-            if (_container != null)
-            {
-                _container.Dispose();
-            }
-        }
 
         public void Start()
         {
@@ -52,6 +38,12 @@ namespace Shuttle.Process.ESModule.Server
             subscriptionManager.Subscribe<EMailSentEvent>();
 
             _bus = ServiceBus.Create(container).Start();
+        }
+
+        public void Stop()
+        {
+            _bus?.Dispose();
+            _container?.Dispose();
         }
     }
 }

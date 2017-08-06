@@ -1,18 +1,21 @@
-﻿using System;
+﻿using System.Diagnostics;
 using Castle.Windsor;
+using log4net;
 using Shuttle.Core.Castle;
-using Shuttle.Core.Host;
+using Shuttle.Core.Infrastructure;
+using Shuttle.Core.Log4Net;
+using Shuttle.Core.ServiceHost;
 using Shuttle.Esb;
 
 namespace Shuttle.RequestResponse.Server
 {
-    public class Host : IHost, IDisposable
+    public class Host : IServiceHost
     {
         private IServiceBus _bus;
 
-        public void Dispose()
+        public Host()
         {
-            _bus.Dispose();
+            Log.Assign(new Log4NetLog(LogManager.GetLogger(typeof(Host))));
         }
 
         public void Start()
@@ -22,6 +25,11 @@ namespace Shuttle.RequestResponse.Server
             ServiceBus.Register(container);
 
             _bus = ServiceBus.Create(container).Start();
+        }
+
+        public void Stop()
+        {
+            _bus.Dispose();
         }
     }
 }
