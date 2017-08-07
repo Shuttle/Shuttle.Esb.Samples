@@ -16,7 +16,7 @@ namespace Shuttle.Ordering.DataAccess
             new MappedColumn<string>("OrderDate", DbType.DateTime);
 
         public static readonly MappedColumn<string> CustomerName =
-        new MappedColumn<string>("CustomerName", DbType.String, 65);
+            new MappedColumn<string>("CustomerName", DbType.String, 65);
 
         public static readonly MappedColumn<string> CustomerEMail =
             new MappedColumn<string>("CustomerEMail", DbType.String, 130);

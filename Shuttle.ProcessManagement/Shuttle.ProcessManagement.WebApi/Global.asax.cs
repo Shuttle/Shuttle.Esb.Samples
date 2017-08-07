@@ -15,9 +15,7 @@ using Shuttle.Core.Castle;
 using Shuttle.Core.Data;
 using Shuttle.Core.Infrastructure;
 using Shuttle.Core.Log4Net;
-using Shuttle.Esb.Castle;
 using Shuttle.Esb;
-using Shuttle.Esb.Msmq;
 using ILog = Shuttle.Core.Infrastructure.ILog;
 
 namespace Shuttle.ProcessManagement.WebApi
@@ -34,7 +32,7 @@ namespace Shuttle.ProcessManagement.WebApi
 
         public WebApiApplication()
         {
-            var logger = LogManager.GetLogger(typeof (WebApiApplication));
+            var logger = LogManager.GetLogger(typeof(WebApiApplication));
 
             Log.Assign(new Log4NetLog(logger));
 
@@ -54,20 +52,19 @@ namespace Shuttle.ProcessManagement.WebApi
                 WebApiConfiguration.Register(GlobalConfiguration.Configuration);
 
                 GlobalConfiguration.Configuration.DependencyResolver = new ApiResolver(_container);
-                GlobalConfiguration.Configuration.MessageHandlers.Add(new CorsMessageHandler());
 
                 _container.Register(
                     Component.For<IHttpControllerActivator>().Instance(new ApiControllerActivator(_container)));
 
                 ConfigureJson();
 
-				var container = new WindsorComponentContainer(_container);
+                var container = new WindsorComponentContainer(_container);
 
-				ServiceBus.Register(container);
+                ServiceBus.Register(container);
 
-				_bus = ServiceBus.Create(container).Start();
+                _bus = ServiceBus.Create(container).Start();
 
-				_log.Information("[started]");
+                _log.Information("[started]");
             }
             catch (Exception ex)
             {
@@ -217,15 +214,15 @@ namespace Shuttle.ProcessManagement.WebApi
 
             _container.RegisterDataAccess("Shuttle.ProcessManagement");
 
-            var shuttleApiControllerType = typeof (ShuttleApiController);
+            var shuttleApiControllerType = typeof(ShuttleApiController);
 
             _container.Register(
                 Classes
                     .FromThisAssembly()
                     .Pick()
-                    .If((type => type.Name.EndsWith("Controller", StringComparison.OrdinalIgnoreCase)
-                                 &&
-                                 shuttleApiControllerType.IsAssignableFrom(type)))
+                    .If(type => type.Name.EndsWith("Controller", StringComparison.OrdinalIgnoreCase)
+                                &&
+                                shuttleApiControllerType.IsAssignableFrom(type))
                     .LifestyleTransient()
                     .WithServiceFirstInterface()
                     .Configure(c => c.Named(c.Implementation.UnderlyingSystemType.Name)));

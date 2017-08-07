@@ -13,7 +13,8 @@ namespace Shuttle.Process.Custom.Server
         private readonly IDatabaseContextFactory _databaseContextFactory;
         private readonly IOrderProcessRepository _repository;
 
-        public AcceptOrderProcessHandler(IDatabaseContextFactory databaseContextFactory, IOrderProcessRepository repository)
+        public AcceptOrderProcessHandler(IDatabaseContextFactory databaseContextFactory,
+            IOrderProcessRepository repository)
         {
             Guard.AgainstNull(databaseContextFactory, "databaseContextFactory");
             Guard.AgainstNull(repository, "repository");
@@ -21,6 +22,8 @@ namespace Shuttle.Process.Custom.Server
             _databaseContextFactory = databaseContextFactory;
             _repository = repository;
         }
+
+        public bool IsReusable => true;
 
         public void ProcessMessage(IHandlerContext<AcceptOrderProcessCommand> context)
         {
@@ -67,11 +70,6 @@ namespace Shuttle.Process.Custom.Server
             {
                 OrderProcessId = orderProcess.Id
             });
-        }
-
-        public bool IsReusable
-        {
-            get { return true; }
         }
     }
 }

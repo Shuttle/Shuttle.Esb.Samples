@@ -25,22 +25,17 @@ namespace Shuttle.Process.Custom.Server.Domain
             DateRegistered = DateTime.Now;
         }
 
-        public Guid Id { get; private set; }
+        public Guid Id { get; }
 
         public Guid? OrderId { get; set; }
         public Guid? InvoiceId { get; set; }
         public string CustomerName { get; set; }
         public string CustomerEMail { get; set; }
 
-        public IEnumerable<OrderProcessItem> OrderProcessItems
-        {
-            get { return new ReadOnlyCollection<OrderProcessItem>(_orderProcessItems); }
-        }
+        public IEnumerable<OrderProcessItem> OrderProcessItems =>
+            new ReadOnlyCollection<OrderProcessItem>(_orderProcessItems);
 
-        public IEnumerable<OrderProcessStatus> Statuses
-        {
-            get { return new ReadOnlyCollection<OrderProcessStatus>(_statuses); }
-        }
+        public IEnumerable<OrderProcessStatus> Statuses => new ReadOnlyCollection<OrderProcessStatus>(_statuses);
 
         public DateTime DateRegistered { get; set; }
         public string OrderNumber { get; set; }
@@ -75,7 +70,8 @@ namespace Shuttle.Process.Custom.Server.Domain
 
         public void GenerateOrderNumber()
         {
-            OrderNumber = string.Format("ORD-{0}-{1}", DateRegistered.Ticks.ToString().Substring(8, 6), Guid.NewGuid().ToString("N").Substring(6));
+            OrderNumber = string.Format("ORD-{0}-{1}", DateRegistered.Ticks.ToString().Substring(8, 6),
+                Guid.NewGuid().ToString("N").Substring(6));
         }
 
         public decimal Total()

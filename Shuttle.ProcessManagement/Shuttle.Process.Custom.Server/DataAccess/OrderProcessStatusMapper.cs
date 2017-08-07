@@ -11,7 +11,7 @@ namespace Shuttle.ProcessManagement
                 new OrderProcessStatus(
                     OrderProcessStatusColumns.Status.MapFrom(row),
                     OrderProcessStatusColumns.StatusDate.MapFrom(row)
-                    ));
+                ));
         }
     }
 }

@@ -8,12 +8,14 @@ namespace Shuttle.ProcessManagement
     public class OrderProcessRepository : IOrderProcessRepository
     {
         private readonly IDatabaseGateway _databaseGateway;
-        private readonly IOrderProcessQueryFactory _queryFactory;
-        private readonly IDataRowMapper<OrderProcess> _orderProcessMapper;
         private readonly IDataRowMapper<OrderProcessItem> _orderProcessItemMapper;
+        private readonly IDataRowMapper<OrderProcess> _orderProcessMapper;
         private readonly IDataRowMapper<OrderProcessStatus> _orderProcessStatusMapper;
+        private readonly IOrderProcessQueryFactory _queryFactory;
 
-        public OrderProcessRepository(IDatabaseGateway databaseGateway, IOrderProcessQueryFactory queryFactory, IDataRowMapper<OrderProcess> orderProcessMapper, IDataRowMapper<OrderProcessItem> orderProcessItemMapper, IDataRowMapper<OrderProcessStatus> orderProcessStatusMapper)
+        public OrderProcessRepository(IDatabaseGateway databaseGateway, IOrderProcessQueryFactory queryFactory,
+            IDataRowMapper<OrderProcess> orderProcessMapper, IDataRowMapper<OrderProcessItem> orderProcessItemMapper,
+            IDataRowMapper<OrderProcessStatus> orderProcessStatusMapper)
         {
             Guard.AgainstNull(databaseGateway, "databaseGateway");
             Guard.AgainstNull(queryFactory, "queryFactory");

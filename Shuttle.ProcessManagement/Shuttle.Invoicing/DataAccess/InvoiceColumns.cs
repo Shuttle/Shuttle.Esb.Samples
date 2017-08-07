@@ -19,7 +19,7 @@ namespace Shuttle.Invoicing.DataAccess
             new MappedColumn<Guid>("OrderId", DbType.Guid);
 
         public static readonly MappedColumn<string> AccountContactName =
-        new MappedColumn<string>("AccountContactName", DbType.String, 65);
+            new MappedColumn<string>("AccountContactName", DbType.String, 65);
 
         public static readonly MappedColumn<string> AccountContactEMail =
             new MappedColumn<string>("AccountContactEMail", DbType.String, 130);

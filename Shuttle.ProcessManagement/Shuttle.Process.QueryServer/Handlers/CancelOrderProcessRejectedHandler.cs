@@ -11,7 +11,8 @@ namespace Shuttle.Process.QueryServer
         private readonly IDatabaseContextFactory _databaseContextFactory;
         private readonly IOrderProcessViewQuery _orderProcessViewQuery;
 
-        public CancelOrderProcessRejectedHandler(IDatabaseContextFactory databaseContextFactory, IOrderProcessViewQuery orderProcessViewQuery)
+        public CancelOrderProcessRejectedHandler(IDatabaseContextFactory databaseContextFactory,
+            IOrderProcessViewQuery orderProcessViewQuery)
         {
             Guard.AgainstNull(databaseContextFactory, "databaseContextFactory");
             Guard.AgainstNull(orderProcessViewQuery, "orderProcessViewQuery");
@@ -20,17 +21,14 @@ namespace Shuttle.Process.QueryServer
             _orderProcessViewQuery = orderProcessViewQuery;
         }
 
+        public bool IsReusable => true;
+
         public void ProcessMessage(IHandlerContext<CancelOrderProcessRejectedEvent> context)
         {
             using (_databaseContextFactory.Create(ProcessManagementData.ConnectionStringName))
             {
                 _orderProcessViewQuery.SaveStatus(context.Message.OrderProcessId, context.Message.Status);
             }
-        }
-
-        public bool IsReusable
-        {
-            get { return true; }
         }
     }
 }

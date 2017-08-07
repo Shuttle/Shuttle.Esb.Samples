@@ -6,7 +6,6 @@ using Shuttle.Invoicing.Messages;
 using Shuttle.Ordering.Messages;
 using Shuttle.Process.Custom.Server.Domain;
 using Shuttle.ProcessManagement;
-using Shuttle.ProcessManagement.Messages;
 
 namespace Shuttle.Process.Custom.Server
 {
@@ -24,6 +23,8 @@ namespace Shuttle.Process.Custom.Server
             _repository = repository;
         }
 
+        public bool IsReusable => true;
+
         public void ProcessMessage(IHandlerContext<OrderCreatedEvent> context)
         {
             if (!context.TransportMessage.IsHandledHere())
@@ -39,7 +40,9 @@ namespace Shuttle.Process.Custom.Server
 
                 if (orderProcess == null)
                 {
-                    throw new ApplicationException(string.Format("Could not find an order process with correlation id '{0}'.", context.TransportMessage.CorrelationId));
+                    throw new ApplicationException(
+                        string.Format("Could not find an order process with correlation id '{0}'.",
+                            context.TransportMessage.CorrelationId));
                 }
 
                 var orderProcessStatus = new OrderProcessStatus("Order Created");
@@ -67,11 +70,6 @@ namespace Shuttle.Process.Custom.Server
             }
 
             context.Send(createInvoiceCommand, c => c.WithCorrelationId(orderProcess.Id.ToString()));
-        }
-
-        public bool IsReusable
-        {
-            get { return true; }
         }
     }
 }

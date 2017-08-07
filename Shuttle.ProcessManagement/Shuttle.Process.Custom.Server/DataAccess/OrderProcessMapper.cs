@@ -16,7 +16,7 @@ namespace Shuttle.ProcessManagement
                 InvoiceId = OrderProcessColumns.InvoiceId.MapFrom(row),
                 DateRegistered = OrderProcessColumns.DateRegistered.MapFrom(row),
                 OrderNumber = OrderProcessColumns.OrderNumber.MapFrom(row),
-                TargetSystem= OrderProcessColumns.TargetSystem.MapFrom(row),
+                TargetSystem = OrderProcessColumns.TargetSystem.MapFrom(row),
                 TargetSystemUri = OrderProcessColumns.TargetSystemUri.MapFrom(row)
             };
 

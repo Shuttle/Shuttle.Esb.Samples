@@ -18,7 +18,7 @@ namespace Shuttle.ProcessManagement
             StatusDate = statusDate;
         }
 
-        public string Status { get; private set; }
-        public DateTime StatusDate { get; private set; }
+        public string Status { get; }
+        public DateTime StatusDate { get; }
     }
 }

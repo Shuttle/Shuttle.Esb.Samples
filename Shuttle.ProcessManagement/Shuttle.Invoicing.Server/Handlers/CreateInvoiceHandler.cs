@@ -21,6 +21,8 @@ namespace Shuttle.Invoicing.Server
             _repository = repository;
         }
 
+        public bool IsReusable => true;
+
         public void ProcessMessage(IHandlerContext<CreateInvoiceCommand> context)
         {
             // simulate slow processing
@@ -40,7 +42,7 @@ namespace Shuttle.Invoicing.Server
 
             invoice.GenerateInvoiceNumber();
 
-            using(_databaseContextFactory.Create(InvoicingData.ConnectionStringName))
+            using (_databaseContextFactory.Create(InvoicingData.ConnectionStringName))
             {
                 _repository.Add(invoice);
             }
@@ -57,11 +59,6 @@ namespace Shuttle.Invoicing.Server
             orderCreatedEvent.Items.AddRange(message.Items);
 
             context.Publish(orderCreatedEvent);
-        }
-
-        public bool IsReusable
-        {
-            get { return true; }
         }
     }
 }

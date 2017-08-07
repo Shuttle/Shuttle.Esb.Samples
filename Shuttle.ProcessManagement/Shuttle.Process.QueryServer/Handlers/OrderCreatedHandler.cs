@@ -21,17 +21,14 @@ namespace Shuttle.Process.QueryServer
             _orderProcessViewQuery = orderProcessViewQuery;
         }
 
+        public bool IsReusable => true;
+
         public void ProcessMessage(IHandlerContext<OrderCreatedEvent> context)
         {
             using (_databaseContextFactory.Create(ProcessManagementData.ConnectionStringName))
             {
                 _orderProcessViewQuery.SaveStatus(context.TransportMessage.OrderProcessId(), "Order Created");
             }
-        }
-
-        public bool IsReusable
-        {
-            get { return true; }
         }
     }
 }

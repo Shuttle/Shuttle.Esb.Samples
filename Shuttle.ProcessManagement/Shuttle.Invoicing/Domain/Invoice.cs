@@ -20,22 +20,20 @@ namespace Shuttle.Invoicing.Domain
             InvoiceDate = invoiceDate;
         }
 
-        public Guid Id { get; private set; }
+        public Guid Id { get; }
         public string InvoiceNumber { get; private set; }
         public InvoiceAccountContact AccountContact { get; set; }
 
-        public IEnumerable<InvoiceItem> Items
-        {
-            get { return new ReadOnlyCollection<InvoiceItem>(_items); }
-        }
+        public IEnumerable<InvoiceItem> Items => new ReadOnlyCollection<InvoiceItem>(_items);
+
+        public DateTime InvoiceDate { get; }
+        public Guid OrderId { get; }
 
         public void GenerateInvoiceNumber()
         {
-            InvoiceNumber = string.Format("INV-{0}-{1}", InvoiceDate.Ticks.ToString().Substring(8, 6), Guid.NewGuid().ToString("N").Substring(6));
+            InvoiceNumber = string.Format("INV-{0}-{1}", InvoiceDate.Ticks.ToString().Substring(8, 6),
+                Guid.NewGuid().ToString("N").Substring(6));
         }
-
-        public DateTime InvoiceDate { get; private set; }
-        public Guid OrderId { get; private set; }
 
         public void AddItem(string description, decimal price)
         {

@@ -23,6 +23,8 @@ namespace Shuttle.Process.Custom.Server
             _repository = repository;
         }
 
+        public bool IsReusable => true;
+
         public void ProcessMessage(IHandlerContext<RegisterOrderProcessCommand> context)
         {
             var message = context.Message;
@@ -41,7 +43,8 @@ namespace Shuttle.Process.Custom.Server
 
             foreach (var quotedProduct in message.QuotedProducts)
             {
-                orderProcess.AddItem(new OrderProcessItem(quotedProduct.ProductId, quotedProduct.Description, quotedProduct.Price));
+                orderProcess.AddItem(new OrderProcessItem(quotedProduct.ProductId, quotedProduct.Description,
+                    quotedProduct.Price));
             }
 
             var status = new OrderProcessStatus("Cooling Off");
@@ -72,11 +75,6 @@ namespace Shuttle.Process.Custom.Server
             {
                 OrderProcessId = orderProcess.Id
             }, c => c.Defer(DateTime.Now.AddSeconds(10)).Local());
-        }
-
-        public bool IsReusable
-        {
-            get { return true; }
         }
     }
 }

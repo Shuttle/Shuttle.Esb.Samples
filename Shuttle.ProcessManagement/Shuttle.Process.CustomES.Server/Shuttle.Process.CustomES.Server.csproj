@@ -85,6 +85,10 @@
       <HintPath>..\packages\Shuttle.Recall.8.2.2\lib\net45-full\Shuttle.Recall.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Shuttle.Recall.Sql.Storage, Version=8.0.10.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Shuttle.Recall.Sql.Storage.8.0.10\lib\net45-full\Shuttle.Recall.Sql.Storage.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />

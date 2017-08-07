@@ -23,6 +23,8 @@ namespace Shuttle.Process.Custom.Server
             _repository = repository;
         }
 
+        public bool IsReusable => true;
+
         public void ProcessMessage(IHandlerContext<InvoiceCreatedEvent> context)
         {
             if (!context.TransportMessage.IsHandledHere())
@@ -59,11 +61,6 @@ namespace Shuttle.Process.Custom.Server
                         "Hello {0},<br/><br/>Your order number {1} has been dispatched.<br/><br/>Regards,<br/>The Shuttle Books Team",
                         orderProcess.CustomerName, orderProcess.OrderNumber)
             });
-        }
-
-        public bool IsReusable
-        {
-            get { return true; }
         }
     }
 }

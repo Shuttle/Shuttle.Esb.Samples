@@ -29,22 +29,13 @@ namespace Shuttle.Process.CustomES.Server.Domain
 
         public decimal Total { get; private set; }
 
-        public Guid Id { get; private set; }
+        public Guid Id { get; }
 
-        public string Status
-        {
-            get { return _statusChanged != null ? _statusChanged.Status : string.Empty; }
-        }
+        public string Status => _statusChanged != null ? _statusChanged.Status : string.Empty;
 
-        public bool CanArchive
-        {
-            get { return Status.Equals("Completed", StringComparison.InvariantCultureIgnoreCase); }
-        }
+        public bool CanArchive => Status.Equals("Completed", StringComparison.InvariantCultureIgnoreCase);
 
-        public bool CanCancel
-        {
-            get { return Status.Equals("Cooling Off", StringComparison.InvariantCultureIgnoreCase); }
-        }
+        public bool CanCancel => Status.Equals("Cooling Off", StringComparison.InvariantCultureIgnoreCase);
 
         public Events.Initialized Initialize()
         {
@@ -57,7 +48,7 @@ namespace Shuttle.Process.CustomES.Server.Domain
             });
         }
 
-        public Events.Initialized On(Events.Initialized initialized)
+        private Events.Initialized On(Events.Initialized initialized)
         {
             Guard.AgainstNull(initialized, "initialized");
 
@@ -80,7 +71,7 @@ namespace Shuttle.Process.CustomES.Server.Domain
             });
         }
 
-        public Events.CustomerAssigned On(Events.CustomerAssigned customerAssigned)
+        private Events.CustomerAssigned On(Events.CustomerAssigned customerAssigned)
         {
             Guard.AgainstNull(customerAssigned, "customerAssigned");
 
@@ -96,7 +87,7 @@ namespace Shuttle.Process.CustomES.Server.Domain
             });
         }
 
-        public Events.TargetSystemAssigned On(Events.TargetSystemAssigned targetSystemAssigned)
+        private Events.TargetSystemAssigned On(Events.TargetSystemAssigned targetSystemAssigned)
         {
             Guard.AgainstNull(targetSystemAssigned, "targetSystemAssigned");
 
@@ -112,7 +103,7 @@ namespace Shuttle.Process.CustomES.Server.Domain
             });
         }
 
-        public Events.StatusChanged On(Events.StatusChanged statusChanged)
+        private Events.StatusChanged On(Events.StatusChanged statusChanged)
         {
             Guard.AgainstNull(statusChanged, "statusChanged");
 
@@ -129,7 +120,7 @@ namespace Shuttle.Process.CustomES.Server.Domain
             });
         }
 
-        public Events.ItemAdded On(Events.ItemAdded itemAdded)
+        private Events.ItemAdded On(Events.ItemAdded itemAdded)
         {
             Guard.AgainstNull(itemAdded, "itemAdded");
 
@@ -170,7 +161,7 @@ namespace Shuttle.Process.CustomES.Server.Domain
             });
         }
 
-        public Events.InvoiceIdAssigned On(Events.InvoiceIdAssigned invoiceIdAssigned)
+        private Events.InvoiceIdAssigned On(Events.InvoiceIdAssigned invoiceIdAssigned)
         {
             Guard.AgainstNull(invoiceIdAssigned, "invoiceIdAssigned");
 
@@ -185,11 +176,44 @@ namespace Shuttle.Process.CustomES.Server.Domain
             });
         }
 
-        public Events.OrderIdAssigned On(Events.OrderIdAssigned orderIdAssigned)
+        private Events.OrderIdAssigned On(Events.OrderIdAssigned orderIdAssigned)
         {
             Guard.AgainstNull(orderIdAssigned, "orderIdAssigned");
 
             return _orderIdAssigned = orderIdAssigned;
+        }
+
+        public SendEMailCommand SendEMailCommand()
+        {
+            return new SendEMailCommand
+            {
+                RecipientEMail = _customerAssigned.CustomerEMail,
+                HtmlBody =
+                    string.Format(
+                        "Hello {0},<br/><br/>Your order number {1} has been dispatched.<br/><br/>Regards,<br/>The Shuttle Books Team",
+                        _customerAssigned.CustomerName, _initialized.OrderNumber)
+            };
+        }
+
+        public CreateInvoiceCommand CreateInvoiceCommand()
+        {
+            var result = new CreateInvoiceCommand
+            {
+                OrderId = _orderIdAssigned.OrderId,
+                AccountContactName = _customerAssigned.CustomerName,
+                AccountContactEMail = _customerAssigned.CustomerEMail
+            };
+
+            foreach (var item in _items)
+            {
+                result.Items.Add(new MessageInvoiceItem
+                {
+                    Description = item.Description,
+                    Price = item.Price
+                });
+            }
+
+            return result;
         }
 
         public class Events
@@ -234,39 +258,6 @@ namespace Shuttle.Process.CustomES.Server.Domain
             {
                 public Guid OrderId { get; set; }
             }
-        }
-
-        public SendEMailCommand SendEMailCommand()
-        {
-            return new SendEMailCommand
-            {
-                RecipientEMail = _customerAssigned.CustomerEMail,
-                HtmlBody =
-                    string.Format(
-                        "Hello {0},<br/><br/>Your order number {1} has been dispatched.<br/><br/>Regards,<br/>The Shuttle Books Team",
-                        _customerAssigned.CustomerName, _initialized.OrderNumber)
-            };
-        }
-
-        public CreateInvoiceCommand CreateInvoiceCommand()
-        {
-            var result = new CreateInvoiceCommand
-            {
-                OrderId = _orderIdAssigned.OrderId,
-                AccountContactName = _customerAssigned.CustomerName,
-                AccountContactEMail = _customerAssigned.CustomerEMail
-            };
-
-            foreach (var item in _items)
-            {
-                result.Items.Add(new MessageInvoiceItem
-                {
-                    Description = item.Description,
-                    Price = item.Price
-                });
-            }
-
-            return result;
         }
     }
 }

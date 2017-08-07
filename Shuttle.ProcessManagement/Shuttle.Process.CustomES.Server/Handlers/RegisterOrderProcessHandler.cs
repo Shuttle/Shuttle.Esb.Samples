@@ -23,6 +23,8 @@ namespace Shuttle.Process.CustomES.Server
             _eventStore = eventStore;
         }
 
+        public bool IsReusable => true;
+
         public void ProcessMessage(IHandlerContext<RegisterOrderProcessCommand> context)
         {
             var message = context.Message;
@@ -36,14 +38,15 @@ namespace Shuttle.Process.CustomES.Server
             stream.AddEvent(initialized);
             stream.AddEvent(orderProcess.AssignCustomer(message.CustomerName, message.CustomerEMail));
             stream.AddEvent(orderProcess.AssignTargetSystem(message.TargetSystem, message.TargetSystemUri));
-            
+
             var status = orderProcess.ChangeStatus("Cooling Off");
-            
+
             stream.AddEvent(status);
 
             foreach (var quotedProduct in message.QuotedProducts)
             {
-                stream.AddEvent(orderProcess.AddItem(quotedProduct.ProductId, quotedProduct.Description, quotedProduct.Price));
+                stream.AddEvent(orderProcess.AddItem(quotedProduct.ProductId, quotedProduct.Description,
+                    quotedProduct.Price));
             }
 
             using (_databaseContextFactory.Create(ProcessManagementData.ConnectionStringName))
@@ -70,11 +73,6 @@ namespace Shuttle.Process.CustomES.Server
             {
                 OrderProcessId = orderProcess.Id
             }, c => c.Defer(DateTime.Now.AddSeconds(10)).Local());
-        }
-
-        public bool IsReusable
-        {
-            get { return true; }
         }
     }
 }

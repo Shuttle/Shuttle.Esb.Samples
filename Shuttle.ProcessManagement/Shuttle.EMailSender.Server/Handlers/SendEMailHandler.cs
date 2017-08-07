@@ -6,6 +6,8 @@ namespace Shuttle.EMailSender.Server
 {
     public class SendEMailHandler : IMessageHandler<SendEMailCommand>
     {
+        public bool IsReusable => true;
+
         public void ProcessMessage(IHandlerContext<SendEMailCommand> context)
         {
             // simulate sending an e-mail
@@ -16,10 +18,6 @@ namespace Shuttle.EMailSender.Server
             {
                 EMailId = context.Message.EMailId
             });
-        }
-
-        public bool IsReusable {
-            get { return true; }
         }
     }
 }

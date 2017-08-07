@@ -13,7 +13,8 @@ namespace Shuttle.ProcessManagement.Services
         private readonly IDatabaseContextFactory _databaseContextFactory;
         private readonly IOrderProcessViewQuery _orderProcessViewQuery;
 
-        public OrderProcessService(IServiceBus bus, IDatabaseContextFactory databaseContextFactory, IOrderProcessViewQuery orderProcessViewQuery)
+        public OrderProcessService(IServiceBus bus, IDatabaseContextFactory databaseContextFactory,
+            IOrderProcessViewQuery orderProcessViewQuery)
         {
             Guard.AgainstNull(bus, "bus");
             Guard.AgainstNull(databaseContextFactory, "databaseContextFactory");
@@ -29,18 +30,18 @@ namespace Shuttle.ProcessManagement.Services
             using (_databaseContextFactory.Create(ProcessManagementData.ConnectionStringName))
             {
                 return from row in _orderProcessViewQuery.All()
-                       let status = (OrderProcessViewColumns.Status.MapFrom(row) ?? string.Empty).ToLower()
-                       select new
-                       {
-                           Id = OrderProcessViewColumns.Id.MapFrom(row),
-                           CustomerName = OrderProcessViewColumns.CustomerName.MapFrom(row),
-                           OrderNumber = OrderProcessViewColumns.OrderNumber.MapFrom(row),
-                           OrderDate = OrderProcessViewColumns.OrderDate.MapFrom(row),
-                           OrderTotal = OrderProcessViewColumns.OrderTotal.MapFrom(row),
-                           Status = OrderProcessViewColumns.Status.MapFrom(row),
-                           CanCancel = status == "cooling off",
-                           CanArchive = status == "completed"
-                       };
+                    let status = (OrderProcessViewColumns.Status.MapFrom(row) ?? string.Empty).ToLower()
+                    select new
+                    {
+                        Id = OrderProcessViewColumns.Id.MapFrom(row),
+                        CustomerName = OrderProcessViewColumns.CustomerName.MapFrom(row),
+                        OrderNumber = OrderProcessViewColumns.OrderNumber.MapFrom(row),
+                        OrderDate = OrderProcessViewColumns.OrderDate.MapFrom(row),
+                        OrderTotal = OrderProcessViewColumns.OrderTotal.MapFrom(row),
+                        Status = OrderProcessViewColumns.Status.MapFrom(row),
+                        CanCancel = status == "cooling off",
+                        CanArchive = status == "completed"
+                    };
             }
         }
 

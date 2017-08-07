@@ -21,6 +21,8 @@ namespace Shuttle.Ordering.Server
             _repository = repository;
         }
 
+        public bool IsReusable => true;
+
         public void ProcessMessage(IHandlerContext<CreateOrderCommand> context)
         {
             // simulate slow processing
@@ -38,7 +40,7 @@ namespace Shuttle.Ordering.Server
                 order.AddItem(item.Description, item.Price);
             }
 
-            using(_databaseContextFactory.Create(OrderingData.ConnectionStringName))
+            using (_databaseContextFactory.Create(OrderingData.ConnectionStringName))
             {
                 _repository.Add(order);
             }
@@ -55,11 +57,6 @@ namespace Shuttle.Ordering.Server
             orderCreatedEvent.Items.AddRange(message.Items);
 
             context.Publish(orderCreatedEvent);
-        }
-
-        public bool IsReusable
-        {
-            get { return true; }
         }
     }
 }

@@ -20,16 +20,13 @@ namespace Shuttle.Ordering.Domain
             OrderDate = orderDate;
         }
 
-        public Guid Id { get; private set; }
-        public string OrderNumber { get; private set; }
+        public Guid Id { get; }
+        public string OrderNumber { get; }
         public OrderCustomer Customer { get; set; }
 
-        public IEnumerable<OrderItem> Items
-        {
-            get { return new ReadOnlyCollection<OrderItem>(_items); }
-        }
+        public IEnumerable<OrderItem> Items => new ReadOnlyCollection<OrderItem>(_items);
 
-        public DateTime OrderDate { get; private set; }
+        public DateTime OrderDate { get; }
 
         public void AddItem(string description, decimal price)
         {

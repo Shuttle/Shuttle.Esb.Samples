@@ -1,7 +1,6 @@
 ﻿using System;
 using Shuttle.Core.Data;
 using Shuttle.Core.Infrastructure;
-using Shuttle.EMailSender.Messages;
 using Shuttle.Esb;
 using Shuttle.Invoicing.Messages;
 using Shuttle.Process.CustomES.Server.Domain;
@@ -23,6 +22,8 @@ namespace Shuttle.Process.CustomES.Server
             _databaseContextFactory = databaseContextFactory;
             _eventStore = eventStore;
         }
+
+        public bool IsReusable => true;
 
         public void ProcessMessage(IHandlerContext<InvoiceCreatedEvent> context)
         {
@@ -53,13 +54,8 @@ namespace Shuttle.Process.CustomES.Server
 
                 _eventStore.Save(stream);
             }
-            
-            context.Send(orderProcess.SendEMailCommand());
-        }
 
-        public bool IsReusable
-        {
-            get { return true; }
+            context.Send(orderProcess.SendEMailCommand());
         }
     }
 }

@@ -43,20 +43,11 @@ namespace Shuttle.Process.ESModule.Server
 
         public decimal Total { get; private set; }
 
-        public string Status
-        {
-            get { return _statusChanged != null ? _statusChanged.Status : string.Empty; }
-        }
+        public string Status => _statusChanged != null ? _statusChanged.Status : string.Empty;
 
-        public bool CanArchive
-        {
-            get { return Status.Equals("Completed", StringComparison.InvariantCultureIgnoreCase); }
-        }
+        public bool CanArchive => Status.Equals("Completed", StringComparison.InvariantCultureIgnoreCase);
 
-        public bool CanCancel
-        {
-            get { return Status.Equals("Cooling Off", StringComparison.InvariantCultureIgnoreCase); }
-        }
+        public bool CanCancel => Status.Equals("Cooling Off", StringComparison.InvariantCultureIgnoreCase);
 
         public Guid CorrelationId { get; set; }
 
@@ -91,6 +82,27 @@ namespace Shuttle.Process.ESModule.Server
             context.Publish(new OrderProcessAcceptedEvent
             {
                 OrderProcessId = CorrelationId
+            });
+        }
+
+        public void ProcessMessage(IProcessHandlerContext<ArchiveOrderProcessCommand> context)
+        {
+            if (!CanArchive)
+            {
+                context.Publish(new ArchiveOrderProcessRejectedEvent
+                {
+                    OrderProcessId = context.Message.OrderProcessId,
+                    Status = Status
+                });
+
+                return;
+            }
+
+            context.Stream.AddEvent(ChangeStatus("Order Archived"));
+
+            context.Publish(new OrderProcessArchivedEvent
+            {
+                OrderProcessId = context.Message.OrderProcessId
             });
         }
 
@@ -200,7 +212,8 @@ namespace Shuttle.Process.ESModule.Server
 
             foreach (var quotedProduct in message.QuotedProducts)
             {
-                context.Stream.AddEvent(AddItem(quotedProduct.ProductId, quotedProduct.Description, quotedProduct.Price));
+                context.Stream.AddEvent(
+                    AddItem(quotedProduct.ProductId, quotedProduct.Description, quotedProduct.Price));
             }
 
             context.Publish(new OrderProcessRegisteredEvent
@@ -363,27 +376,6 @@ namespace Shuttle.Process.ESModule.Server
             }
 
             return true;
-        }
-
-        public void ProcessMessage(IProcessHandlerContext<ArchiveOrderProcessCommand> context)
-        {
-            if (!CanArchive)
-            {
-                context.Publish(new ArchiveOrderProcessRejectedEvent
-                {
-                    OrderProcessId = context.Message.OrderProcessId,
-                    Status = Status
-                });
-
-                return;
-            }
-
-            context.Stream.AddEvent(ChangeStatus("Order Archived"));
-
-            context.Publish(new OrderProcessArchivedEvent
-            {
-                OrderProcessId = context.Message.OrderProcessId
-            });
         }
     }
 }

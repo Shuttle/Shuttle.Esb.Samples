@@ -1,7 +1,6 @@
 ﻿using Shuttle.Core.Data;
 using Shuttle.Core.Infrastructure;
 using Shuttle.Esb;
-using Shuttle.Ordering.Messages;
 using Shuttle.Process.Custom.Server.Domain;
 using Shuttle.ProcessManagement;
 using Shuttle.ProcessManagement.Messages;
@@ -13,7 +12,8 @@ namespace Shuttle.Process.Custom.Server
         private readonly IDatabaseContextFactory _databaseContextFactory;
         private readonly IOrderProcessRepository _repository;
 
-        public CompleteOrderProcessHandler(IDatabaseContextFactory databaseContextFactory, IOrderProcessRepository repository)
+        public CompleteOrderProcessHandler(IDatabaseContextFactory databaseContextFactory,
+            IOrderProcessRepository repository)
         {
             Guard.AgainstNull(databaseContextFactory, "databaseContextFactory");
             Guard.AgainstNull(repository, "repository");
@@ -21,6 +21,8 @@ namespace Shuttle.Process.Custom.Server
             _databaseContextFactory = databaseContextFactory;
             _repository = repository;
         }
+
+        public bool IsReusable => true;
 
         public void ProcessMessage(IHandlerContext<CompleteOrderProcessCommand> context)
         {
@@ -41,11 +43,6 @@ namespace Shuttle.Process.Custom.Server
             {
                 OrderProcessId = orderProcess.Id
             });
-        }
-
-        public bool IsReusable
-        {
-            get { return true; }
         }
     }
 }

@@ -22,6 +22,8 @@ namespace Shuttle.Process.CustomES.Server
             _eventStore = eventStore;
         }
 
+        public bool IsReusable => true;
+
         public void ProcessMessage(IHandlerContext<AcceptOrderProcessCommand> context)
         {
             OrderProcess orderProcess;
@@ -49,11 +51,6 @@ namespace Shuttle.Process.CustomES.Server
             {
                 OrderProcessId = orderProcess.Id
             });
-        }
-
-        public bool IsReusable
-        {
-            get { return true; }
         }
     }
 }

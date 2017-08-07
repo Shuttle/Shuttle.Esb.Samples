@@ -12,7 +12,7 @@ namespace Shuttle.ProcessManagement
                     OrderProcessItemColumns.ProductId.MapFrom(row),
                     OrderProcessItemColumns.Description.MapFrom(row),
                     OrderProcessItemColumns.Price.MapFrom(row)
-                    ));
+                ));
         }
     }
 }

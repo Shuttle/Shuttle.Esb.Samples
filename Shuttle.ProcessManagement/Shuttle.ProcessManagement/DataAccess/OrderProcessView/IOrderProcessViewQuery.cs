@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using Shuttle.Core.Data;
 using Shuttle.ProcessManagement.Messages;
 
 namespace Shuttle.ProcessManagement

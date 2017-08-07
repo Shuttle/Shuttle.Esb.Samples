@@ -20,7 +20,7 @@ namespace Shuttle.ProcessManagement.WebApi
         }
 
         public IHttpController Create(HttpRequestMessage request, HttpControllerDescriptor controllerDescriptor,
-                                      Type controllerType)
+            Type controllerType)
         {
             Guard.AgainstNull(controllerType, "controllerType");
 
@@ -30,9 +30,10 @@ namespace Shuttle.ProcessManagement.WebApi
             }
             catch (Exception ex)
             {
-                throw new HttpException(404, string.Format("The controller for path '{0}' could not be instantiated.", request.RequestUri.AbsolutePath), ex);
+                throw new HttpException(404,
+                    string.Format("The controller for path '{0}' could not be instantiated.",
+                        request.RequestUri.AbsolutePath), ex);
             }
         }
-
     }
 }

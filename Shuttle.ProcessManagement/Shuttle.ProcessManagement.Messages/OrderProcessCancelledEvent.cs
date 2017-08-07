@@ -4,6 +4,6 @@ namespace Shuttle.ProcessManagement.Messages
 {
     public class OrderProcessCancelledEvent
     {
-        public Guid OrderProcessId { get; set; } 
+        public Guid OrderProcessId { get; set; }
     }
 }

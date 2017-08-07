@@ -11,22 +11,6 @@ namespace Shuttle.ProcessManagement
             return RawQuery.Create(string.Concat(SelectClause(), "order by OrderDate"));
         }
 
-        private static string SelectClause()
-        {
-            return @"
-select 
-    Id, 
-    CustomerName, 
-    OrderNumber, 
-    OrderDate, 
-    OrderTotal, 
-    Status,
-    TargetSystem,
-    TargetSystemUri
-from 
-    OrderProcessView ";
-        }
-
         public IQuery Add(OrderProcessRegisteredEvent message)
         {
             return RawQuery.Create(@"
@@ -65,12 +49,14 @@ values
 
         public IQuery Find(Guid id)
         {
-            return RawQuery.Create(string.Concat(SelectClause(), "where Id = @Id")).AddParameterValue(OrderProcessViewColumns.Id, id);
+            return RawQuery.Create(string.Concat(SelectClause(), "where Id = @Id"))
+                .AddParameterValue(OrderProcessViewColumns.Id, id);
         }
 
         public IQuery Remove(Guid id)
         {
-            return RawQuery.Create("delete from dbo.OrderProcessView where Id = @Id").AddParameterValue(OrderProcessViewColumns.Id, id);
+            return RawQuery.Create("delete from dbo.OrderProcessView where Id = @Id")
+                .AddParameterValue(OrderProcessViewColumns.Id, id);
         }
 
         public IQuery SaveStatus(Guid id, string status)
@@ -78,6 +64,22 @@ values
             return RawQuery.Create("update dbo.OrderProcessView set Status = @Status where Id = @Id")
                 .AddParameterValue(OrderProcessViewColumns.Id, id)
                 .AddParameterValue(OrderProcessViewColumns.Status, status);
+        }
+
+        private static string SelectClause()
+        {
+            return @"
+select 
+    Id, 
+    CustomerName, 
+    OrderNumber, 
+    OrderDate, 
+    OrderTotal, 
+    Status,
+    TargetSystem,
+    TargetSystemUri
+from 
+    OrderProcessView ";
         }
     }
 }

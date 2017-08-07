@@ -23,6 +23,8 @@ namespace Shuttle.Process.Custom.Server
             _repository = repository;
         }
 
+        public bool IsReusable => true;
+
         public void ProcessMessage(IHandlerContext<EMailSentEvent> context)
         {
             if (!context.TransportMessage.IsHandledHere())
@@ -54,11 +56,6 @@ namespace Shuttle.Process.Custom.Server
             {
                 OrderProcessId = orderProcess.Id
             }, c => c.Local());
-        }
-
-        public bool IsReusable
-        {
-            get { return true; }
         }
     }
 }

@@ -22,6 +22,8 @@ namespace Shuttle.Process.CustomES.Server
             _eventStore = eventStore;
         }
 
+        public bool IsReusable => true;
+
         public void ProcessMessage(IHandlerContext<ArchiveOrderProcessCommand> context)
         {
             using (_databaseContextFactory.Create(ProcessManagementData.ConnectionStringName))
@@ -50,10 +52,6 @@ namespace Shuttle.Process.CustomES.Server
             {
                 OrderProcessId = context.Message.OrderProcessId
             });
-        }
-
-        public bool IsReusable {
-            get { return true; }
         }
     }
 }
