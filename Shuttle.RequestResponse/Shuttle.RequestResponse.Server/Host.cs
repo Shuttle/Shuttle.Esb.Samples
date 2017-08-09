@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using Castle.Windsor;
+﻿using Castle.Windsor;
 using log4net;
 using Shuttle.Core.Castle;
 using Shuttle.Core.Infrastructure;
