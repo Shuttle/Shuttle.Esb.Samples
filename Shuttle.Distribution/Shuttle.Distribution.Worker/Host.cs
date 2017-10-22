@@ -1,7 +1,7 @@
-﻿using Microsoft.Practices.Unity;
-using Shuttle.Core.ServiceHost;
+﻿using Shuttle.Core.ServiceHost;
 using Shuttle.Core.Unity;
 using Shuttle.Esb;
+using Unity;
 
 namespace Shuttle.Distribution.Worker
 {

@@ -45,8 +45,8 @@
       <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Shuttle.Core.Castle, Version=8.0.6.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Shuttle.Core.Castle.8.0.6\lib\net452-full\Shuttle.Core.Castle.dll</HintPath>
+    <Reference Include="Shuttle.Core.Castle, Version=8.0.7.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Shuttle.Core.Castle.8.0.7\lib\net452-full\Shuttle.Core.Castle.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Shuttle.Core.Infrastructure, Version=8.0.6.0, Culture=neutral, processorArchitecture=MSIL">
@@ -61,8 +61,8 @@
       <HintPath>..\packages\Shuttle.Core.ServiceHost.1.0.14\lib\net452-full\Shuttle.Core.ServiceHost.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Shuttle.Esb, Version=9.1.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Shuttle.Esb.9.1.2\lib\net452-full\Shuttle.Esb.dll</HintPath>
+    <Reference Include="Shuttle.Esb, Version=9.1.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Shuttle.Esb.9.1.3\lib\net452-full\Shuttle.Esb.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Shuttle.Esb.Msmq, Version=9.0.0.0, Culture=neutral, processorArchitecture=MSIL">
