@@ -5,9 +5,14 @@ VisualStudioVersion = 15.0.27130.2026
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shuttle.RequestResponse.Messages", "Shuttle.RequestResponse.Messages\Shuttle.RequestResponse.Messages.csproj", "{86295650-DA74-4C79-96B2-AEA48B9DC683}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shuttle.RequestResponse.Client", "Shuttle.RequestResponse.Client\Shuttle.RequestResponse.Client.csproj", "{82BE2D71-B2F4-4F9E-8C5F-CB27B63E5615}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shuttle.RequestResponse.Client", "Shuttle.RequestResponse.Client\Shuttle.RequestResponse.Client.csproj", "{82BE2D71-B2F4-4F9E-8C5F-CB27B63E5615}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shuttle.RequestResponse.Server", "Shuttle.RequestResponse.Server\Shuttle.RequestResponse.Server.csproj", "{1631C13A-434A-4D54-8ED9-77EB4B7C8CE0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shuttle.RequestResponse.Server", "Shuttle.RequestResponse.Server\Shuttle.RequestResponse.Server.csproj", "{1631C13A-434A-4D54-8ED9-77EB4B7C8CE0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{83F3013B-504D-489F-BD13-E11F50A66BB8}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -2,19 +2,15 @@
 
 When using Visual Studio 2015+ the NuGet packages should be restored automatically.  If you find that they do not or if you are using an older version of Visual Studio please execute the following in a Visual Studio command prompt:
 
-~~~
+```
 cd {extraction-folder}\Shuttle.Esb.Samples\Shuttle.RequestResponse
 nuget restore
-~~~
+```
 
 Once you have opened the `Shuttle.RequestResponse.sln` solution in Visual Studio set the following projects as startup projects:
 
 - Shuttle.RequestResponse.Client
 - Shuttle.RequestResponse.Server
-
-> Set `Shuttle.Core.Host.exe` as the **Start external program** option by navigating to the **bin\debug** folder of the server project for the **Shuttle.RequestResponse.Server** project.
-
-<div class='alert alert-info'>Before the reference <strong>Shuttle.Core.Host.exe</strong> will be available in the <strong>bin\debug</strong> folder you may need to build the solution.</div>
 
 # Implementation
 
@@ -23,8 +19,8 @@ In order to get any processing done in Shuttle.Esb a message will need to be gen
 In this guide we'll create the following projects:
 
 - a **Console Application** called `Shuttle.RequestResponse.Client`
-- a **Class Library** called `Shuttle.RequestResponse.Server`
-- and another **Class Library** called `Shuttle.RequestResponse.Messages` that will contain all our message classes
+- a **Console Application** called `Shuttle.RequestResponse.Server`
+- a **Class Library** called `Shuttle.RequestResponse.Messages` that will contain all our message classes
 
 ## Messages
 
@@ -36,7 +32,7 @@ In this guide we'll create the following projects:
 
 > Rename the `Class1` default file to `RegisterMemberCommand` and add a `UserName` property.
 
-~~~ c#
+``` c#
 namespace Shuttle.RequestResponse.Messages
 {
 	public class RegisterMemberCommand
@@ -44,13 +40,13 @@ namespace Shuttle.RequestResponse.Messages
 		public string UserName { get; set; }
 	}
 }
-~~~
+```
 
 ### MemberRegisteredEvent
 
 > Add a new class called `MemberRegisteredEvent` also with a `UserName` property.
 
-~~~ c#
+``` c#
 namespace Shuttle.RequestResponse.Messages
 {
 	public class MemberRegisteredEvent
@@ -58,7 +54,7 @@ namespace Shuttle.RequestResponse.Messages
 		public string UserName { get; set; }
 	}
 }
-~~~
+```
 
 ## Client
 
@@ -68,24 +64,34 @@ namespace Shuttle.RequestResponse.Messages
 
 This will provide access to the Msmq `IQueue` implementation and also include the required dependencies.
 
+> Install the `Shuttle.Core.Castle` nuget package.
+
+This will provide access to the Castle `WindsorContainer` implementation.
+
 > Add a reference to the `Shuttle.RequestResponse.Messages` project.
 
 ### Program
 
 > Implement the main client code as follows:
 
-~~~ c#
+``` c#
 using System;
+using Castle.Windsor;
+using Shuttle.Core.Castle;
 using Shuttle.Esb;
 using Shuttle.RequestResponse.Messages;
 
 namespace Shuttle.RequestResponse.Client
 {
-	class Program
+	internal class Program
 	{
-		static void Main(string[] args)
+		private static void Main(string[] args)
 		{
-			using (var bus = ServiceBus.Create().Start())
+			var container = new WindsorComponentContainer(new WindsorContainer());
+
+			ServiceBus.Register(container);
+
+			using (var bus = ServiceBus.Create(container).Start())
 			{
 				string userName;
 
@@ -94,19 +100,19 @@ namespace Shuttle.RequestResponse.Client
 					bus.Send(new RegisterMemberCommand
 					{
 						UserName = userName
-					});
+					}, c => c.WillExpire(DateTime.Now.AddSeconds(5)));
 				}
 			}
 		}
 	}
 }
-~~~
+```
 
 ### App.config
 
 > Create the shuttle configuration as follows:
 
-~~~ xml
+``` xml
 <?xml version="1.0" encoding="utf-8" ?>
 <configuration>
 	<configSections>
@@ -124,20 +130,16 @@ namespace Shuttle.RequestResponse.Client
 		   workQueueUri="msmq://./shuttle-client-work"
 		   errorQueueUri="msmq://./shuttle-error" />
 	</serviceBus>
-	
-    <startup> 
-        <supportedRuntime version="v4.0" sku=".NETFramework,Version=v4.5" />
-    </startup>
 </configuration>
-~~~
+```
 
-This tells shuttle that all messages that are sent and have a type name starting with `Shuttle.RequestResponse.Messages` should be sent to endpoint `msmq://./shuttle-server-work`.
+This tells Shuttle that all messages that are sent and have a type name starting with `Shuttle.RequestResponse.Messages` should be sent to endpoint `msmq://./shuttle-server-work`.
 
 ### MemberRegisteredHandler
 
 > Create a new class called `MemberRegisteredHandler` that implements the `IMessageHandler<MemberRegisteredEvent>` interface as follows:
 
-~~~ c#
+``` c#
 using System;
 using Shuttle.Esb;
 using Shuttle.RequestResponse.Messages;
@@ -152,61 +154,97 @@ namespace Shuttle.RequestResponse.Client
 			Console.WriteLine("[RESPONSE RECEIVED] : user name = '{0}'", context.Message.UserName);
 			Console.WriteLine();
 		}
-
-		public bool IsReusable {
-			get { return true; } 
-		}
 	}
 }
-~~~
+```
 
 ## Server
 
-> Add a new `Class Library` to the solution called `Shuttle.RequestResponse.Server`.
+> Add a new `Console Application` to the solution called `Shuttle.RequestResponse.Server`.
 
 > Install the `Shuttle.Esb.Msmq` nuget package.
 
 This will provide access to the Msmq `IQueue` implementation and also include the required dependencies.
 
-> Install the `Shuttle.Core.Host` nuget package.
+> Install the `Shuttle.Core.ServiceHost` nuget package.
 
-The default mechanism used to host an endpoint is by using a Windows service.  However, by using the `Shuttle.Core.Host` executable we are able to run the endpoint as a console application or register it as a Windows service for deployment.
+The default mechanism used to host an endpoint is by using a Windows service.  However, by using the `Shuttle.Core.ServiceHost` we are able to run the endpoint as a console application or register it as a Windows service for deployment.
+
+> Install the `Shuttle.Core.Castle` nuget package.
+
+This will provide access to the Castle `WindsorContainer` implementation.
+
+> Install the `Shuttle.Core.Log4Net` nuget package.
+
+This will provide access to the `Log4Net` implementation.
 
 > Add a reference to the `Shuttle.RequestResponse.Messages` project.
 
 ### Host
 
-> Rename the default `Class1` file to `Host` and implement the `IHost` and `IDisposabe` interfaces as follows:
+> Implement the `Program` class as follows:
 
-~~~ c#
-using System;
-using Shuttle.Core.Host;
+``` c#
+using Shuttle.Core.ServiceHost;
+
+namespace Shuttle.RequestResponse.Server
+{
+    internal class Program
+    {
+        private static void Main()
+        {
+            ServiceHost.Run<Host>();
+        }
+    }
+}
+```
+
+This will simply instance the `Host` class and get it running.
+
+> Add a `Host` class and implement the `IServiceHost` and `IDisposabe` interfaces as follows:
+
+``` c#
+using Castle.Windsor;
+using log4net;
+using Shuttle.Core.Castle;
+using Shuttle.Core.Log4Net;
+using Shuttle.Core.Logging;
+using Shuttle.Core.ServiceHost;
 using Shuttle.Esb;
 
 namespace Shuttle.RequestResponse.Server
 {
-	public class Host : IHost, IDisposable
-	{
-		private IServiceBus _bus;
+    public class Host : IServiceHost
+    {
+        private IServiceBus _bus;
 
-		public void Start()
-		{
-			_bus = ServiceBus.Create().Start();
-		}
+        public Host()
+        {
+            Log.Assign(new Log4NetLog(LogManager.GetLogger(typeof(Host))));
+        }
 
-		public void Dispose()
-		{
-			_bus.Dispose();
-		}
-	}
+        public void Start()
+        {
+            var container = new WindsorComponentContainer(new WindsorContainer());
+
+            ServiceBus.Register(container);
+
+            _bus = ServiceBus.Create(container).Start();
+        }
+
+        public void Stop()
+        {
+            _bus.Dispose();
+        }
+    }
 }
-~~~
+```
 
 ### App.config
 
 > Add an `Application Configuration File` item to create the `App.config` and populate as follows:
 
-~~~ xml
+``` xml
 <?xml version="1.0" encoding="utf-8" ?>
 <configuration>
 	<configSections>
@@ -219,13 +257,13 @@ namespace Shuttle.RequestResponse.Server
 			errorQueueUri="msmq://./shuttle-error" />
 	</serviceBus>
 </configuration>
-~~~
+```
 
 ### RegisterMemberHandler
 
 > Add a new class called `RegisterMemberHandler` that implements the `IMessageHandler<RegisterMemberCommand>` interface as follows:
 
-~~~ c#
+``` c#
 using System;
 using Shuttle.Esb;
 using Shuttle.RequestResponse.Messages;
@@ -245,24 +283,13 @@ namespace Shuttle.RequestResponse.Server
 				UserName = context.Message.UserName
 			}, c => c.Reply());
 		}
-
-		public bool IsReusable
-		{
-			get { return true; }
-		}
 	}
 }
-~~~
-
-This will write out some information to the console window and send a response back to the sender (client).
-
-> Set `Shuttle.Core.Host.exe` as the **Start external program** option by navigating to the **bin\debug** folder of the server project.
-
-<div class='alert alert-info'>Before the reference <strong>Shuttle.Core.Host.exe</strong> will be available in the <strong>bin\debug</strong> folder you may need to build the solution.</div>
+```
 
 ## Run
 
-> Set both the client and server projects as the startup.
+> Set both the client and server projects as startup projects.
 
 ### Execute
 

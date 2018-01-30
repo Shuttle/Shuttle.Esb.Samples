@@ -17,6 +17,5 @@ namespace Shuttle.RequestResponse.Server
 				UserName = context.Message.UserName
 			}, c => c.Reply());
 		}
-
 	}
 }
