@@ -17,10 +17,5 @@ namespace Shuttle.PublishSubscribe.Server
 				UserName = context.Message.UserName
 			});
 		}
-
-		public bool IsReusable
-		{
-			get { return true; }
-		}
 	}
 }

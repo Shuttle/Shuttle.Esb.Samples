@@ -18,9 +18,5 @@ namespace Shuttle.RequestResponse.Server
 			}, c => c.Reply());
 		}
 
-		public bool IsReusable
-		{
-			get { return true; }
-		}
 	}
 }
