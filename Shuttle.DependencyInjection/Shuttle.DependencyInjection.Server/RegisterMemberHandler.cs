@@ -1,5 +1,5 @@
 ﻿using System;
-using Shuttle.Core.Infrastructure;
+using Shuttle.Core.Contract;
 using Shuttle.DependencyInjection.EMail;
 using Shuttle.Esb;
 using Shuttle.DependencyInjection.Messages;
@@ -24,11 +24,6 @@ namespace Shuttle.DependencyInjection.Server
 			Console.WriteLine();
 
 			_emailService.Send(context.Message.UserName);
-		}
-
-		public bool IsReusable
-		{
-			get { return true; }
 		}
 	}
 }
