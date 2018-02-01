@@ -12,10 +12,5 @@ namespace Shuttle.PublishSubscribe.Server
 			Console.WriteLine("[EVENT RECEIVED] : user name = '{0}'", context.Message.UserName);
 			Console.WriteLine();
 		}
-
-		public bool IsReusable
-		{
-			get { return true; }
-		}
 	}
 }

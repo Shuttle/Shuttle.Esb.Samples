@@ -179,6 +179,8 @@ namespace Shuttle.Idempotence.Server
 }
 ```
 
+This will simply run the `Host` implementation.
+
 ### Host
 
 > Add a `Host` class and implement the `IServiceHost` interface as follows:
@@ -221,8 +223,6 @@ When you reference the `Shuttle.Esb.Sql.Idempotence` package a `scripts` folder 
 The `{version}` bit will be in a `semver` format.
 
 > Create a new database called **Shuttle** and execute the script `System.Data.SqlClient\IdempotenceServiceCreate.sql` in the newly created database.
-
-Whenever `Publish` is called the registered `ISubscriptionManager` instance is asked for the subscribers to the published message type.  These are retrieved from the Sql Server database for the implementation we are using.
 
 ### App.config
 

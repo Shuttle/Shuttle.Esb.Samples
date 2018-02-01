@@ -1,21 +1,17 @@
 # Running
 
-When using Visual Studio 2015+ the NuGet packages should be restored automatically.  If you find that they do not or if you are using an older version of Visual Studio please execute the following in a Visual Studio command prompt:
+When using Visual Studio 2017 the NuGet packages should be restored automatically.  If you find that they do not or if you are using an older version of Visual Studio please execute the following in a Visual Studio command prompt:
 
-~~~
+```
 cd {extraction-folder}\Shuttle.Esb.Samples\Shuttle.PublishSubscribe
 nuget restore
-~~~
+```
 
 Once you have opened the `Shuttle.PublishSubscribe.sln` solution in Visual Studio set the following projects as startup projects:
 
 - Shuttle.PublishSubscribe.Client
 - Shuttle.PublishSubscribe.Server
 - Shuttle.PublishSubscribe.Subscriber
-
-<div class='alert alert-info'>Before the reference <strong>Shuttle.Core.Host.exe</strong> will be available in the <strong>bin\debug</strong> folder you may need to build the solution.</div>
-
-> Set `Shuttle.Core.Host.exe` as the **Start external program** option by navigating to the **bin\debug** folder of the server project for the **Shuttle.RequestResponse.Server**, as well as the **Shuttle.RequestResponse.Subscriber** project.
 
 You will also need to create and configure a Sql Server database for this sample and remember to update the **App.config** `connectionString` settings to point to your database.  Please reference the **Database** section below.
 
@@ -26,9 +22,9 @@ You will also need to create and configure a Sql Server database for this sample
 In this guide we'll create the following projects:
 
 - a **Console Application** called `Shuttle.PublishSubscribe.Client`
-- a **Class Library** called `Shuttle.PublishSubscribe.Server`
-- another **Class Library** called `Shuttle.PublishSubscribe.Messages` that will contain all our message classes
-- and, lastly, another **Class Library** called `Shuttle.PublishSubscribe.Subscriber` that will represent a subscriber of our event message
+- a **Console Application** called `Shuttle.PublishSubscribe.Server`
+- a **Console Application** called `Shuttle.PublishSubscribe.Subscriber` that will represent a subscriber of our event message
+- a **Class Library** called `Shuttle.PublishSubscribe.Messages` that will contain all our message classes
 
 ## Messages
 
@@ -40,7 +36,7 @@ In this guide we'll create the following projects:
 
 > Rename the `Class1` default file to `RegisterMemberCommand` and add a `UserName` property.
 
-~~~ c#
+``` c#
 namespace Shuttle.PublishSubscribe.Messages
 {
 	public class RegisterMemberCommand
@@ -48,13 +44,13 @@ namespace Shuttle.PublishSubscribe.Messages
 		public string UserName { get; set; }
 	}
 }
-~~~
+```
 
 ### MemberRegisteredEvent
 
 > Add a new class called `MemberRegisteredEvent` also with a `UserName` property.
 
-~~~ c#
+``` c#
 namespace Shuttle.PublishSubscribe.Messages
 {
 	public class MemberRegisteredEvent
@@ -62,7 +58,7 @@ namespace Shuttle.PublishSubscribe.Messages
 		public string UserName { get; set; }
 	}
 }
-~~~
+```
 
 ## Client
 
@@ -72,24 +68,35 @@ namespace Shuttle.PublishSubscribe.Messages
 
 This will provide access to the Msmq `IQueue` implementation and also include the required dependencies.
 
+> Install the `Shuttle.Core.StructureMap` nuget package.
+
+This will provide access to the StructureMap dependency injection container.
+
 > Add a reference to the `Shuttle.PublishSubscribe.Messages` project.
 
 ### Program
 
 > Implement the main client code as follows:
 
-~~~ c#
+``` c#
 using System;
+using Shuttle.Core.StructureMap;
 using Shuttle.Esb;
 using Shuttle.PublishSubscribe.Messages;
+using StructureMap;
 
 namespace Shuttle.PublishSubscribe.Client
 {
-	class Program
+	internal class Program
 	{
-		static void Main(string[] args)
+		private static void Main(string[] args)
 		{
-			using (var bus = ServiceBus.Create().Start())
+			var smRegistry = new Registry();
+			var registry = new StructureMapComponentRegistry(smRegistry);
+
+			ServiceBus.Register(registry);
+
+			using (var bus = ServiceBus.Create(new StructureMapComponentResolver(new Container(smRegistry))).Start())
 			{
 				string userName;
 
@@ -104,13 +111,13 @@ namespace Shuttle.PublishSubscribe.Client
 		}
 	}
 }
-~~~
+```
 
 ### App.config
 
 > Create the shuttle configuration as follows:
 
-~~~ xml
+``` xml
 <?xml version="1.0" encoding="utf-8" ?>
 <configuration>
 	<configSections>
@@ -124,78 +131,107 @@ namespace Shuttle.PublishSubscribe.Client
 			</messageRoute>
 		</messageRoutes>		
 	</serviceBus>
-	
-    <startup> 
-        <supportedRuntime version="v4.0" sku=".NETFramework,Version=v4.5" />
-    </startup>
 </configuration>
-~~~
+```
 
-This tells shuttle that all messages that are sent and have a type name starting with `Shuttle.PublishSubscribe.Messages` should be sent to endpoint `msmq://./shuttle-server-work`.
+This tells Shuttle that all messages that are sent and have a type name starting with `Shuttle.PublishSubscribe.Messages` should be sent to endpoint `msmq://./shuttle-server-work`.
 
 ## Server
 
-> Add a new `Class Library` to the solution called `Shuttle.PublishSubscribe.Server`.
+> Add a new `Console Application` to the solution called `Shuttle.PublishSubscribe.Server`.
 
-> Install **both** the `Shuttle.Esb.Msmq` and `Shuttle.Esb.SqlServer` nuget packages.
+> Install the `Shuttle.Esb.Msmq` nuget package.
 
-This will provide access to the Msmq `IQueue` implementation and also include the required dependencies.  You are also including the **SqlServer** implementation for the `ISubscriptionManager`.
+This will provide access to the Msmq `IQueue` implementation and also include the required dependencies.
 
-> Install the `Shuttle.Core.Host` nuget package.
+> Install the `Shuttle.Core.StructureMap` nuget package.
 
-The default mechanism used to host an endpoint is by using a Windows service.  However, by using the `Shuttle.Core.Host` executable we are able to run the endpoint as a console application or register it as a Windows service for deployment.
+This will provide access to the StructureMap dependency injection container.
+
+> Install the `Shuttle.Esb.Sql.Subscription` nuget package.
+
+This will provide access to the Sql-based `ISubscriptionManager` implementation.
+
+> Install the `Shuttle.Core.ServiceHost` nuget package.
+
+The default mechanism used to host an endpoint is by using a Windows service.  However, by using the `Shuttle.Core.ServiceHost` assembly we are able to run the endpoint as a console application or register it as a Windows service for deployment.
 
 > Add a reference to the `Shuttle.PublishSubscribe.Messages` project.
 
+### Program
+
+Implement the `Program` class as follows:
+
+``` c#
+using Shuttle.Core.ServiceHost;
+
+namespace Shuttle.PublishSubscribe.Server
+{
+    public class Program
+    {
+        public static void Main()
+        {
+            ServiceHost.Run<Host>();
+        }
+    }
+}
+```
+
+This will simply run the `Host` implementation.
+
 ### Host
 
-> Rename the default `Class1` file to `Host` and implement the `IHost` and `IDisposabe` interfaces as follows:
+> Add a `Host` class and implement the `IServiceHost` interface as follows:
 
-~~~ c#
-using System;
-using Shuttle.Core.Host;
+``` c#
+using Shuttle.Core.ServiceHost;
+using Shuttle.Core.StructureMap;
 using Shuttle.Esb;
+using StructureMap;
 
-namespace Shuttle.PublishSubscribe.Subscriber
+namespace Shuttle.PublishSubscribe.Server
 {
-	public class Host : IHost, IDisposable
-	{
-		private IServiceBus _bus;
+    public class Host : IServiceHostStart
+    {
+        private IServiceBus _bus;
 
-		public void Start()
-		{
-			_bus = ServiceBus.Create(c => c.SubscriptionManager(SubscriptionManager.Default())).Start();
-		}
+        public void Start()
+        {
+            var smRegistry = new Registry();
+            var registry = new StructureMapComponentRegistry(smRegistry);
 
-		public void Dispose()
-		{
-			_bus.Dispose();
-		}
-	}
+            ServiceBus.Register(registry);
+
+            _bus = ServiceBus.Create(new StructureMapComponentResolver(new Container(smRegistry))).Start();
+        }
+
+        public void Stop()
+        {
+            _bus.Dispose();
+        }
+    }
 }
-~~~
+```
 
 ### Database
 
 We need a store for our subscriptions.  In this example we will be using **Sql Server**.  If you use the express version remember to change the `data source` value to `.\sqlexpress` from the standard `.`.
 
-When you reference the `Shuttle.Esb.SqlServer` package a number of scripts are included in the relevant package folder:
-
-- `.\Shuttle.PublishSubscribe\packages\Shuttle.Esb.SqlServer.{version}\scripts`
+When you reference the `Shuttle.Esb.Sql.Subscription` package a `scripts` folder is included in the relevant package folder.  Click on the Nuget referenced assembly in the `References` or `Dependencies` (depending on your project type) and navigate to the package folder to find the `scripts` folder.
 
 The `{version}` bit will be in a `semver` format.
 
-> Create a new database called **Shuttle**
-
-> For versions of `Shuttle.Esb.SqlServer` *before* v6.0.5 you need to run `SubscriptionManagerCreate.sql` in the newly created database.  **From v6.0.5 this will be done automatically**.
+> Create a new database called **Shuttle** and execute the script `System.Data.SqlClient\SubscriptionManagerCreate.sql` in the newly created database.
 
 This will create the required structures that the subscription manager will use to store the subcriptions.
+
+Whenever `Publish` is called the registered `ISubscriptionManager` instance is asked for the subscribers to the published message type.  These are retrieved from the Sql Server database for the implementation we are using.
 
 ### App.config
 
 > Add an `Application Configuration File` item to create the `App.config` and populate as follows:
 
-~~~ xml
+``` xml
 <?xml version="1.0" encoding="utf-8" ?>
 <configuration>
 	<configSections>
@@ -214,7 +250,7 @@ This will create the required structures that the subscription manager will use 
 			errorQueueUri="msmq://./shuttle-error" />
 	</serviceBus>
 </configuration>
-~~~
+```
 
 The Sql Server implementation of the `ISubscriptionManager` that we are using by default will try to find a connection string with a name of **Subscription**.  However, you can override this.  See the [Sql Server configuration options][sql-server] for details about how to do this.
 
@@ -222,12 +258,12 @@ The Sql Server implementation of the `ISubscriptionManager` that we are using by
 
 > Add a new class called `RegisterMemberHandler` that implements the `IMessageHandler<RegisterMemberCommand>` interface as follows:
 
-~~~ c#
+``` c#
 using System;
 using Shuttle.Esb;
 using Shuttle.PublishSubscribe.Messages;
 
-namespace Shuttle.PublishSubscribe.Subscriber
+namespace Shuttle.PublishSubscribe.Server
 {
 	public class RegisterMemberHandler : IMessageHandler<RegisterMemberCommand>
 	{
@@ -242,70 +278,98 @@ namespace Shuttle.PublishSubscribe.Subscriber
 				UserName = context.Message.UserName
 			});
 		}
-
-		public bool IsReusable
-		{
-			get { return true; }
-		}
 	}
 }
-~~~
+```
 
 This will write out some information to the console window and publish the `MemberRegisteredEvent` message.
 
-> Set `Shuttle.Core.Host.exe` as the **Start external program** option by navigating to the **bin\debug** folder of the server project.
-
-<div class='alert alert-info'>Before the reference <strong>Shuttle.Core.Host.exe</strong> will be available in the <strong>bin\debug</strong> folder you may need to build the solution.</div>
-
 ## Subscriber
 
-> Add a new `Class Library` to the solution called `Shuttle.PublishSubscribe.Subscriber`.
+> Add a new `Console Application` to the solution called `Shuttle.PublishSubscribe.Subscriber`.
 
-> Install **both** the `Shuttle.Esb.Msmq` and `Shuttle.Esb.SqlServer` nuget packages.
+> Add a new `Console Application` to the solution called `Shuttle.PublishSubscribe.Server`.
 
-This will provide access to the Msmq `IQueue` implementation and also include the required dependencies.  You are also including the **SqlSubscriber** implementation for the `ISubscriptionManager`.
+> Install the `Shuttle.Esb.Msmq` nuget package.
 
-> Install the `Shuttle.Core.Host` nuget package.
+This will provide access to the Msmq `IQueue` implementation and also include the required dependencies.
 
-The default mechanism used to host an endpoint is by using a Windows service.  However, by using the `Shuttle.Core.Host` executable we are able to run the endpoint as a console application or register it as a Windows service for deployment.
+> Install the `Shuttle.Core.StructureMap` nuget package.
+
+This will provide access to the StructureMap dependency injection container.
+
+> Install the `Shuttle.Esb.Sql.Subscription` nuget package.
+
+This will provide access to the Sql-based `ISubscriptionManager` implementation.
+
+> Install the `Shuttle.Core.ServiceHost` nuget package.
+
+The default mechanism used to host an endpoint is by using a Windows service.  However, by using the `Shuttle.Core.ServiceHost` assembly we are able to run the endpoint as a console application or register it as a Windows service for deployment.
 
 > Add a reference to the `Shuttle.PublishSubscribe.Messages` project.
 
+### Program
+
+Implement the `Program` class as follows:
+
+``` c#
+using Shuttle.Core.ServiceHost;
+
+namespace Shuttle.PublishSubscribe.Server
+{
+    public class Program
+    {
+        public static void Main()
+        {
+            ServiceHost.Run<Host>();
+        }
+    }
+}
+```
+
+This will simply run the `Host` implementation.
+
 ### Host
 
-> Rename the default `Class1` file to `Host` and implement the `IHost` and `IDisposabe` interfaces as follows:
+> Add a `Host` class and implement the `IServiceHost` interface as follows:
 
-~~~ c#
-using System;
-using Shuttle.Core.Host;
+``` c#
+using Shuttle.Core.Container;
+using Shuttle.Core.ServiceHost;
+using Shuttle.Core.StructureMap;
 using Shuttle.Esb;
-using Shuttle.Esb.SqlServer;
 using Shuttle.PublishSubscribe.Messages;
+using StructureMap;
 
 namespace Shuttle.PublishSubscribe.Subscriber
 {
-	public class Host : IHost, IDisposable
-	{
-		private IServiceBus _bus;
+    public class Host : IServiceHostStart
+    {
+        private IServiceBus _bus;
 
-		public void Start()
-		{
-			var subscriptionManager = SubscriptionManager.Default();
+        public void Start()
+        {
+            var structureMapRegistry = new Registry();
+            var registry = new StructureMapComponentRegistry(structureMapRegistry);
 
-			subscriptionManager.Subscribe<MemberRegisteredEvent>();
+            ServiceBus.Register(registry);
 
-			_bus = ServiceBus.Create(c => c.SubscriptionManager(subscriptionManager)).Start();
-		}
+            var resolver = new StructureMapComponentResolver(new Container(structureMapRegistry));
 
-		public void Dispose()
-		{
-			_bus.Dispose();
-		}
-	}
+            resolver.Resolve<ISubscriptionManager>().Subscribe<MemberRegisteredEvent>();
+
+            _bus = ServiceBus.Create(resolver).Start();
+        }
+
+        public void Stop()
+        {
+            _bus.Dispose();
+        }
+    }
 }
-~~~
+```
 
-Here we register the subscription by calling the `subscriptionManager.Subscribe<MemberRegisteredEvent>();` method.  Since we a re using the Sql Server implementation of the `ISubscriptionManager` interface an entry will be created in the **SubscriberMessageType** table associating the inbox work queue uri with the message type.
+Here we register the subscription by calling the `ISubscriptionManager` implementation's `Subscribe<MemberRegisteredEvent>();` method.  Since we are using the Sql Server implementation of the `ISubscriptionManager` interface an entry will be created in the **SubscriberMessageType** table associating the inbox work queue uri with the message type.
 
 It is important to note that in a production environment one would not typically register subscriptions in this manner as they may be somewhat more sensitive as we do not want any arbitrary subscriber listening in on the messages being published.  For this reason the connection string should be read-only and the subscription should be registered manually or via a deployment script.  Should the subscription **not** yet exist the creation of the subscription will fail, indicating that there is work to be done.
 
@@ -313,7 +377,7 @@ It is important to note that in a production environment one would not typically
 
 > Add an `Application Configuration File` item to create the `App.config` and populate as follows:
 
-~~~ xml
+``` xml
 <?xml version="1.0" encoding="utf-8" ?>
 <configuration>
 	<configSections>
@@ -332,13 +396,13 @@ It is important to note that in a production environment one would not typically
 			errorQueueUri="msmq://./shuttle-error" />
 	</serviceBus>
 </configuration>
-~~~
+```
 
 ### MemberRegisteredHandler
 
 > Add a new class called `MemberRegisteredHandler` that implements the `IMessageHandler<MemberRegisteredHandler>` interface as follows:
 
-~~~ c#
+``` c#
 using System;
 using Shuttle.Esb;
 using Shuttle.PublishSubscribe.Messages;
@@ -353,20 +417,11 @@ namespace Shuttle.PublishSubscribe.Server
 			Console.WriteLine("[EVENT RECEIVED] : user name = '{0}'", context.Message.UserName);
 			Console.WriteLine();
 		}
-
-		public bool IsReusable
-		{
-			get { return true; }
-		}
 	}
 }
-~~~
+```
 
 This will write out some information to the console window.
-
-> Set `Shuttle.Core.Host.exe` as the **Start external program** option by navigating to the **bin\debug** folder of the subscriber project.
-
-<div class='alert alert-info'>Before the reference <strong>Shuttle.Core.Host.exe</strong> will be available in the <strong>bin\debug</strong> folder you may need to build the solution.</div>
 
 ## Run
 
