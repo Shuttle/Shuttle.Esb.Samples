@@ -14,10 +14,5 @@ namespace Shuttle.Idempotence.Server
 				context.TransportMessage.MessageId);
 			Console.WriteLine();
 		}
-
-		public bool IsReusable
-		{
-			get { return true; }
-		}
 	}
 }

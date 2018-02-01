@@ -36,7 +36,7 @@ namespace Shuttle.Idempotence.Client
 					}
 
 					bus.Send(command); // will be processed since it has a new message id
-					bus.Send(command); // will also be processed since it also has a new message id
+					bus.Send(command); // will also be processed since it too has a new message id
 				}
 			}
 		}
