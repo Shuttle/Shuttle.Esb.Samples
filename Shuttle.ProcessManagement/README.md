@@ -8,10 +8,10 @@ In this sample the front-end is a static site implemented using (CanJS)[https://
 
 When using Visual Studio 2015+ the NuGet packages should be restored automatically.  If you find that they do not or if you are using an older version of Visual Studio please execute the following in a powershell command prompt:
 
-~~~
+```
 cd {extraction-folder}\Shuttle.Esb.Samples\Shuttle.ProcessManagement
 nuget-restore.ps1
-~~~
+```
 
 Once you have opened the `Shuttle.ProcessManagement.sln` solution in Visual Studio set the following projects as startup projects:
 
@@ -43,7 +43,7 @@ The `{version}` bit will be in a `semver` format.
 
 > Create a new database called **ProcessManagement** and execute script `SubscriptionManagerCreate.sql` in the newly created database.
 
-This will create the required structures that the idempotence service can use to keep track of message processing.
+This will create the required structures that the subscription manager can use to publish messages.
 
 The `Shuttle.Recall.SqlServer` package contains a the following script folder:
 

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using Shuttle.Core.Infrastructure;
+using Shuttle.Core.Contract;
 using Shuttle.ProcessManagement;
 
 namespace Shuttle.Process.Custom.Server.Domain

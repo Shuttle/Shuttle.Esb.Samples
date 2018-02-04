@@ -1,9 +1,9 @@
 ﻿using Castle.Windsor;
 using log4net;
-using Shuttle.Castle;
 using Shuttle.Core.Castle;
-using Shuttle.Core.Infrastructure;
+using Shuttle.Core.Data.Registration;
 using Shuttle.Core.Log4Net;
+using Shuttle.Core.Logging;
 using Shuttle.Core.ServiceHost;
 using Shuttle.Esb;
 
@@ -25,9 +25,9 @@ namespace Shuttle.Invoicing.Server
 
             _container = new WindsorContainer();
 
-            _container.RegisterDataAccess("Shuttle.Invoicing");
-
             var container = new WindsorComponentContainer(_container);
+
+            container.RegisterDataAccess("Shuttle.Invoicing");
 
             ServiceBus.Register(container);
 

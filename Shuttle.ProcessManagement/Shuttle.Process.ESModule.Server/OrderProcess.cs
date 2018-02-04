@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using Shuttle.Core.Infrastructure;
+using Shuttle.Core.Contract;
 using Shuttle.EMailSender.Messages;
 using Shuttle.Esb;
 using Shuttle.Esb.Process;
 using Shuttle.Invoicing.Messages;
 using Shuttle.Ordering.Messages;
-using Shuttle.Process.ESModule.v1;
 using Shuttle.ProcessManagement.Messages;
 using Shuttle.Recall;
 
@@ -23,13 +22,13 @@ namespace Shuttle.Process.ESModule.Server
         IProcessMessageHandler<CompleteOrderProcessCommand>,
         IProcessMessageHandler<ArchiveOrderProcessCommand>
     {
-        private readonly List<ItemAdded> _items = new List<ItemAdded>();
-        private CustomerAssigned _customerAssigned;
-        private Initialized _initialized;
-        private InvoiceIdAssigned _invoiceIdAssigned;
-        private OrderIdAssigned _orderIdAssigned;
-        private StatusChanged _statusChanged;
-        private TargetSystemAssigned _targetSystemAssigned;
+        private readonly List<CustomES.Server.Domain.OrderProcess.Events.ItemAdded> _items = new List<CustomES.Server.Domain.OrderProcess.Events.ItemAdded>();
+        private CustomES.Server.Domain.OrderProcess.Events.CustomerAssigned _customerAssigned;
+        private CustomES.Server.Domain.OrderProcess.Events.Initialized _initialized;
+        private CustomES.Server.Domain.OrderProcess.Events.InvoiceIdAssigned _invoiceIdAssigned;
+        private CustomES.Server.Domain.OrderProcess.Events.OrderIdAssigned _orderIdAssigned;
+        private CustomES.Server.Domain.OrderProcess.Events.StatusChanged _statusChanged;
+        private CustomES.Server.Domain.OrderProcess.Events.TargetSystemAssigned _targetSystemAssigned;
 
         public OrderProcess()
             : this(Guid.NewGuid())
@@ -237,18 +236,18 @@ namespace Shuttle.Process.ESModule.Server
             }, c => c.Defer(DateTime.Now.AddSeconds(10)).Local().WithCorrelationId(CorrelationId.ToString("N")));
         }
 
-        public Initialized Initialize()
+        public CustomES.Server.Domain.OrderProcess.Events.Initialized Initialize()
         {
             var now = DateTime.Now;
 
-            return On(new Initialized
+            return On(new CustomES.Server.Domain.OrderProcess.Events.Initialized
             {
                 OrderNumber = GenerateOrderNumber(now),
                 DateRegistered = now
             });
         }
 
-        public Initialized On(Initialized initialized)
+        public CustomES.Server.Domain.OrderProcess.Events.Initialized On(CustomES.Server.Domain.OrderProcess.Events.Initialized initialized)
         {
             Guard.AgainstNull(initialized, "initialized");
 
@@ -262,57 +261,57 @@ namespace Shuttle.Process.ESModule.Server
                 Guid.NewGuid().ToString("N").Substring(6));
         }
 
-        public CustomerAssigned AssignCustomer(string customerName, string customerEMail)
+        public CustomES.Server.Domain.OrderProcess.Events.CustomerAssigned AssignCustomer(string customerName, string customerEMail)
         {
-            return On(new CustomerAssigned
+            return On(new CustomES.Server.Domain.OrderProcess.Events.CustomerAssigned
             {
                 CustomerName = customerName,
                 CustomerEMail = customerEMail
             });
         }
 
-        public CustomerAssigned On(CustomerAssigned customerAssigned)
+        public CustomES.Server.Domain.OrderProcess.Events.CustomerAssigned On(CustomES.Server.Domain.OrderProcess.Events.CustomerAssigned customerAssigned)
         {
             Guard.AgainstNull(customerAssigned, "customerAssigned");
 
             return _customerAssigned = customerAssigned;
         }
 
-        public TargetSystemAssigned AssignTargetSystem(string targetSystem, string targetSystemUri)
+        public CustomES.Server.Domain.OrderProcess.Events.TargetSystemAssigned AssignTargetSystem(string targetSystem, string targetSystemUri)
         {
-            return On(new TargetSystemAssigned
+            return On(new CustomES.Server.Domain.OrderProcess.Events.TargetSystemAssigned
             {
                 TargetSystem = targetSystem,
                 TargetSystemUri = targetSystemUri
             });
         }
 
-        public TargetSystemAssigned On(TargetSystemAssigned targetSystemAssigned)
+        public CustomES.Server.Domain.OrderProcess.Events.TargetSystemAssigned On(CustomES.Server.Domain.OrderProcess.Events.TargetSystemAssigned targetSystemAssigned)
         {
             Guard.AgainstNull(targetSystemAssigned, "targetSystemAssigned");
 
             return _targetSystemAssigned = targetSystemAssigned;
         }
 
-        public StatusChanged ChangeStatus(string status)
+        public CustomES.Server.Domain.OrderProcess.Events.StatusChanged ChangeStatus(string status)
         {
-            return On(new StatusChanged
+            return On(new CustomES.Server.Domain.OrderProcess.Events.StatusChanged
             {
                 Status = status,
                 StatusDate = DateTime.Now
             });
         }
 
-        public StatusChanged On(StatusChanged statusChanged)
+        public CustomES.Server.Domain.OrderProcess.Events.StatusChanged On(CustomES.Server.Domain.OrderProcess.Events.StatusChanged statusChanged)
         {
             Guard.AgainstNull(statusChanged, "statusChanged");
 
             return _statusChanged = statusChanged;
         }
 
-        public ItemAdded AddItem(Guid productId, string description, decimal price)
+        public CustomES.Server.Domain.OrderProcess.Events.ItemAdded AddItem(Guid productId, string description, decimal price)
         {
-            return On(new ItemAdded
+            return On(new CustomES.Server.Domain.OrderProcess.Events.ItemAdded
             {
                 ProductId = productId,
                 Description = description,
@@ -320,7 +319,7 @@ namespace Shuttle.Process.ESModule.Server
             });
         }
 
-        public ItemAdded On(ItemAdded itemAdded)
+        public CustomES.Server.Domain.OrderProcess.Events.ItemAdded On(CustomES.Server.Domain.OrderProcess.Events.ItemAdded itemAdded)
         {
             Guard.AgainstNull(itemAdded, "itemAdded");
 
@@ -331,30 +330,30 @@ namespace Shuttle.Process.ESModule.Server
             return itemAdded;
         }
 
-        public InvoiceIdAssigned AssignInvoiceId(Guid invoiceId)
+        public CustomES.Server.Domain.OrderProcess.Events.InvoiceIdAssigned AssignInvoiceId(Guid invoiceId)
         {
-            return On(new InvoiceIdAssigned
+            return On(new CustomES.Server.Domain.OrderProcess.Events.InvoiceIdAssigned
             {
                 InvoiceId = invoiceId
             });
         }
 
-        public InvoiceIdAssigned On(InvoiceIdAssigned invoiceIdAssigned)
+        public CustomES.Server.Domain.OrderProcess.Events.InvoiceIdAssigned On(CustomES.Server.Domain.OrderProcess.Events.InvoiceIdAssigned invoiceIdAssigned)
         {
             Guard.AgainstNull(invoiceIdAssigned, "invoiceIdAssigned");
 
             return _invoiceIdAssigned = invoiceIdAssigned;
         }
 
-        public OrderIdAssigned AssignOrderId(Guid orderId)
+        public CustomES.Server.Domain.OrderProcess.Events.OrderIdAssigned AssignOrderId(Guid orderId)
         {
-            return On(new OrderIdAssigned
+            return On(new CustomES.Server.Domain.OrderProcess.Events.OrderIdAssigned
             {
                 OrderId = orderId
             });
         }
 
-        public OrderIdAssigned On(OrderIdAssigned orderIdAssigned)
+        public CustomES.Server.Domain.OrderProcess.Events.OrderIdAssigned On(CustomES.Server.Domain.OrderProcess.Events.OrderIdAssigned orderIdAssigned)
         {
             Guard.AgainstNull(orderIdAssigned, "orderIdAssigned");
 

@@ -1,5 +1,5 @@
-﻿using Shuttle.Core.Data;
-using Shuttle.Core.Infrastructure;
+﻿using Shuttle.Core.Contract;
+using Shuttle.Core.Data;
 using Shuttle.Invoicing.Domain;
 
 namespace Shuttle.Invoicing.DataAccess

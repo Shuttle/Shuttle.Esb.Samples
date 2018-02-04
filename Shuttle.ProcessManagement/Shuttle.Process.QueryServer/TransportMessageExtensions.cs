@@ -1,5 +1,5 @@
 ﻿using System;
-using Shuttle.Core.Infrastructure;
+using Shuttle.Core.Contract;
 using Shuttle.Esb;
 
 namespace Shuttle.Process.QueryServer

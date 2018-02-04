@@ -1,6 +1,6 @@
 ﻿using System;
+using Shuttle.Core.Contract;
 using Shuttle.Core.Data;
-using Shuttle.Core.Infrastructure;
 using Shuttle.Esb;
 using Shuttle.Invoicing.Messages;
 using Shuttle.Ordering.Messages;

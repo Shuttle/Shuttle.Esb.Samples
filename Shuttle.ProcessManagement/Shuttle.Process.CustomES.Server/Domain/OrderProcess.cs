@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Shuttle.Core.Infrastructure;
+using Shuttle.Core.Contract;
 using Shuttle.EMailSender.Messages;
 using Shuttle.Invoicing.Messages;
 using Shuttle.Ordering.Messages;

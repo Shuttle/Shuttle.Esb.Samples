@@ -1,6 +1,6 @@
 ﻿using System.Threading;
+using Shuttle.Core.Contract;
 using Shuttle.Core.Data;
-using Shuttle.Core.Infrastructure;
 using Shuttle.Esb;
 using Shuttle.Invoicing.Domain;
 using Shuttle.Invoicing.Messages;

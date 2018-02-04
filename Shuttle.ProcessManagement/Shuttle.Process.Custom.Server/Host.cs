@@ -1,10 +1,11 @@
 ﻿using System.Reflection;
 using Castle.Windsor;
 using log4net;
-using Shuttle.Castle;
+using Shuttle.Core.Container;
 using Shuttle.Core.Castle;
-using Shuttle.Core.Infrastructure;
+using Shuttle.Core.Data.Registration;
 using Shuttle.Core.Log4Net;
+using Shuttle.Core.Logging;
 using Shuttle.Core.ServiceHost;
 using Shuttle.EMailSender.Messages;
 using Shuttle.Esb;
@@ -29,9 +30,9 @@ namespace Shuttle.Process.Custom.Server
 
             _container = new WindsorContainer();
 
-            _container.RegisterDataAccess(Assembly.GetExecutingAssembly());
-
             var container = new WindsorComponentContainer(_container);
+
+            container.RegisterDataAccess(Assembly.GetExecutingAssembly());
 
             ServiceBus.Register(container);
 

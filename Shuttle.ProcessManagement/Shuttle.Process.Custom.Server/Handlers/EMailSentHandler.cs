@@ -1,6 +1,6 @@
 ﻿using System;
+using Shuttle.Core.Contract;
 using Shuttle.Core.Data;
-using Shuttle.Core.Infrastructure;
 using Shuttle.EMailSender.Messages;
 using Shuttle.Esb;
 using Shuttle.Process.Custom.Server.Domain;

@@ -1,4 +1,4 @@
-﻿using Shuttle.Core.Infrastructure;
+﻿using Shuttle.Core.Pipelines;
 using Shuttle.Esb;
 using Shuttle.Esb.Process;
 
