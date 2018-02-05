@@ -249,7 +249,7 @@ namespace Shuttle.Process.ESModule.Server
 
         public CustomES.Server.Domain.OrderProcess.Events.Initialized On(CustomES.Server.Domain.OrderProcess.Events.Initialized initialized)
         {
-            Guard.AgainstNull(initialized, "initialized");
+            Guard.AgainstNull(initialized, nameof(initialized));
 
             return _initialized = initialized;
         }
@@ -272,7 +272,7 @@ namespace Shuttle.Process.ESModule.Server
 
         public CustomES.Server.Domain.OrderProcess.Events.CustomerAssigned On(CustomES.Server.Domain.OrderProcess.Events.CustomerAssigned customerAssigned)
         {
-            Guard.AgainstNull(customerAssigned, "customerAssigned");
+            Guard.AgainstNull(customerAssigned, nameof(customerAssigned));
 
             return _customerAssigned = customerAssigned;
         }
@@ -288,7 +288,7 @@ namespace Shuttle.Process.ESModule.Server
 
         public CustomES.Server.Domain.OrderProcess.Events.TargetSystemAssigned On(CustomES.Server.Domain.OrderProcess.Events.TargetSystemAssigned targetSystemAssigned)
         {
-            Guard.AgainstNull(targetSystemAssigned, "targetSystemAssigned");
+            Guard.AgainstNull(targetSystemAssigned, nameof(targetSystemAssigned));
 
             return _targetSystemAssigned = targetSystemAssigned;
         }
@@ -304,7 +304,7 @@ namespace Shuttle.Process.ESModule.Server
 
         public CustomES.Server.Domain.OrderProcess.Events.StatusChanged On(CustomES.Server.Domain.OrderProcess.Events.StatusChanged statusChanged)
         {
-            Guard.AgainstNull(statusChanged, "statusChanged");
+            Guard.AgainstNull(statusChanged, nameof(statusChanged));
 
             return _statusChanged = statusChanged;
         }
@@ -321,7 +321,7 @@ namespace Shuttle.Process.ESModule.Server
 
         public CustomES.Server.Domain.OrderProcess.Events.ItemAdded On(CustomES.Server.Domain.OrderProcess.Events.ItemAdded itemAdded)
         {
-            Guard.AgainstNull(itemAdded, "itemAdded");
+            Guard.AgainstNull(itemAdded, nameof(itemAdded));
 
             _items.Add(itemAdded);
 
@@ -340,7 +340,7 @@ namespace Shuttle.Process.ESModule.Server
 
         public CustomES.Server.Domain.OrderProcess.Events.InvoiceIdAssigned On(CustomES.Server.Domain.OrderProcess.Events.InvoiceIdAssigned invoiceIdAssigned)
         {
-            Guard.AgainstNull(invoiceIdAssigned, "invoiceIdAssigned");
+            Guard.AgainstNull(invoiceIdAssigned, nameof(invoiceIdAssigned));
 
             return _invoiceIdAssigned = invoiceIdAssigned;
         }
@@ -355,7 +355,7 @@ namespace Shuttle.Process.ESModule.Server
 
         public CustomES.Server.Domain.OrderProcess.Events.OrderIdAssigned On(CustomES.Server.Domain.OrderProcess.Events.OrderIdAssigned orderIdAssigned)
         {
-            Guard.AgainstNull(orderIdAssigned, "orderIdAssigned");
+            Guard.AgainstNull(orderIdAssigned, nameof(orderIdAssigned));
 
             return _orderIdAssigned = orderIdAssigned;
         }

@@ -9,6 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Castle.Windsor.MsDependencyInjection" Version="3.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.5" />
     <PackageReference Include="Shuttle.Core.Castle" Version="10.0.4" />
     <PackageReference Include="Shuttle.Core.Data.Registration" Version="10.0.0" />
@@ -19,6 +20,11 @@
 
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Shuttle.ProcessManagement.Messages\Shuttle.ProcessManagement.Messages.csproj" />
+    <ProjectReference Include="..\Shuttle.ProcessManagement\Shuttle.ProcessManagement.csproj" />
   </ItemGroup>
 
 </Project>

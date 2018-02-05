@@ -14,8 +14,8 @@ namespace Shuttle.ProcessManagement
 
         public OrderProcessViewQuery(IDatabaseGateway databaseGateway, IOrderProcessViewQueryFactory queryFactory)
         {
-            Guard.AgainstNull(databaseGateway, "databaseGateway");
-            Guard.AgainstNull(queryFactory, "queryFactory");
+            Guard.AgainstNull(databaseGateway, nameof(databaseGateway));
+            Guard.AgainstNull(queryFactory, nameof(queryFactory));
 
             _databaseGateway = databaseGateway;
             _queryFactory = queryFactory;

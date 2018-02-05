@@ -14,8 +14,8 @@ namespace Shuttle.Process.QueryServer
         public OrderProcessAcceptedHandler(IDatabaseContextFactory databaseContextFactory,
             IOrderProcessViewQuery orderProcessViewQuery)
         {
-            Guard.AgainstNull(databaseContextFactory, "databaseContextFactory");
-            Guard.AgainstNull(orderProcessViewQuery, "orderProcessViewQuery");
+            Guard.AgainstNull(databaseContextFactory, nameof(databaseContextFactory));
+            Guard.AgainstNull(orderProcessViewQuery, nameof(orderProcessViewQuery));
 
             _databaseContextFactory = databaseContextFactory;
             _orderProcessViewQuery = orderProcessViewQuery;

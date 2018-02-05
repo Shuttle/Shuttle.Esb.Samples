@@ -50,7 +50,7 @@ namespace Shuttle.Process.CustomES.Server.Domain
 
         private Events.Initialized On(Events.Initialized initialized)
         {
-            Guard.AgainstNull(initialized, "initialized");
+            Guard.AgainstNull(initialized, nameof(initialized));
 
             return _initialized = initialized;
         }
@@ -73,7 +73,7 @@ namespace Shuttle.Process.CustomES.Server.Domain
 
         private Events.CustomerAssigned On(Events.CustomerAssigned customerAssigned)
         {
-            Guard.AgainstNull(customerAssigned, "customerAssigned");
+            Guard.AgainstNull(customerAssigned, nameof(customerAssigned));
 
             return _customerAssigned = customerAssigned;
         }
@@ -89,7 +89,7 @@ namespace Shuttle.Process.CustomES.Server.Domain
 
         private Events.TargetSystemAssigned On(Events.TargetSystemAssigned targetSystemAssigned)
         {
-            Guard.AgainstNull(targetSystemAssigned, "targetSystemAssigned");
+            Guard.AgainstNull(targetSystemAssigned, nameof(targetSystemAssigned));
 
             return _targetSystemAssigned = targetSystemAssigned;
         }
@@ -105,7 +105,7 @@ namespace Shuttle.Process.CustomES.Server.Domain
 
         private Events.StatusChanged On(Events.StatusChanged statusChanged)
         {
-            Guard.AgainstNull(statusChanged, "statusChanged");
+            Guard.AgainstNull(statusChanged, nameof(statusChanged));
 
             return _statusChanged = statusChanged;
         }
@@ -122,7 +122,7 @@ namespace Shuttle.Process.CustomES.Server.Domain
 
         private Events.ItemAdded On(Events.ItemAdded itemAdded)
         {
-            Guard.AgainstNull(itemAdded, "itemAdded");
+            Guard.AgainstNull(itemAdded, nameof(itemAdded));
 
             _items.Add(itemAdded);
 
@@ -163,7 +163,7 @@ namespace Shuttle.Process.CustomES.Server.Domain
 
         private Events.InvoiceIdAssigned On(Events.InvoiceIdAssigned invoiceIdAssigned)
         {
-            Guard.AgainstNull(invoiceIdAssigned, "invoiceIdAssigned");
+            Guard.AgainstNull(invoiceIdAssigned, nameof(invoiceIdAssigned));
 
             return _invoiceIdAssigned = invoiceIdAssigned;
         }
@@ -178,7 +178,7 @@ namespace Shuttle.Process.CustomES.Server.Domain
 
         private Events.OrderIdAssigned On(Events.OrderIdAssigned orderIdAssigned)
         {
-            Guard.AgainstNull(orderIdAssigned, "orderIdAssigned");
+            Guard.AgainstNull(orderIdAssigned, nameof(orderIdAssigned));
 
             return _orderIdAssigned = orderIdAssigned;
         }

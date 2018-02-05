@@ -14,8 +14,8 @@ namespace Shuttle.Process.Custom.Server
         public CancelOrderProcessHandler(IDatabaseContextFactory databaseContextFactory,
             IOrderProcessRepository repository)
         {
-            Guard.AgainstNull(databaseContextFactory, "databaseContextFactory");
-            Guard.AgainstNull(repository, "repository");
+            Guard.AgainstNull(databaseContextFactory, nameof(databaseContextFactory));
+            Guard.AgainstNull(repository, nameof(repository));
 
             _databaseContextFactory = databaseContextFactory;
             _repository = repository;

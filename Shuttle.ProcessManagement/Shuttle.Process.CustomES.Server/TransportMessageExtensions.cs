@@ -8,7 +8,7 @@ namespace Shuttle.Process.CustomES.Server
     {
         public static bool IsHandledHere(this TransportMessage transportMessage)
         {
-            Guard.AgainstNull(transportMessage, "transportMessage");
+            Guard.AgainstNull(transportMessage, nameof(transportMessage));
 
             return transportMessage.Headers.GetHeaderValue("TargetSystem")
                 .Equals("custom / event-source", StringComparison.InvariantCultureIgnoreCase);

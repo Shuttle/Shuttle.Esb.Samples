@@ -19,7 +19,7 @@ namespace Shuttle.Process.Custom.Server.Domain
 
         public OrderProcess(Guid id)
         {
-            Guard.AgainstNull(id, "id");
+            Guard.AgainstNull(id, nameof(id));
 
             Id = id;
             DateRegistered = DateTime.Now;
@@ -44,14 +44,14 @@ namespace Shuttle.Process.Custom.Server.Domain
 
         public void AddItem(OrderProcessItem item)
         {
-            Guard.AgainstNull(item, "item");
+            Guard.AgainstNull(item, nameof(item));
 
             _orderProcessItems.Add(item);
         }
 
         public void AddStatus(OrderProcessStatus status)
         {
-            Guard.AgainstNull(status, "status");
+            Guard.AgainstNull(status, nameof(status));
 
             _statuses.Add(status);
         }

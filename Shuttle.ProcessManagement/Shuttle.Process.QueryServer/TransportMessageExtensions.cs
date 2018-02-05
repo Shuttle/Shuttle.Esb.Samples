@@ -8,7 +8,7 @@ namespace Shuttle.Process.QueryServer
     {
         public static Guid OrderProcessId(this TransportMessage transportMessage)
         {
-            Guard.AgainstNull(transportMessage, "transportMessage");
+            Guard.AgainstNull(transportMessage, nameof(transportMessage));
 
             return new Guid(transportMessage.CorrelationId);
         }

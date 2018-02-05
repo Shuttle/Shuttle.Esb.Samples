@@ -17,8 +17,8 @@ namespace Shuttle.Process.CustomES.Server
 
         public EMailSentHandler(IDatabaseContextFactory databaseContextFactory, IEventStore eventStore)
         {
-            Guard.AgainstNull(databaseContextFactory, "databaseContextFactory");
-            Guard.AgainstNull(eventStore, "eventStore");
+            Guard.AgainstNull(databaseContextFactory, nameof(databaseContextFactory));
+            Guard.AgainstNull(eventStore, nameof(eventStore));
 
             _databaseContextFactory = databaseContextFactory;
             _eventStore = eventStore;

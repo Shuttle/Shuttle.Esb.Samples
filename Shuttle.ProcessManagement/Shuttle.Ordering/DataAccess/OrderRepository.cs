@@ -11,8 +11,8 @@ namespace Shuttle.Ordering.DataAccess
 
         public OrderRepository(IDatabaseGateway databaseGateway, IOrderQueryFactory queryFactory)
         {
-            Guard.AgainstNull(databaseGateway, "databaseGateway");
-            Guard.AgainstNull(queryFactory, "queryFactory");
+            Guard.AgainstNull(databaseGateway, nameof(databaseGateway));
+            Guard.AgainstNull(queryFactory, nameof(queryFactory));
 
             _databaseGateway = databaseGateway;
             _queryFactory = queryFactory;

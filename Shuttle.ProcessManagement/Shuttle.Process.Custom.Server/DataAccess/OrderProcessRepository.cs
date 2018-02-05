@@ -17,11 +17,11 @@ namespace Shuttle.ProcessManagement
             IDataRowMapper<OrderProcess> orderProcessMapper, IDataRowMapper<OrderProcessItem> orderProcessItemMapper,
             IDataRowMapper<OrderProcessStatus> orderProcessStatusMapper)
         {
-            Guard.AgainstNull(databaseGateway, "databaseGateway");
-            Guard.AgainstNull(queryFactory, "queryFactory");
-            Guard.AgainstNull(orderProcessMapper, "orderProcessMapper");
-            Guard.AgainstNull(orderProcessItemMapper, "orderProcessItemMapper");
-            Guard.AgainstNull(orderProcessStatusMapper, "orderProcessStatusMapper");
+            Guard.AgainstNull(databaseGateway, nameof(databaseGateway));
+            Guard.AgainstNull(queryFactory, nameof(queryFactory));
+            Guard.AgainstNull(orderProcessMapper, nameof(orderProcessMapper));
+            Guard.AgainstNull(orderProcessItemMapper, nameof(orderProcessItemMapper));
+            Guard.AgainstNull(orderProcessStatusMapper, nameof(orderProcessStatusMapper));
 
             _databaseGateway = databaseGateway;
             _queryFactory = queryFactory;
@@ -32,7 +32,7 @@ namespace Shuttle.ProcessManagement
 
         public void Add(OrderProcess orderProcess)
         {
-            Guard.AgainstNull(orderProcess, "orderProcess");
+            Guard.AgainstNull(orderProcess, nameof(orderProcess));
 
             _databaseGateway.ExecuteUsing(_queryFactory.Add(orderProcess));
 
