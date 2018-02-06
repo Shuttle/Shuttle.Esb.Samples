@@ -4,5 +4,5 @@ Shuttle.ViewModels = {};
 Shuttle.Components = {};
 
 Shuttle.configuration = {
-    api: 'http://localhost:17538/api/'
+    api: 'http://localhost:8656/api/'
 };

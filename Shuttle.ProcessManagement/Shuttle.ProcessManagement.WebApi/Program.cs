@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 using log4net;
@@ -20,6 +21,8 @@ namespace Shuttle.ProcessManagement.WebApi
             Log.Assign(new Log4NetLog(LogManager.GetLogger(typeof(Program))));
 
             Log.Information("[started]");
+
+            var connectionStringSettings = ConfigurationManager.ConnectionStrings["ProcessManagement"];
 
             BuildWebHost(args).Run();
 

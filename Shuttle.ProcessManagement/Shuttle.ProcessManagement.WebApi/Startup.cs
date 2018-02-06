@@ -1,14 +1,15 @@
 ﻿using System;
-using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 using Castle.Windsor.MsDependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Shuttle.Core.Container;
 using Shuttle.Core.Castle;
 using Shuttle.Core.Data.Registration;
 using Shuttle.Esb;
+using Shuttle.ProcessManagement.Services;
 
 namespace Shuttle.ProcessManagement.WebApi
 {
@@ -27,29 +28,18 @@ namespace Shuttle.ProcessManagement.WebApi
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+            services.AddCors();
 
             var container = new WindsorContainer();
 
             var componentContainer = new WindsorComponentContainer(container);
 
             componentContainer.RegisterDataAccess("Shuttle.ProcessManagement");
+            componentContainer.Register<IOrderProcessService, OrderProcessService>();
 
             ServiceBus.Register(componentContainer);
 
             _bus = ServiceBus.Create(componentContainer).Start();
-
-            //var shuttleApiControllerType = typeof(ShuttleApiController);
-
-            //container.Register(
-            //    Classes
-            //        .FromThisAssembly()
-            //        .Pick()
-            //        .If(type => type.Name.EndsWith("Controller", StringComparison.OrdinalIgnoreCase)
-            //                    &&
-            //                    shuttleApiControllerType.IsAssignableFrom(type))
-            //        .LifestyleTransient()
-            //        .WithServiceFirstInterface()
-            //        .Configure(c => c.Named(c.Implementation.UnderlyingSystemType.Name)));
 
             return WindsorRegistrationHelper.CreateServiceProvider(container, services);
         }
@@ -61,6 +51,10 @@ namespace Shuttle.ProcessManagement.WebApi
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseCors(
+                options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()
+            );
 
             app.UseMvc();
         }

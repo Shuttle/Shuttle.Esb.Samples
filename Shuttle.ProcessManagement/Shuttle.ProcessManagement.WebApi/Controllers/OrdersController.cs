@@ -9,6 +9,7 @@ using Shuttle.ProcessManagement.Messages;
 
 namespace Shuttle.ProcessManagement.WebApi.Controllers
 {
+    [Route("api/[controller]")]
     public class OrdersController : Controller
     {
         private readonly IServiceBus _bus;
@@ -26,11 +27,13 @@ namespace Shuttle.ProcessManagement.WebApi.Controllers
             _productQuery = productQuery;
         }
 
-        public HttpResponseMessage Get()
+        [HttpGet]
+        public dynamic Get()
         {
             return _orderProcessService.ActiveOrders();
         }
 
+        [HttpDelete]
         public StatusCodeResult Delete(Guid id)
         {
             _orderProcessService.CancelOrder(id);
@@ -38,6 +41,7 @@ namespace Shuttle.ProcessManagement.WebApi.Controllers
             return StatusCode((int) HttpStatusCode.OK);
         }
 
+        [HttpPost]
         public void Post([FromBody] RegisterOrderModel model)
         {
             Guard.AgainstNull(model, nameof(model));
@@ -55,19 +59,19 @@ namespace Shuttle.ProcessManagement.WebApi.Controllers
             {
                 case "custom":
                 {
-                    message.TargetSystemUri = "msmq://./process-custom-server";
+                    message.TargetSystemUri = "rabbitmq://shuttle:shuttle!@localhost/process-custom-server";
 
                     break;
                 }
                 case "custom / event-source":
                 {
-                    message.TargetSystemUri = "msmq://./process-custom-es-server";
+                    message.TargetSystemUri = "rabbitmq://shuttle:shuttle!@localhost/process-custom-es-server";
 
                     break;
                 }
                 case "event-source / module":
                 {
-                    message.TargetSystemUri = "msmq://./process-es-module-server";
+                    message.TargetSystemUri = "rabbitmq://shuttle:shuttle!@localhost/process-es-module-server";
 
                     break;
                 }

@@ -1,10 +1,10 @@
 ﻿using System.Linq;
-using System.Net.Http;
 using Microsoft.AspNetCore.Mvc;
 using Shuttle.Core.Contract;
 
 namespace Shuttle.ProcessManagement.WebApi.Controllers
 {
+    [Route("api/[controller]")]
     public class ProductsController : Controller
     {
         private readonly IProductQuery _productQuery;
@@ -16,6 +16,7 @@ namespace Shuttle.ProcessManagement.WebApi.Controllers
             _productQuery = productQuery;
         }
 
+        [HttpGet]
         public dynamic Get()
         {
             return _productQuery.All()
