@@ -1,7 +1,6 @@
 ﻿using Castle.Windsor;
 using log4net;
 using Shuttle.Core.Container;
-using Shuttle.Core.Data.Registration;
 using Shuttle.Core.Castle;
 using Shuttle.Core.Log4Net;
 using Shuttle.Core.Logging;
@@ -32,7 +31,7 @@ namespace Shuttle.Process.CustomES.Server
 
             var container = new WindsorComponentContainer(_container);
 
-            container.RegisterDataAccess("Shuttle.ProcessManagement");
+            container.RegisterSuffixed("Shuttle.ProcessManagement");
 
             EventStore.Register(container);
             ServiceBus.Register(container);

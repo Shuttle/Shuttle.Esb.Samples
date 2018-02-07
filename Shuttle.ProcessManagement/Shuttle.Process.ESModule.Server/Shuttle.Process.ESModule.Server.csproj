@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <PackageReference Include="Shuttle.Core.Castle" Version="10.0.4" />
-    <PackageReference Include="Shuttle.Core.Data.Registration" Version="10.0.0" />
     <PackageReference Include="Shuttle.Core.Data.SqlClient" Version="10.0.4" />
     <PackageReference Include="Shuttle.Core.Log4Net" Version="10.0.0" />
     <PackageReference Include="Shuttle.Core.ServiceHost" Version="10.0.0" />

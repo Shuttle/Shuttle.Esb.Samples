@@ -7,7 +7,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Shuttle.Core.Container;
 using Shuttle.Core.Castle;
-using Shuttle.Core.Data.Registration;
 using Shuttle.Esb;
 using Shuttle.ProcessManagement.Services;
 
@@ -34,7 +33,7 @@ namespace Shuttle.ProcessManagement.WebApi
 
             var componentContainer = new WindsorComponentContainer(container);
 
-            componentContainer.RegisterDataAccess("Shuttle.ProcessManagement");
+            componentContainer.RegisterSuffixed("Shuttle.ProcessManagement");
             componentContainer.Register<IOrderProcessService, OrderProcessService>();
 
             ServiceBus.Register(componentContainer);

@@ -33,12 +33,10 @@ namespace Shuttle.ProcessManagement.WebApi.Controllers
             return _orderProcessService.ActiveOrders();
         }
 
-        [HttpDelete]
-        public StatusCodeResult Delete(Guid id)
+        [HttpDelete("{id}")]
+        public void Delete(Guid id)
         {
             _orderProcessService.CancelOrder(id);
-
-            return StatusCode((int) HttpStatusCode.OK);
         }
 
         [HttpPost]
