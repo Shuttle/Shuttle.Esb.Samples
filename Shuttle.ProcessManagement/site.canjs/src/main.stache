@@ -1,0 +1,10 @@
+<cs-alerts/>
+<div class="container-fluid">
+    <div class="row row-offcanvas row-offcanvas-left">
+        <div id="application-content" class="main col-sm-12 col-md-12">
+            <h1>Shuttle Books</h1>
+            <shuttle-books />
+            <shuttle-orders />
+        </div>
+    </div>
+</div>

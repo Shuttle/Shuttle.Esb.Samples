@@ -1,0 +1,58 @@
+{
+  "name": "shuttle-processmanagement-sample",
+  "version": "1.0.0",
+  "description": "",
+  "steal": {
+    "main": "main.js",
+    "directories": {
+      "lib": "src"
+    },
+    "plugins": [
+      "steal-stache",
+      "steal-css"
+    ],
+    "meta": {
+      "popper.js": {
+        "format": "global",
+        "deps": [
+          "jquery"
+        ]
+      },
+      "bootstrap": {
+        "deps": [
+          "jquery",
+          "popper.js"
+        ]
+      }
+    },
+    "map": {
+      "popper.js": "popper.js/dist/umd/popper",
+      "bootstrap": "bootstrap/dist/js/bootstrap"
+    }
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bootstrap": "^4.0.0",
+    "can-component": "^3.3.7",
+    "can-compute": "^3.3.10",
+    "can-connect": "^1.5.12",
+    "can-define": "^1.5.4",
+    "can-define-validate-validatejs": "^0.1.3",
+    "can-route": "^3.2.4",
+    "can-route-pushstate": "^3.2.1",
+    "can-set": "^1.3.3",
+    "can-stache": "^3.14.4",
+    "can-stache-bindings": "^3.11.5",
+    "font-awesome": "^4.7.0",
+    "popper.js": "^1.13.0",
+    "shuttle-canstrap": "^1.0.32",
+    "shuttle-guard": "^1.0.0",
+    "steal": "^1.6.2",
+    "steal-css": "^1.3.1",
+    "steal-stache": "^3.1.3"
+  }
+}
