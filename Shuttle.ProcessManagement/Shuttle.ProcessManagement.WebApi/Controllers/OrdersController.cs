@@ -30,7 +30,7 @@ namespace Shuttle.ProcessManagement.WebApi.Controllers
         [HttpGet]
         public dynamic Get()
         {
-            return _orderProcessService.ActiveOrders();
+            return new { Data = _orderProcessService.ActiveOrders() };
         }
 
         [HttpDelete("{id}")]

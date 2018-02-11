@@ -19,13 +19,16 @@ namespace Shuttle.ProcessManagement.WebApi.Controllers
         [HttpGet]
         public dynamic Get()
         {
-            return _productQuery.All()
-                .Select(row => new
-                {
-                    Id = ProductColumns.Id.MapFrom(row),
-                    Description = ProductColumns.Description.MapFrom(row),
-                    Price = ProductColumns.Price.MapFrom(row)
-                });
+            return new
+            {
+                Data = _productQuery.All()
+                    .Select(row => new
+                    {
+                        Id = ProductColumns.Id.MapFrom(row),
+                        Description = ProductColumns.Description.MapFrom(row),
+                        Price = ProductColumns.Price.MapFrom(row)
+                    })
+            };
         }
     }
 }

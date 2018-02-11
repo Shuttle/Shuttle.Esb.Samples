@@ -27,8 +27,8 @@ const Book = DefineMap.extend({
 });
 
 const api = {
-    books: new Api({
-        endpoint: 'books',
+    products: new Api({
+        endpoint: 'products',
         Map: Book
     }),
     orders: new Api('orders')
@@ -63,7 +63,7 @@ const ViewModel = DefineMap.extend({
     },
     get booksPromise() {
         const refreshTimestamp = this.refreshTimestamp;
-        return api.books.list();
+        return api.products.list();
     },
     customerName: {
         type: 'string',
@@ -97,12 +97,12 @@ const ViewModel = DefineMap.extend({
     init: function () {
         var self = this;
 
-        api.books.get('products');
+        api.products.list();
     },
     calculateTotal: function () {
         var total = 0;
 
-        each(this.books, function (book) {
+        each(this.products, function (book) {
             if (book.buying) {
                 total = total + book.price;
             }
@@ -122,7 +122,7 @@ const ViewModel = DefineMap.extend({
         this._clearOrder();
     },
     _clearOrder: function () {
-        this.books.each(function (book) {
+        this.products.each(function (book) {
             book.buying = false;
         });
 
@@ -142,7 +142,7 @@ const ViewModel = DefineMap.extend({
             customerEMail: this.customerEMail
         };
 
-        each(this.books, function (book) {
+        each(this.products, function (book) {
             if (book.buying) {
                 order.productIds.push(book.id);
             }
