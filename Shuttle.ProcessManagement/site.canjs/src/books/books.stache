@@ -1,46 +1,48 @@
 ﻿{{#if(booksPromise.isResolved)}}
-    <h3>Available titles</h3>
-    <table class='table table-bordered table-hover'>
-        <thead>
-        <tr>
-            <th class='col-md-1'></th>
-            <th>Title</th>
-            <th class='col-md-2 text-right'>Price</th>
-        </tr>
-        </thead>
-        <tbody>
-        {{#each booksPromise.value}}
-            <tr class='{{#if buying}}success{{/if}}'>
-                <td>
-                    {{#if buying}}
-                        <button class="btn btn-default btn-danger btn-xs" can-click="remove">Remove</button>
-                    {{else}}
-                        <button class="btn btn-default btn-success btn-xs" can-click="add">Add</button>
-                    {{/if}}
-                </td>
-                <td>{{description}}</td>
-                <td class="text-right">{{price}}</td>
-            </tr>
-        {{/each}}
-        </tbody>
-        <tfoot>
-        <tr>
-            <td colspan="2">
-            </td>
-            <td class="text-right info">{{total}}</td>
-        </tr>
-        </tfoot>
-    </table>
-    {{#if(canOrder)}}
-        <cs-form title:from="'Checkout'">
-            <cs-form-input label:from="'Name'" required:from="'true'" value:bind="customerName"
-                           vm:errors:from="errors()" errorAttribute:from="'customerName'"/>
-            <cs-form-input label:from="'e-mail'" required:from="'true'" value:bind="customerEMail"
-                           vm:errors:from="errors()" errorAttribute:from="'customerEMail'" placeholder:from="'abc.xyz@example.com'"/>
-            <cs-button text:from="'Cancel'" click:from="@cancel" elementClass:from="'btn-secondary'" />
-            <cs-button actions:from="actions" text:from="'Order'" elementClass:from="'btn-primary'" />
-        </cs-form>
-    {{/if}}
+<h3>Available titles</h3>
+<table class='table table-sm'>
+    <thead class="thead-light">
+    <tr class="row">
+        <th class="col-1"></th>
+        <th class="col">Title</th>
+        <th class="col-2 text-right">Price</th>
+    </tr>
+    </thead>
+<tbody>
+{{#each(books)}}
+<tr class='row {{#if buying}}table-info{{/if}}'>
+    <td class="col-1">
+        {{#if buying}}
+            <cs-button text:from="'Remove'" click:from="@toggle" elementClass:from="'btn-default btn-danger btn-sm'"/>
+        {{else}}
+            <cs-button text:from="'Add'" click:from="@toggle" elementClass:from="'btn-default btn-success btn-sm'"/>
+        {{/if}}
+    </td>
+    <td class="col">{{description}}</td>
+    <td class="col-2 text-right">{{price}}</td>
+</tr>
+{{/each}}
+</tbody>
+    <tfoot>
+    <tr class="row">
+        <td colspan="2" class="col">
+        </td>
+        <td class="col-2 text-right info">{{total}}</td>
+    </tr>
+    </tfoot>
+</table>
+{{#if(canOrder)}}
+<cs-form title:from="'Checkout'">
+    <cs-form-input label:from="'Name'" required:from="'true'" value:bind="customerName"
+                   vm:errors:from="errors()" errorAttribute:from="'customerName'"/>
+    <cs-form-input label:from="'e-mail'" required:from="'true'" value:bind="customerEMail"
+                   vm:errors:from="errors()" errorAttribute:from="'customerEMail'"
+                   placeholder:from="'abc.xyz@example.com'"/>
+    <cs-button text:from="'Cancel'" click:from="@cancel" elementClass:from="'btn-secondary'"/>
+    <cs-button actions:from="actions" text:from="'Order'" elementClass:from="'btn-primary'"/>
+</cs-form>
+<br/>
+{{/if}}
 {{else}}
-    <cs-fetching title:from="'(fetching books)'"/>
+<cs-fetching title:from="'(fetching books)'"/>
 {{/if}}

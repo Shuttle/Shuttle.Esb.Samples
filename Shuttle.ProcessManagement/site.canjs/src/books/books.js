@@ -1,4 +1,5 @@
 ﻿import DefineMap from 'can-define/map/';
+import DefineList from 'can-define/list/';
 import Component from 'can-component';
 import view from './books.stache';
 import each from 'can-util/js/each/';
@@ -23,8 +24,15 @@ const Book = DefineMap.extend({
     buying: {
         type: 'boolean',
         default: false
-    }
+    },
+    toggle() {
+        this.buying = !this.buying;
+    },
 });
+
+const Books = DefineList.extend({
+    '#': Book
+})
 
 const api = {
     products: new Api({
@@ -35,35 +43,46 @@ const api = {
 };
 
 const ViewModel = DefineMap.extend({
+    books: {
+        Type: Books
+    },
     actions: {
         Type: ActionList,
-        default: [
-            {
-                text: 'Custom',
-                click: function () {
-                    this.orderCustom()
-                }
-            },
-            {
-                text: 'Custom / EventSource',
-                click: function () {
-                    this.orderCustomEventSource();
-                }
-            },
-            {
-                text: 'EventSource / Module',
-                click: function () {
-                    this.orderEventSourceModule();
-                }
-            },
-        ]
+        default() {
+            const self = this;
+
+            return [
+                {
+                    text: 'Custom',
+                    click: function () {
+                        self.orderCustom()
+                    }
+                },
+                {
+                    text: 'Custom / EventSource',
+                    click: function () {
+                        self.orderCustomEventSource();
+                    }
+                },
+                {
+                    text: 'EventSource / Module',
+                    click: function () {
+                        self.orderEventSourceModule();
+                    }
+                },
+            ]
+        }
     },
     refreshTimestamp: {
         type: 'string'
     },
     get booksPromise() {
+        const self = this;
         const refreshTimestamp = this.refreshTimestamp;
-        return api.products.list();
+        return api.products.list()
+            .then(function (books) {
+                self.books = new Books(books);
+            });
     },
     customerName: {
         type: 'string',
@@ -87,46 +106,30 @@ const ViewModel = DefineMap.extend({
         }
     },
     total: {
-        type: 'number',
-        default: 0
+        get() {
+            var result = 0;
+
+            each(this.books, function (book) {
+                if (book.buying) {
+                    result = result + book.price;
+                }
+            });
+
+            return result;
+        }
     },
     canOrder: {
-        type: 'boolean',
-        default: false
-    },
-    init: function () {
-        var self = this;
-
-        api.products.list();
-    },
-    calculateTotal: function () {
-        var total = 0;
-
-        each(this.products, function (book) {
-            if (book.buying) {
-                total = total + book.price;
-            }
-        });
-
-        this.total = total;
-    },
-    canOrder() {
-        this.total > 0;
-    },
-    toggleBuying: function (book) {
-        book.buying = !book.buying;
-
-        this.calculateTotal();
+        get() {
+            return this.total > 0;
+        }
     },
     cancel: function () {
         this._clearOrder();
     },
     _clearOrder: function () {
-        this.products.each(function (book) {
+        this.books.forEach(function (book) {
             book.buying = false;
         });
-
-        this.calculateTotal();
     },
     _submitOrder: function (targetSystem) {
         var self = this;
@@ -142,21 +145,21 @@ const ViewModel = DefineMap.extend({
             customerEMail: this.customerEMail
         };
 
-        each(this.products, function (book) {
+        each(this.books, function (book) {
             if (book.buying) {
                 order.productIds.push(book.id);
             }
         });
 
-        api.orders.post('orders', {data: order})
-            .done(function () {
-                self._clearOrder();
+        api.orders.post(order)
+            .then(function () {
+                    self._clearOrder();
 
-                alerts.show({message: 'Your order has been sent for processing.', name: 'order-placed'});
-            })
-            .fail(function (xhr, textStatus, errorThrown) {
-                alerts.show({message: errorThrown, name: 'order-error', type: 'danger'});
-            });
+                    alerts.show({message: 'Your order has been sent for processing.', name: 'order-placed'});
+                },
+                function (xhr, textStatus, errorThrown) {
+                    alerts.show({message: errorThrown, name: 'order-error', type: 'danger'});
+                });
     },
 
     orderCustom: function () {

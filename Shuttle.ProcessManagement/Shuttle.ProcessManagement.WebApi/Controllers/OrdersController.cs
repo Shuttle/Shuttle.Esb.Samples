@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Globalization;
-using System.Net;
-using System.Net.Http;
 using Microsoft.AspNetCore.Mvc;
 using Shuttle.Core.Contract;
 using Shuttle.Esb;

@@ -38,6 +38,46 @@ var Order = DefineMap.extend({
     canArchive: {
         type: 'boolean',
         default: false,
+    },
+    applyValues: function (order) {
+        this.id = order.id;
+        this.customerName = order.customerName;
+        this.orderNumber = order.orderNumber;
+        this.orderDate = order.orderDate;
+        this.orderTotal = order.orderTotal;
+        this.status = order.status;
+        this.canCancel = order.canCancel;
+        this.canArchive = order.canArchive;
+    },
+    archiveOrder() {
+        api.archivedOrders.delete({id: this.id})
+            .then(function () {
+                    alerts.show({message: 'Your archive request has been sent for processing.', name: 'order-archive'});
+                },
+                function () {
+                    alerts.show({
+                        message: 'The selected order could not be archived.',
+                        name: 'order-archive-error',
+                        type: 'danger'
+                    });
+                });
+    },
+    cancelOrder: function () {
+        api.orders.delete({id: this.id})
+            .then(
+                function () {
+                    alerts.show({
+                        message: 'Your cancellation request has been sent for processing.',
+                        name: 'order-cancel'
+                    });
+                },
+                function () {
+                    alerts.show({
+                        message: 'The selected order could not be cancelled.',
+                        name: 'order-cancel-error',
+                        type: 'danger'
+                    });
+                });
     }
 });
 
@@ -47,18 +87,19 @@ const Orders = DefineList.extend({
 
 var api = {
     orders: new Api({
-        endpoint: 'orders',
+        endpoint: 'orders/{id}',
         Map: Order
-    })
+    }),
+    archivedOrders: new Api("archivedorders/{id}")
 };
 
 var ViewModel = DefineMap.extend({
     fetching: {
         type: 'boolean',
-        value: true
+        default: true
     },
     orders: {
-        Value: Orders
+        value: new Orders()
     },
     refreshTimestamp: {
         type: 'string'
@@ -112,44 +153,6 @@ var ViewModel = DefineMap.extend({
         }
 
         this.orders.splice(removeIndex, 1);
-    },
-
-    cancelOrder: function (order) {
-        var self = this;
-        var id = order.id;
-
-        api.orders.delete('orders/' + id)
-            .then(
-                function () {
-                    alerts.show({
-                        message: 'Your cancellation request has been sent for processing.',
-                        name: 'order-cancel'
-                    });
-                },
-                function () {
-                    alerts.show({
-                        message: 'The selected order could not be cancelled.',
-                        name: 'order-cancel-error',
-                        type: 'danger'
-                    });
-                });
-    },
-
-    archiveOrder: function (order) {
-        var self = this;
-        var id = order.id;
-
-        api.orders.post('archivedorders/' + id)
-            .then(function () {
-                    alerts.show({message: 'Your archive request has been sent for processing.', name: 'order-archive'});
-                },
-                function () {
-                    alerts.show({
-                        message: 'The selected order could not be archived.',
-                        name: 'order-archive-error',
-                        type: 'danger'
-                    });
-                });
     },
     refresh: function () {
         this.refreshTimestamp = Date.now();
