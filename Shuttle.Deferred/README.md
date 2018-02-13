@@ -1,20 +1,16 @@
 # Running
 
-When using Visual Studio 2015+ the NuGet packages should be restored automatically.  If you find that they do not or if you are using an older version of Visual Studio please execute the following in a Visual Studio command prompt:
+When using Visual Studio 2017 the NuGet packages should be restored automatically.  If you find that they do not or if you are using an older version of Visual Studio please execute the following in a Visual Studio command prompt:
 
-~~~
+```
 cd {extraction-folder}\Shuttle.Esb.Samples\Shuttle.Deferred
 nuget restore
-~~~
+```
 
 Once you have opened the `Shuttle.Deferred.sln` solution in Visual Studio set the following projects as startup projects:
 
 - Shuttle.Deferred.Client
 - Shuttle.Deferred.Server
-
-> Set `Shuttle.Core.Host.exe` as the **Start external program** option by navigating to the **bin\debug** folder of the server project for the **Shuttle.Deferred.Server** project.
-
-<div class='alert alert-info'>Before the reference <strong>Shuttle.Core.Host.exe</strong> will be available in the <strong>bin\debug</strong> folder you may need to build the solution.</div>
 
 # Implementation
 
@@ -25,8 +21,8 @@ Deferred messages refer to messages that are not immediately processed when avai
 In this guide we'll create the following projects:
 
 - a **Console Application** called `Shuttle.Deferred.Client`
-- a **Class Library** called `Shuttle.Deferred.Server`
-- and another **Class Library** called `Shuttle.Deferred.Messages` that will contain all our message classes
+- a **Console Application** called `Shuttle.Deferred.Server`
+- a **Class Library** called `Shuttle.Deferred.Messages` that will contain all our message classes
 
 ## Messages
 
@@ -38,7 +34,7 @@ In this guide we'll create the following projects:
 
 > Rename the `Class1` default file to `RegisterMemberCommand` and add a `UserName` property.
 
-~~~ c#
+``` c#
 namespace Shuttle.Deferred.Messages
 {
 	public class RegisterMemberCommand
@@ -46,7 +42,7 @@ namespace Shuttle.Deferred.Messages
 		public string UserName { get; set; }
 	}
 }
-~~~
+```
 
 ## Client
 
@@ -56,24 +52,35 @@ namespace Shuttle.Deferred.Messages
 
 This will provide access to the Msmq `IQueue` implementation and also include the required dependencies.
 
+> Install the `Shuttle.Core.Autofac` nuget package.
+
+This will provide access to the Autofac dependency container implementation.
+
 > Add a reference to the `Shuttle.Deferred.Messages` project.
 
 ### Program
 
 > Implement the main client code as follows:
 
-~~~ c#
+``` c#
 using System;
-using Shuttle.Esb;
+using Autofac;
+using Shuttle.Core.Autofac;
 using Shuttle.Deferred.Messages;
+using Shuttle.Esb;
 
 namespace Shuttle.Deferred.Client
 {
-	class Program
+	internal class Program
 	{
-		static void Main(string[] args)
+		private static void Main(string[] args)
 		{
-			using (var bus = ServiceBus.Create().Start())
+			var containerBuilder = new ContainerBuilder();
+			var registry = new AutofacComponentRegistry(containerBuilder);
+
+			ServiceBus.Register(registry);
+
+			using (var bus = ServiceBus.Create(new AutofacComponentResolver(containerBuilder.Build())).Start())
 			{
 				string userName;
 
@@ -88,7 +95,7 @@ namespace Shuttle.Deferred.Client
 		}
 	}
 }
-~~~
+```
 
 The message sent will have its `IgnoreTilleDate` set to 5 seconds into the future.  You can have a look at the [TransportMessage][transport-message] for more information on the message structure.
 
@@ -96,7 +103,7 @@ The message sent will have its `IgnoreTilleDate` set to 5 seconds into the futur
 
 > Create the shuttle configuration as follows:
 
-~~~ xml
+``` xml
 <?xml version="1.0" encoding="utf-8" ?>
 <configuration>
 	<configSections>
@@ -110,69 +117,96 @@ The message sent will have its `IgnoreTilleDate` set to 5 seconds into the futur
 			</messageRoute>
 		</messageRoutes>		
 	</serviceBus>
-	
-    <startup> 
-        <supportedRuntime version="v4.0" sku=".NETFramework,Version=v4.5" />
-    </startup>
 </configuration>
-~~~
+```
 
-This tells shuttle that all messages that are sent and have a type name starting with `Shuttle.Deferred.Messages` should be sent to endpoint `msmq://./shuttle-server-work`.
+This tells Shuttle that all messages that are sent and have a type name starting with `Shuttle.Deferred.Messages` should be sent to endpoint `msmq://./shuttle-server-work`.
 
 ## Server
 
-> Add a new `Class Library` to the solution called `Shuttle.Deferred.Server`.
+> Add a new `Console Application` to the solution called `Shuttle.Deferred.Server`.
 
 > Install the `Shuttle.Esb.Msmq` nuget package.
 
 This will provide access to the Msmq `IQueue` implementation and also include the required dependencies.
 
-> Install both the `Shuttle.Core.Host` and `shuttle-core-infrastructure-log4net` nuget packages.
+> Install the `Shuttle.Core.Autofac` nuget package.
 
-The default mechanism used to host an endpoint is by using a Windows service.  However, by using the `Shuttle.Core.Host` executable we are able to run the endpoint as a console application or register it as a Windows service for deployment.
+This will provide access to the Autofac dependency container implementation.
+
+> Install the `Shuttle.Core.ServiceHost` nuget package.
+
+The default mechanism used to host an endpoint is by using a Windows service.  However, by using the `Shuttle.Core.ServiceHost` we are able to run the endpoint as a console application or register it as a Windows service for deployment.
+
+> Install the `Shuttle.Core.Log4Net` nuget package.
 
 We are also adding **Log4Net** to demonstrate how to add a third-party logging mechanism to shuttle.
 
 > Add a reference to the `Shuttle.Deferred.Messages` project.
 
+### Program
+
+> Implement the `Program` class as follows:
+
+``` c#
+using Shuttle.Core.ServiceHost;
+
+namespace Shuttle.RequestResponse.Server
+{
+    internal class Program
+    {
+        private static void Main()
+        {
+            ServiceHost.Run<Host>();
+        }
+    }
+}
+```
+
 ### Host
 
-> Rename the default `Class1` file to `Host` and implement the `IHost` and `IDisposabe` interfaces as follows:
+> Rename the default `Class1` file to `Host` and implement the `IHost` interface as follows:
 
-~~~ c#
-using System;
+``` c#
+using Autofac;
 using log4net;
-using Shuttle.Core.Host;
-using Shuttle.Core.Infrastructure;
+using Shuttle.Core.Autofac;
 using Shuttle.Core.Log4Net;
+using Shuttle.Core.Logging;
+using Shuttle.Core.ServiceHost;
 using Shuttle.Esb;
 
 namespace Shuttle.Deferred.Server
 {
-	public class Host : IHost, IDisposable
-	{
-		private IServiceBus _bus;
+    public class Host : IServiceHost
+    {
+        private IServiceBus _bus;
 
-		public void Start()
-		{
-			Log.Assign(new Log4NetLog(LogManager.GetLogger(typeof(Host))));
+        public void Stop()
+        {
+            _bus.Dispose();
+        }
 
-			_bus = ServiceBus.Create().Start();
-		}
+        public void Start()
+        {
+            Log.Assign(new Log4NetLog(LogManager.GetLogger(typeof(Host))));
 
-		public void Dispose()
-		{
-			_bus.Dispose();
-		}
-	}
+            var containerBuilder = new ContainerBuilder();
+            var registry = new AutofacComponentRegistry(containerBuilder);
+
+            ServiceBus.Register(registry);
+
+            _bus = ServiceBus.Create(new AutofacComponentResolver(containerBuilder.Build())).Start();
+        }
+    }
 }
-~~~
+```
 
 ### App.config
 
 > Add an `Application Configuration File` item to create the `App.config` and populate as follows:
 
-~~~ xml
+``` xml
 <?xml version="1.0" encoding="utf-8" ?>
 <configuration>
 	<configSections>
@@ -212,14 +246,14 @@ namespace Shuttle.Deferred.Server
 		   errorQueueUri="msmq://./shuttle-error" />
 	</serviceBus>
 </configuration>
-~~~
+```
 
 ### RegisterMemberHandler
 
 > Add a new class called `RegisterMemberHandler` that implements the `IMessageHandler<RegisterMemberCommand>` interface as follows:
 
-~~~ c#
-using System;
+``` c#
+using Shuttle.Core.Logging;
 using Shuttle.Esb;
 using Shuttle.Deferred.Messages;
 
@@ -227,26 +261,22 @@ namespace Shuttle.Deferred.Server
 {
 	public class RegisterMemberHandler : IMessageHandler<RegisterMemberCommand>
 	{
-		public void ProcessMessage(IHandlerContext<RegisterMemberCommand> context)
-		{
-			Console.WriteLine();
-			Console.WriteLine("[MEMBER REGISTERED] : user name = '{0}'", context.Message.UserName);
-			Console.WriteLine();
-		}
+	    private readonly ILog _log;
 
-		public bool IsReusable
+	    public RegisterMemberHandler()
+	    {
+	        _log = Log.For(this);
+	    }
+
+	    public void ProcessMessage(IHandlerContext<RegisterMemberCommand> context)
 		{
-			get { return true; }
+		    _log.Trace($"[MEMBER REGISTERED] : user name = '{context.Message.UserName}'");
 		}
 	}
 }
-~~~
+```
 
-This will write out some information to the console window and send a response back to the sender (client).
-
-> Set `Shuttle.Core.Host.exe` as the **Start external program** option by navigating to the **bin\debug** folder of the server project.
-
-<div class='alert alert-info'>Before the reference <strong>Shuttle.Core.Host.exe</strong> will be available in the <strong>bin\debug</strong> folder you may need to build the solution.</div>
+This will use Log4Net to write out some information to the console window as well as a file.
 
 ## Run
 
@@ -262,4 +292,4 @@ This will write out some information to the console window and send a response b
 
 You have now implemented deferred message sending.
 
-You will also notice that `Log4Net` has created the log file under **~\Shuttle.Deferred\Shuttle.Deferred.Server\bin\Debug\logs**.
+You will also notice that `Log4Net` has created the log file under **~\Shuttle.Deferred\Shuttle.Deferred.Server\bin\Debug\{framework}\logs**.

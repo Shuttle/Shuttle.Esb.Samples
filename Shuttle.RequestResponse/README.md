@@ -180,7 +180,7 @@ This will provide access to the `Log4Net` implementation.
 
 > Add a reference to the `Shuttle.RequestResponse.Messages` project.
 
-### Host
+### Program
 
 > Implement the `Program` class as follows:
 
@@ -201,7 +201,9 @@ namespace Shuttle.RequestResponse.Server
 
 This will simply instance the `Host` class and get it running.
 
-> Add a `Host` class and implement the `IServiceHost` and `IDisposabe` interfaces as follows:
+### Host
+
+> Add a `Host` class and implement the `IServiceHost` interface as follows:
 
 ``` c#
 using Castle.Windsor;

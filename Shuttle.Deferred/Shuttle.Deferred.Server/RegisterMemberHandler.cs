@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Shuttle.Core.Logging;
 using Shuttle.Esb;
 using Shuttle.Deferred.Messages;
 
@@ -6,16 +6,16 @@ namespace Shuttle.Deferred.Server
 {
 	public class RegisterMemberHandler : IMessageHandler<RegisterMemberCommand>
 	{
-		public void ProcessMessage(IHandlerContext<RegisterMemberCommand> context)
-		{
-			Console.WriteLine();
-			Console.WriteLine("[MEMBER REGISTERED] : user name = '{0}'", context.Message.UserName);
-			Console.WriteLine();
-		}
+	    private readonly ILog _log;
 
-		public bool IsReusable
+	    public RegisterMemberHandler()
+	    {
+	        _log = Log.For(this);
+	    }
+
+	    public void ProcessMessage(IHandlerContext<RegisterMemberCommand> context)
 		{
-			get { return true; }
+		    _log.Trace($"[MEMBER REGISTERED] : user name = '{context.Message.UserName}'");
 		}
 	}
 }

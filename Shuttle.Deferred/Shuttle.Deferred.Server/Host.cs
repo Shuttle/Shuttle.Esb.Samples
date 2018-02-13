@@ -1,8 +1,8 @@
 ﻿using Autofac;
 using log4net;
 using Shuttle.Core.Autofac;
-using Shuttle.Core.Infrastructure;
 using Shuttle.Core.Log4Net;
+using Shuttle.Core.Logging;
 using Shuttle.Core.ServiceHost;
 using Shuttle.Esb;
 
