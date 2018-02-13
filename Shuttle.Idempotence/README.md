@@ -1,6 +1,6 @@
 # Running
 
-When using Visual Studio 2015+ the NuGet packages should be restored automatically.  If you find that they do not or if you are using an older version of Visual Studio please execute the following in a Visual Studio command prompt:
+When using Visual Studio 2017 the NuGet packages should be restored automatically.  If you find that they do not or if you are using an older version of Visual Studio please execute the following in a Visual Studio command prompt:
 
 ```
 cd {extraction-folder}\Shuttle.Esb.Samples\Shuttle.Idempotence

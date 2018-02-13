@@ -6,12 +6,7 @@ The process management sample represents something closer to a real-world scenar
 
 In this sample the front-end is a static site implemented using (CanJS)[https://canjs.com/].  The rest api is an asp.net web-api.  There are three physical implementations of the same logical process manager to demonstrate the various options and the read-model is kept updated using CQRS with system messages.  For the event-sourcing side one could just as easily use event processing to update the read model but since the system event messages are being processed it is re-used for the event sourcing implementation also.
 
-When using Visual Studio 2015+ the NuGet packages should be restored automatically.  If you find that they do not or if you are using an older version of Visual Studio please execute the following in a powershell command prompt:
-
-```
-cd {extraction-folder}\Shuttle.Esb.Samples\Shuttle.ProcessManagement
-nuget-restore.ps1
-```
+When using Visual Studio 2017 the NuGet packages should be restored automatically.
 
 Once you have opened the `Shuttle.ProcessManagement.sln` solution in Visual Studio set the following projects as startup projects:
 
@@ -23,11 +18,10 @@ Once you have opened the `Shuttle.ProcessManagement.sln` solution in Visual Stud
 - Shuttle.Process.ESModule.Server
 - Shuttle.Process.QueryServer
 - Shuttle.ProcessManagement.WebApi
-- site
 
-> Set `Shuttle.Core.Host.exe` as the **Start external program** option by navigating to the **bin\debug** folder of each of the server projects.
+# Front-End (site.canjs)
 
-<div class='alert alert-info'>Before the reference <strong>Shuttle.Core.Host.exe</strong> will be available in the <strong>bin\debug</strong> folder you may need to build the solution.</div>
+In order to run the single-page application CanJS front-end you need to host the site using any hosting software.  A simple solution is using node.js and installing the `http-server` package.  You can then host the site from the `site.canjs` folder by opening a command prompt and running `http-server` in the `site.canjs` folder.
 
 You will also need to create and configure a Sql Server database for this sample and remember to update the **App.config** `connectionString` settings to point to your database.  Please reference the **Database** section below.
 
