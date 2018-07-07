@@ -6,8 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Shuttle.Core.StructureMap" Version="10.0.3" />
-    <PackageReference Include="Shuttle.Esb.Msmq" Version="10.0.2" />
+    <PackageReference Include="Shuttle.Core.StructureMap" Version="10.0.4" />
+    <PackageReference Include="Shuttle.Esb.Msmq" Version="10.0.3" />
   </ItemGroup>
 
   <ItemGroup>

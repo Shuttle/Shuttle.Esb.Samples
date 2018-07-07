@@ -23,7 +23,6 @@ namespace Shuttle.ProcessManagement.WebApi
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
@@ -44,8 +43,10 @@ namespace Shuttle.ProcessManagement.WebApi
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IApplicationLifetime applicationLifetime)
         {
+            applicationLifetime.ApplicationStopping.Register(OnShutdown);
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -56,6 +57,11 @@ namespace Shuttle.ProcessManagement.WebApi
             );
 
             app.UseMvc();
+        }
+
+        public void OnShutdown()
+        {
+            _bus?.Dispose();
         }
     }
 }

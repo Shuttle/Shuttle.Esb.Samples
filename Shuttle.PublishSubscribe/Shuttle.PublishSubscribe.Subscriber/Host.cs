@@ -1,4 +1,5 @@
-﻿using Shuttle.Core.Container;
+﻿using System;
+using Shuttle.Core.Container;
 using Shuttle.Core.ServiceHost;
 using Shuttle.Core.StructureMap;
 using Shuttle.Esb;
