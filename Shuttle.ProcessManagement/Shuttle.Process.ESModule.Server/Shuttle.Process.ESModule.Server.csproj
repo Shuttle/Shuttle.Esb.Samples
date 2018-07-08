@@ -7,14 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Shuttle.Core.Castle" Version="10.0.4" />
-    <PackageReference Include="Shuttle.Core.Data.SqlClient" Version="10.0.4" />
-    <PackageReference Include="Shuttle.Core.Log4Net" Version="10.0.0" />
-    <PackageReference Include="Shuttle.Core.ServiceHost" Version="10.0.0" />
-    <PackageReference Include="Shuttle.Esb.Process" Version="10.0.0" />
-    <PackageReference Include="Shuttle.Esb.RabbitMQ" Version="10.0.3" />
-    <PackageReference Include="Shuttle.Esb.Sql.Subscription" Version="10.0.0" />
-    <PackageReference Include="Shuttle.Recall.Sql.Storage" Version="10.0.0" />
+    <PackageReference Include="Shuttle.Core.Castle" Version="10.0.5" />
+    <PackageReference Include="Shuttle.Core.Data.SqlClient" Version="10.0.5" />
+    <PackageReference Include="Shuttle.Core.Log4Net" Version="10.0.1" />
+    <PackageReference Include="Shuttle.Core.ServiceHost" Version="10.0.1" />
+    <PackageReference Include="Shuttle.Esb.Process" Version="10.0.1" />
+    <PackageReference Include="Shuttle.Esb.RabbitMQ" Version="10.0.6" />
+    <PackageReference Include="Shuttle.Esb.Sql.Subscription" Version="10.0.1" />
+    <PackageReference Include="Shuttle.Recall.Sql.Storage" Version="10.0.1" />
   </ItemGroup>
 
   <ItemGroup>
