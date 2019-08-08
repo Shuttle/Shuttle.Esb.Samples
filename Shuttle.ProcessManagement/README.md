@@ -74,6 +74,6 @@ When the process manager receives the `InvoiceCreatedEvent` an e-mail needs to b
 
 After the process has been completed it is possible to `Archive` the process.  In our sample it simply deletes the order.
 
-As you can see from all the messages the process manager is responsible for the interaction between the various business and infrastructure endpoints to ensure that your use-case runs to completion.  None of the system know about the inner working of the other and can be re-used in different processes.
+As you can see from all the messages the process manager is responsible for the interaction between the various business and infrastructure endpoints to ensure that your use-case runs to completion.  None of the systems know about the inner working of another and can be re-used in different processes.
 
 
