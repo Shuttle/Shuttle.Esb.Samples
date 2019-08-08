@@ -4,7 +4,7 @@ Our sample case is a fictitious online book store where you can order books.  An
 
 The process management sample represents something closer to a real-world scenario where one would have a front-end integrating with a web-api.  The web-api issues commands that are processed by the process managers.
 
-In this sample the front-end is a static site implemented using (CanJS)[https://canjs.com/].  The rest api is an asp.net web-api.  There are three physical implementations of the same logical process manager to demonstrate the various options and the read-model is kept updated using CQRS with system messages.  For the event-sourcing side one could just as easily use event processing to update the read model but since the system event messages are being processed it is re-used for the event sourcing implementation also.
+In this sample the front-end is a static site implemented using [CanJS](https://canjs.com/).  The rest api is an asp.net web-api.  There are three physical implementations of the same logical process manager to demonstrate the various options and the read-model is kept updated using CQRS with system messages.  For the event-sourcing side one could just as easily use event processing to update the read model but since the system event messages are being processed it is re-used for the event sourcing implementation also.
 
 When using Visual Studio 2017 the NuGet packages should be restored automatically.
 
