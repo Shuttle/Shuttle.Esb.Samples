@@ -1,9 +1,9 @@
 import $ from 'jquery';
 import 'popper.js';
 import 'bootstrap';
+import '@fortawesome/fontawesome-svg-core';
 
 import 'bootstrap/dist/css/bootstrap.css';
-import 'font-awesome/css/font-awesome.css';
 
 import template from "./main.stache";
 
@@ -14,20 +14,16 @@ import loader from '@loader';
 import '~/books/';
 import '~/orders/';
 
-import {alerts} from 'shuttle-canstrap/alerts/';
+import state from '~/state';
 
-options.wire({
-    url: function(){
-        return loader.serviceBaseURL;
-    }
-});
+options.url = loader.serviceBaseURL;
 
 $.ajaxPrefilter(function (options, originalOptions) {
     options.error = function (xhr) {
         if (xhr.responseJSON) {
-            alerts.show({message: xhr.responseJSON.message, type: 'danger', name: 'ajax-prefilter-error'});
+            state.alerts.add({message: xhr.responseJSON.message, type: 'danger', name: 'ajax-prefilter-error'});
         } else {
-            alerts.show({
+            state.alerts.add({
                 message: xhr.status + ' / ' + xhr.statusText,
                 type: 'danger',
                 name: 'ajax-prefilter-error'
@@ -40,4 +36,4 @@ $.ajaxPrefilter(function (options, originalOptions) {
     };
 });
 
-$('#application-container').html(template());
+$('#application-container').html(template(state));

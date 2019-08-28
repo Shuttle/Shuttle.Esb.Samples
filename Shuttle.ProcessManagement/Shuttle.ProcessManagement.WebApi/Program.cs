@@ -1,4 +1,6 @@
 ﻿using System.Configuration;
+using System.Data.Common;
+using System.Data.SqlClient;
 using log4net;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
@@ -11,6 +13,8 @@ namespace Shuttle.ProcessManagement.WebApi
     {
         public static void Main(string[] args)
         {
+            DbProviderFactories.RegisterFactory("System.Data.SqlClient", SqlClientFactory.Instance);
+
             Log.Assign(new Log4NetLog(LogManager.GetLogger(typeof(Program))));
 
             Log.Information("[started]");

@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
@@ -14,8 +14,8 @@
     <PackageReference Include="Microsoft.AspNetCore.Cors" Version="2.1.1" />
     <PackageReference Include="Shuttle.Core.Castle" Version="10.0.5" />
     <PackageReference Include="Shuttle.Core.Data.SqlClient" Version="10.0.5" />
-    <PackageReference Include="Shuttle.Core.Log4Net" Version="10.0.1" />
-    <PackageReference Include="Shuttle.Esb.RabbitMQ" Version="10.0.6" />
+    <PackageReference Include="Shuttle.Core.Log4Net" Version="10.0.2" />
+    <PackageReference Include="Shuttle.Esb.RabbitMQ" Version="11.0.1" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.5.0" />
   </ItemGroup>
 

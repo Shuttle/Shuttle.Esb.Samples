@@ -1,10 +1,7 @@
-﻿import DefineMap from 'can-define/map/';
-import DefineList from 'can-define/list/';
-import Component from 'can-component';
+﻿import { DefineMap, DefineList, Component, Reflect } from 'can';
 import view from './orders.stache';
 import Api from 'shuttle-can-api';
-import {alerts} from 'shuttle-canstrap/alerts/';
-import each from 'can-util/js/each/';
+import state from '~/state';
 
 var Order = DefineMap.extend({
     id: {
@@ -52,10 +49,10 @@ var Order = DefineMap.extend({
     archiveOrder() {
         api.archivedOrders.delete({id: this.id})
             .then(function () {
-                    alerts.show({message: 'Your archive request has been sent for processing.', name: 'order-archive'});
+                    state.alerts.add({message: 'Your archive request has been sent for processing.', name: 'order-archive'});
                 },
                 function () {
-                    alerts.show({
+                    state.alerts.add({
                         message: 'The selected order could not be archived.',
                         name: 'order-archive-error',
                         type: 'danger'
@@ -66,13 +63,13 @@ var Order = DefineMap.extend({
         api.orders.delete({id: this.id})
             .then(
                 function () {
-                    alerts.show({
+                    state.alerts.add({
                         message: 'Your cancellation request has been sent for processing.',
                         name: 'order-cancel'
                     });
                 },
                 function () {
-                    alerts.show({
+                    state.alerts.add({
                         message: 'The selected order could not be cancelled.',
                         name: 'order-cancel-error',
                         type: 'danger'
@@ -119,12 +116,12 @@ var ViewModel = DefineMap.extend({
         api.orders.list()
             .then(
                 function (data) {
-                    each(data, function (item) {
+                    Reflect.each(data, function (item) {
                         self.orders.push(new Order(item));
                     });
                 },
                 function (error) {
-                    alerts.show({
+                    state.alerts.add({
                         message: 'Could not fetch the orders.',
                         name: 'order-fetch-error',
                         type: 'danger'
@@ -171,7 +168,7 @@ var ViewModel = DefineMap.extend({
             api.orders.list()
                 .then(
                     function (data) {
-                        each(data, function (order) {
+                        Reflect.each(data, function (order) {
                             found = false;
 
                             self.orders.forEach(function (element) {
@@ -190,7 +187,7 @@ var ViewModel = DefineMap.extend({
                         self.orders.forEach(function (existingOrder) {
                             found = false;
 
-                            each(data, function (order) {
+                            Reflect.each(data, function (order) {
                                 if (found) {
                                     return;
                                 }
@@ -203,12 +200,12 @@ var ViewModel = DefineMap.extend({
                             }
                         });
 
-                        each(orderIdsToRemove, function (id) {
+                        Reflect.each(orderIdsToRemove, function (id) {
                             self._removeOrder(id);
                         });
                     },
                     function (error) {
-                        alerts.show({
+                        state.alerts.add({
                             message: 'Could not fetch the orders.',
                             name: 'order-fetch-error',
                             type: 'danger'

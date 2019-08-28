@@ -7,6 +7,7 @@ using Shuttle.Core.Logging;
 using Shuttle.Core.ServiceHost;
 using Shuttle.EMailSender.Messages;
 using Shuttle.Esb;
+using Shuttle.Esb.Sql.Subscription;
 using Shuttle.Invoicing.Messages;
 using Shuttle.Ordering.Messages;
 using Shuttle.ProcessManagement.Messages;

@@ -1,11 +1,8 @@
-﻿import DefineMap from 'can-define/map/';
-import DefineList from 'can-define/list/';
-import Component from 'can-component';
+﻿import { DefineMap, DefineList, Component } from 'can';
 import view from './books.stache';
-import each from 'can-util/js/each/';
 import Api from 'shuttle-can-api';
 import validator from 'can-define-validate-validatejs';
-import {alerts} from 'shuttle-canstrap/alerts/';
+import state from '~/state';
 import {ActionList} from 'shuttle-canstrap/button/';
 
 const Book = DefineMap.extend({
@@ -109,7 +106,7 @@ const ViewModel = DefineMap.extend({
         get() {
             var result = 0;
 
-            each(this.books, function (book) {
+            this.books.forEach(function (book) {
                 if (book.buying) {
                     result = result + book.price;
                 }
@@ -145,7 +142,7 @@ const ViewModel = DefineMap.extend({
             customerEMail: this.customerEMail
         };
 
-        each(this.books, function (book) {
+        this.books.forEach(function (book) {
             if (book.buying) {
                 order.productIds.push(book.id);
             }
@@ -155,10 +152,10 @@ const ViewModel = DefineMap.extend({
             .then(function () {
                     self._clearOrder();
 
-                    alerts.show({message: 'Your order has been sent for processing.', name: 'order-placed'});
+                    state.alerts.add({message: 'Your order has been sent for processing.', name: 'order-placed'});
                 },
                 function (xhr, textStatus, errorThrown) {
-                    alerts.show({message: errorThrown, name: 'order-error', type: 'danger'});
+                    state.alerts.add({message: errorThrown, name: 'order-error', type: 'danger'});
                 });
     },
 
