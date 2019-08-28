@@ -4,7 +4,7 @@ Our sample case is a fictitious online book store where you can order books.  An
 
 The process management sample represents something closer to a real-world scenario where one would have a front-end integrating with a web-api.  The web-api issues commands that are processed by the process managers.
 
-In this sample the front-end is a static site implemented using (CanJS)[https://canjs.com/].  The rest api is an asp.net web-api.  There are three physical implementations of the same logical process manager to demonstrate the various options and the read-model is kept updated using CQRS with system messages.  For the event-sourcing side one could just as easily use event processing to update the read model but since the system event messages are being processed it is re-used for the event sourcing implementation also.
+In this sample the front-end is a static site implemented using [CanJS](https://canjs.com/).  The rest api is an asp.net web-api.  There are three physical implementations of the same logical process manager to demonstrate the various options and the read-model is kept updated using CQRS with system messages.  For the event-sourcing side one could just as easily use event processing to update the read model but since the system event messages are being processed it is re-used for the event sourcing implementation also.
 
 When using Visual Studio 2017 the NuGet packages should be restored automatically.
 
@@ -74,6 +74,6 @@ When the process manager receives the `InvoiceCreatedEvent` an e-mail needs to b
 
 After the process has been completed it is possible to `Archive` the process.  In our sample it simply deletes the order.
 
-As you can see from all the messages the process manager is responsible for the interaction between the various business and infrastructure endpoints to ensure that your use-case runs to completion.  None of the system know about the inner working of the other and can be re-used in different processes.
+As you can see from all the messages the process manager is responsible for the interaction between the various business and infrastructure endpoints to ensure that your use-case runs to completion.  None of the systems know about the inner working of another and can be re-used in different processes.
 
 
