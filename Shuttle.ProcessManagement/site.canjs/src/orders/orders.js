@@ -87,7 +87,9 @@ var api = {
         endpoint: 'orders/{id}',
         Map: Order
     }),
-    archivedOrders: new Api("archivedorders/{id}")
+    archivedOrders: new Api({
+        endpoint: 'archivedorders/{id}'
+    })
 };
 
 var ViewModel = DefineMap.extend({

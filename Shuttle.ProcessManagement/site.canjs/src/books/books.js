@@ -36,7 +36,9 @@ const api = {
         endpoint: 'products',
         Map: Book
     }),
-    orders: new Api('orders')
+    orders: new Api({
+        endpoint: 'orders'
+    })
 };
 
 const ViewModel = DefineMap.extend({

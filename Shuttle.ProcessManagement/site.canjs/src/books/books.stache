@@ -32,14 +32,14 @@
     </tfoot>
 </table>
 {{#if(canOrder)}}
-<cs-form title:from="'Checkout'">
-    <cs-form-input label:from="'Name'" required:from="'true'" value:bind="customerName"
-                   vm:errors:from="errors()" errorAttribute:from="'customerName'"/>
-    <cs-form-input label:from="'e-mail'" required:from="'true'" value:bind="customerEMail"
-                   vm:errors:from="errors()" errorAttribute:from="'customerEMail'"
-                   placeholder:from="'abc.xyz@example.com'"/>
-    <cs-button text:from="'Cancel'" click:from="@cancel" elementClass:from="'btn-secondary'"/>
-    <cs-button actions:from="actions" text:from="'Order'" elementClass:from="'btn-primary'"/>
+<cs-form title:raw="Checkout">
+    <cs-form-input label:raw="Name" required:raw="true" value:bind="customerName"
+                   vm:errors:from="errors()" errorAttribute:raw="customerName"/>
+    <cs-form-input label:raw="e-mail" required:raw="true" value:bind="customerEMail"
+                   vm:errors:from="errors()" errorAttribute:raw="customerEMail"
+                   placeholder:raw="abc.xyz@example.com"/>
+    <cs-button text:raw="Cancel" click:from="@cancel" elementClass:raw="btn-secondary"/>
+    <cs-button actions:from="actions" text:raw="Order" elementClass:raw="btn-primary"/>
 </cs-form>
 <br/>
 {{/if}}
