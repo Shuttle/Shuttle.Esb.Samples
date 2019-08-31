@@ -1,7 +1,7 @@
 ﻿{{#if fetching}}
     <cs-fetching title:from="'(fetching active orders)'"/>
 {{else}}
-    <h3>Active orders</h3>
+    <h4>Active orders</h4>
     <table class='table table-sm'>
         <thead class="thead-light">
         <tr class="row">

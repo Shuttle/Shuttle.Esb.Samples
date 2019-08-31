@@ -1,5 +1,5 @@
 ﻿{{#if(booksPromise.isResolved)}}
-<h3>Available titles</h3>
+<h4>Available titles</h4>
 <table class='table table-sm'>
     <thead class="thead-light">
     <tr class="row">
@@ -38,6 +38,7 @@
     <cs-form-input label:raw="e-mail" required:raw="true" value:bind="customerEMail"
                    vm:errors:from="errors()" errorAttribute:raw="customerEMail"
                    placeholder:raw="abc.xyz@example.com"/>
+    <br/>
     <cs-button text:raw="Cancel" click:from="@cancel" elementClass:raw="btn-secondary"/>
     <cs-button actions:from="actions" text:raw="Order" elementClass:raw="btn-primary"/>
 </cs-form>
