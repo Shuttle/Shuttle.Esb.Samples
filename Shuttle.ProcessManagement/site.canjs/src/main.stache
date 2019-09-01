@@ -1,6 +1,6 @@
 <nav class="navbar navbar-dark bg-dark">
     <a class="navbar-brand" href="#">
-        Shuttle Books
+        Shuttle Books (canjs)
     </a>
     <ul class="navbar-nav flex-row ml-md-auto d-none d-md-flex">
         <li class="nav-item">
