@@ -4,7 +4,6 @@ import 'bootstrap';
 import '@fortawesome/fontawesome-svg-core';
 
 import 'bootstrap/dist/css/bootstrap.css';
-import './main.css';
 
 import template from './main.stache';
 

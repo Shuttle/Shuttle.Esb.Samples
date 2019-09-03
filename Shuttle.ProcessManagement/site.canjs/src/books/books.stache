@@ -32,7 +32,10 @@
     </tfoot>
 </table>
 {{#if(canOrder)}}
-<cs-form title:raw="Checkout">
+<div>
+    <div class="cs-form-heading">
+        <h4 class="cs-form-title">Checkout</h4>
+    </div>
     <cs-form-input label:raw="Name" required:raw="true" value:bind="customerName"
                    vm:errors:from="errors()" errorAttribute:raw="customerName"/>
     <cs-form-input label:raw="e-mail" required:raw="true" value:bind="customerEMail"
@@ -41,7 +44,7 @@
     <br/>
     <cs-button text:raw="Cancel" click:from="@cancel" elementClass:raw="btn-secondary"/>
     <cs-button actions:from="actions" text:raw="Order" elementClass:raw="btn-primary"/>
-</cs-form>
+</div>
 <br/>
 {{/if}}
 {{else}}
