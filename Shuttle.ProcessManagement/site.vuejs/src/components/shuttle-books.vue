@@ -40,32 +40,58 @@
           </tr>
         </tfoot>
       </table>
-      <!-- <cs-form title:raw="Checkout">
-            <cs-form-input label:raw="Name" required:raw="true" value:bind="customerName"
-                        vm:errors:from="errors()" errorAttribute:raw="customerName"/>
-            <cs-form-input label:raw="e-mail" required:raw="true" value:bind="customerEMail"
-                        vm:errors:from="errors()" errorAttribute:raw="customerEMail"
-                        placeholder:raw="abc.xyz@example.com"/>
-            <br/>
-            <cs-button text:raw="Cancel" click:from="@cancel" elementClass:raw="btn-secondary"/>
-            <cs-button actions:from="actions" text:raw="Order" elementClass:raw="btn-primary"/>
-        </cs-form>
-      <br/>-->
+      <div v-if="canOrder()">
+        <h4>Checkout</h4>
+        <label for="customerName">Name</label>
+        <b-form-input v-model="customerName" placeholder="Enter your name" trim />
+        <div class="text-warning" v-if="!$v.customerName.required">can't be blank</div>
+        <label for="customerEMail">e-mail</label>
+        <b-form-input v-model="customerEMail" :type="email" placeholder="abc.xyz@example.com" class="mr-1" />
+        <div class="text-warning" v-if="!$v.customerEMail.email">is not a valid e-mail</div>
+        <div class="text-warning" v-if="!$v.customerEMail.required">can't be blank</div>
+        <br />
+        <b-button v-on:click="cancel" variant="secondary" class="mr-1">Cancel</b-button>
+        <b-dropdown variant="primary" text="Order">
+          <b-dropdown-item href="#">Custom</b-dropdown-item>
+          <b-dropdown-item href="#">Custom / EventSource</b-dropdown-item>
+          <b-dropdown-item href="#">EventSource / Module</b-dropdown-item>
+        </b-dropdown>
+      </div>
+      <br />
     </div>
-    <div v-else>no books</div>
+    <div v-else>
+      <b-card>
+        <h4 slot="header">(fetching books)</h4>
+        <b-card-text>
+          <b-progress :value="100" striped :animated="true" class="mt-2"></b-progress>
+        </b-card-text>
+      </b-card>
+    </div>
   </div>
 </template>
 
 <script>
 import axios from "axios";
 import configuration from "@/configuration.js";
+import { required, email } from "vuelidate/lib/validators";
 
 export default {
   name: "shuttle-books",
   data() {
     return {
+      customerName: "",
+      customerEMail: "",
       books: []
     };
+  },
+  validations: {
+    customerName: {
+      required
+    },
+    customerEMail: {
+      required,
+      email
+    }
   },
   computed: {
     total() {
@@ -77,6 +103,17 @@ export default {
   methods: {
     toggle(book) {
       book.buying = !book.buying;
+    },
+    canOrder() {
+      return this.total > 0;
+    },
+    cancel() {
+      this._clearOrder();
+    },
+    _clearOrder() {
+      this.books.forEach(function(book) {
+        book.buying = false;
+      });
     }
   },
   mounted() {

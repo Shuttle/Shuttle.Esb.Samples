@@ -16,7 +16,17 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link p-2" href="https://github.com/Shuttle/Shuttle.Esb.Samples/tree/master/Shuttle.ProcessManagement/site.canjs" target="_blank" rel="noopener" aria-label="GitHub">
+                <a class="nav-link p-2" href="https://bootstrap-vue.js.org/" target="_blank" rel="noopener" aria-label="Bootstrap-Vue">
+                    <img src="./assets/bootstrap-vue.svg" class="d-inline-block align-middle" alt="" style="width: 20px; height 20px;">
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link p-2" href="https://vuelidate.netlify.com/" target="_blank" rel="noopener" aria-label="Vuelidate">
+                    <img src="./assets/vuelidate.svg" class="d-inline-block align-middle" alt="" style="width: 20px; height 20px;">
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link p-2" href="https://github.com/Shuttle/Shuttle.Esb.Samples/tree/master/Shuttle.ProcessManagement/site.vuejs" target="_blank" rel="noopener" aria-label="GitHub">
                     <svg class="navbar-nav-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 499.36"
                             focusable="false" style="width: 20px; height 20px;">
                         <title>GitHub</title>
