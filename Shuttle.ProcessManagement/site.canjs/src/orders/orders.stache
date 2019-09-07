@@ -21,7 +21,7 @@
                         <cs-button text:from="'Cancel'" click:from="@cancelOrder" elementClass:from="'btn-default btn-danger btn-sm'" />
                     {{/if}}
                     {{#if canArchive}}
-                        <cs-button text:from="'archive'" click:from="@archiveOrder" elementClass:from="'btn-default btn-danger btn-sm'" />
+                        <cs-button text:from="'Archive'" click:from="@archiveOrder" elementClass:from="'btn-default btn-danger btn-sm'" />
                     {{/if}}
                 </td>
                 <td class="col-2">{{customerName}}</td>

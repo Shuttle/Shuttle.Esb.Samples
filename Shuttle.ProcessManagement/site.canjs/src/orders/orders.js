@@ -1,4 +1,4 @@
-﻿import { DefineMap, DefineList, Component, Reflect } from 'can';
+﻿import { DefineMap, DefineList, Component } from 'can';
 import view from './orders.stache';
 import Api from 'shuttle-can-api';
 import state from '~/state';
@@ -47,10 +47,10 @@ var Order = DefineMap.extend({
         this.canArchive = order.canArchive;
     },
     archiveOrder() {
-        api.archivedOrders.delete({id: this.id})
+        api.archivedOrders.delete({ id: this.id })
             .then(function () {
-                    state.alerts.add({message: 'Your archive request has been sent for processing.', name: 'order-archive'});
-                },
+                state.alerts.add({ message: 'Your archive request has been sent for processing.', name: 'order-archive' });
+            },
                 function () {
                     state.alerts.add({
                         message: 'The selected order could not be archived.',
@@ -60,7 +60,7 @@ var Order = DefineMap.extend({
                 });
     },
     cancelOrder: function () {
-        api.orders.delete({id: this.id})
+        api.orders.delete({ id: this.id })
             .then(
                 function () {
                     state.alerts.add({
@@ -118,7 +118,7 @@ var ViewModel = DefineMap.extend({
         api.orders.list()
             .then(
                 function (data) {
-                    Reflect.each(data, function (item) {
+                    data.forEach(function (item) {
                         self.orders.push(new Order(item));
                     });
                 },
@@ -168,51 +168,49 @@ var ViewModel = DefineMap.extend({
 
         timeout = setTimeout(function () {
             api.orders.list()
-                .then(
-                    function (data) {
-                        Reflect.each(data, function (order) {
-                            found = false;
+                .then(response => {
+                    response.forEach(function (order) {
+                        found = false;
 
-                            self.orders.forEach(function (element) {
-                                if (element.id === order.id) {
-                                    element.applyValues(order);
+                        self.orders.forEach(function (element) {
+                            if (element.id === order.id) {
+                                element.applyValues(order);
 
-                                    found = true;
-                                }
-                            });
-
-                            if (!found) {
-                                self.orders.push(new Order(order));
+                                found = true;
                             }
                         });
 
-                        self.orders.forEach(function (existingOrder) {
-                            found = false;
+                        if (!found) {
+                            self.orders.push(new Order(order));
+                        }
+                    });
 
-                            Reflect.each(data, function (order) {
-                                if (found) {
-                                    return;
-                                }
+                    self.orders.forEach(function (existingOrder) {
+                        found = false;
 
-                                found = (order.id === existingOrder.id);
-                            });
-
-                            if (!found) {
-                                orderIdsToRemove.push(existingOrder.id);
+                        response.forEach(function (order) {
+                            if (found) {
+                                return;
                             }
+
+                            found = (order.id === existingOrder.id);
                         });
 
-                        Reflect.each(orderIdsToRemove, function (id) {
-                            self._removeOrder(id);
-                        });
-                    },
-                    function (error) {
-                        state.alerts.add({
-                            message: 'Could not fetch the orders.',
-                            name: 'order-fetch-error',
-                            type: 'danger'
-                        });
-                    })
+                        if (!found) {
+                            orderIdsToRemove.push(existingOrder.id);
+                        }
+                    });
+
+                    orderIdsToRemove.forEach(function (id) {
+                        self._removeOrder(id);
+                    });
+                }).catch(error => {
+                    state.alerts.add({
+                        message: 'Could not fetch the orders.',
+                        name: 'order-fetch-error',
+                        type: 'danger'
+                    });
+                })
                 .then(function () {
                     self._poll();
                 });

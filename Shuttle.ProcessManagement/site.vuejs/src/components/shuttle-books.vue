@@ -46,15 +46,20 @@
         <b-form-input v-model="customerName" placeholder="Enter your name" trim />
         <div class="text-warning" v-if="!$v.customerName.required">can't be blank</div>
         <label for="customerEMail">e-mail</label>
-        <b-form-input v-model="customerEMail" :type="email" placeholder="abc.xyz@example.com" class="mr-1" />
+        <b-form-input
+          v-model="customerEMail"
+          type="email"
+          placeholder="abc.xyz@example.com"
+          class="mr-1"
+        />
         <div class="text-warning" v-if="!$v.customerEMail.email">is not a valid e-mail</div>
         <div class="text-warning" v-if="!$v.customerEMail.required">can't be blank</div>
         <br />
         <b-button v-on:click="cancel" variant="secondary" class="mr-1">Cancel</b-button>
         <b-dropdown variant="primary" text="Order">
-          <b-dropdown-item href="#">Custom</b-dropdown-item>
-          <b-dropdown-item href="#">Custom / EventSource</b-dropdown-item>
-          <b-dropdown-item href="#">EventSource / Module</b-dropdown-item>
+          <b-dropdown-item href="#" v-on:click="orderCustom">Custom</b-dropdown-item>
+          <b-dropdown-item href="#" :click="orderCustomEventSource">Custom / EventSource</b-dropdown-item>
+          <b-dropdown-item href="#" :click="orderEventSourceModule">EventSource / Module</b-dropdown-item>
         </b-dropdown>
       </div>
       <br />
@@ -74,6 +79,7 @@
 import axios from "axios";
 import configuration from "@/configuration.js";
 import { required, email } from "vuelidate/lib/validators";
+import state from "@/state.js";
 
 export default {
   name: "shuttle-books",
@@ -114,6 +120,53 @@ export default {
       this.books.forEach(function(book) {
         book.buying = false;
       });
+    },
+    orderCustom() {
+      this._submitOrder("custom");
+    },
+    orderCustomEventSource() {
+      this._submitOrder("custom / event-source");
+    },
+    orderEventSourceModule() {
+      this._submitOrder("event-source / module");
+    },
+    _submitOrder: function(targetSystem) {
+      var self = this;
+
+      if (this.$v.$invalid) {
+        return false;
+      }
+
+      var order = {
+        productIds: [],
+        targetSystem: targetSystem,
+        customerName: this.customerName,
+        customerEMail: this.customerEMail
+      };
+
+      this.books.forEach(function(book) {
+        if (book.buying) {
+          order.productIds.push(book.id);
+        }
+      });
+
+      axios
+        .post(configuration.url + "/orders", order)
+        .then(() => {
+          self._clearOrder();
+
+          state.alerts.add({
+            message: "Your order has been sent for processing.",
+            name: "order-placed"
+          });
+        })
+        .catch(error => {
+          state.alerts.add({
+            message: error.message,
+            name: "order-error",
+            type: "danger"
+          });
+        });
     }
   },
   mounted() {

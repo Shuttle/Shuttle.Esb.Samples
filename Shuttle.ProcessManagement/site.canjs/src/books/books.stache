@@ -37,7 +37,7 @@
         <h4 class="cs-form-title">Checkout</h4>
     </div>
     <cs-form-input label:raw="Name" required:raw="true" value:bind="customerName"
-                   vm:errors:from="errors()" errorAttribute:raw="customerName"/>
+                   vm:errors:from="errors()" errorAttribute:raw="customerName" placeholder:raw="Enter your name"/>
     <cs-form-input label:raw="e-mail" required:raw="true" value:bind="customerEMail"
                    vm:errors:from="errors()" errorAttribute:raw="customerEMail"
                    placeholder:raw="abc.xyz@example.com"/>
