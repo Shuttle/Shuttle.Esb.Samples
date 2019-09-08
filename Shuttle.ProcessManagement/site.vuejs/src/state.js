@@ -73,7 +73,7 @@ export class Alerts {
 
         this.messages = this.messages.filter(function (message) {
             return (message.expiryDate &&
-                message.expiryDate < date) ? message : undefined;
+                message.expiryDate < date) ? undefined : message;
         });
 
         setTimeout(function() {

@@ -29,7 +29,7 @@
                 class="btn btn-default btn-success btn-sm"
               >Add</button>
             </td>
-            <td class="col">{{book.description}}</td>
+            <td class="col"><a :href="book.url" target="_blank">{{book.description}}</a></td>
             <td class="col-2 text-right">{{book.price}}</td>
           </tr>
         </tbody>
@@ -58,8 +58,8 @@
         <b-button v-on:click="cancel" variant="secondary" class="mr-1">Cancel</b-button>
         <b-dropdown variant="primary" text="Order">
           <b-dropdown-item href="#" v-on:click="orderCustom">Custom</b-dropdown-item>
-          <b-dropdown-item href="#" :click="orderCustomEventSource">Custom / EventSource</b-dropdown-item>
-          <b-dropdown-item href="#" :click="orderEventSourceModule">EventSource / Module</b-dropdown-item>
+          <b-dropdown-item href="#" v-on:click="orderCustomEventSource">Custom / EventSource</b-dropdown-item>
+          <b-dropdown-item href="#" v-on:click="orderEventSourceModule">EventSource / Module</b-dropdown-item>
         </b-dropdown>
       </div>
       <br />

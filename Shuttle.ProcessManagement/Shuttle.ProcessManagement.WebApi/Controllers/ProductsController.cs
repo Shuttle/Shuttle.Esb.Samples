@@ -26,7 +26,8 @@ namespace Shuttle.ProcessManagement.WebApi.Controllers
                     {
                         Id = ProductColumns.Id.MapFrom(row),
                         Description = ProductColumns.Description.MapFrom(row),
-                        Price = ProductColumns.Price.MapFrom(row)
+                        Price = ProductColumns.Price.MapFrom(row),
+                        Url = ProductColumns.Url.MapFrom(row)
                     })
             };
         }

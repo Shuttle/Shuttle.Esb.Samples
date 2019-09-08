@@ -18,7 +18,7 @@
             <cs-button text:from="'Add'" click:from="@toggle" elementClass:from="'btn-default btn-success btn-sm'"/>
         {{/if}}
     </td>
-    <td class="col">{{description}}</td>
+    <td class="col"><a href="{{url}}" target="_blank">{{description}}</a></td>
     <td class="col-2 text-right">{{price}}</td>
 </tr>
 {{/each}}
