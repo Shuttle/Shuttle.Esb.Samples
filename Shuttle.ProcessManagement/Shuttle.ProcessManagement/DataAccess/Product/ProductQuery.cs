@@ -44,7 +44,7 @@ namespace Shuttle.ProcessManagement
             var result = All().FirstOrDefault(dataRow => ProductColumns.Id.MapFrom(dataRow).Equals(id));
 
             Guard.Against<ApplicationException>(result == null,
-                string.Format("Could not locate a product with id '{0}'.", id));
+                $"Could not locate a product with id '{id}'.");
 
             return result;
         }
