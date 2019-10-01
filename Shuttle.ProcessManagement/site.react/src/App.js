@@ -91,7 +91,7 @@ function App() {
       <Alerts />
       <div className="container-fluid">
       <div className="row row-offcanvas row-offcanvas-left">
-        <div id="application-content" className="main col-sm-12 col-md-12">
+        <div id="application-content" className="main col-sm-12 col-md-12 pt-2">
           <ShuttleBooks />
           {/* <ShuttleOrders /> */}
         </div>
