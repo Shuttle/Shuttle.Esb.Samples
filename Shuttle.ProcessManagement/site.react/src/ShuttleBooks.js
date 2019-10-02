@@ -5,21 +5,29 @@ import state from "./state.js";
 import Card from 'react-bootstrap/Card'
 import ProgressBar from 'react-bootstrap/ProgressBar'
 import Form from 'react-bootstrap/Form'
-import FormControl from 'react-bootstrap/FormControl'
 import Button from 'react-bootstrap/Button'
+import Dropdown from 'react-bootstrap/Dropdown'
+import DropdownButton from 'react-bootstrap/DropdownButton'
+import ButtonToolbar from 'react-bootstrap/ButtonToolbar'
 
 export default class ShuttleBooks extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            customerName: "",
-            customerEMail: "",
+            customerName: '',
+            customerName: '',
+            customerNameValidation: '',
+            customerEMail: '',
+            customerEMailValidation: '',
             books: []
         };
 
         this.handleCustomerNameChange = this.handleCustomerNameChange.bind(this);
         this.handleCustomerEMailChange = this.handleCustomerEMailChange.bind(this);
+        this.orderCustom = this.orderCustom.bind(this);
+        this.orderCustomEventSource = this.orderCustomEventSource.bind(this);
+        this.orderEventSourceModule = this.orderEventSourceModule.bind(this);
     }
 
     componentDidMount() {
@@ -57,13 +65,45 @@ export default class ShuttleBooks extends React.Component {
         }, 0);
     }
 
+    validate() {
+        const email = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        let customerNameValidation = '';
+        let customerEMailValidation = '';
+
+        if (!this.state.customerName) {
+            customerNameValidation = "can't be blank";
+        }
+
+        if (!this.state.customerEMail) {
+            customerEMailValidation = "can't be blank";
+        }
+
+        if (!customerEMailValidation && !email.test(this.state.customerEMail)) {
+            customerEMailValidation = 'not a valid e-mail address';
+        }
+
+        this.setState({
+            customerNameValidation: customerNameValidation,
+            customerEMailValidation: customerEMailValidation
+        });
+
+        return !customerNameValidation || !customerEMailValidation;
+    }
+
     handleCustomerNameChange(e) {
-        this.setState({ customerName: e.target.value });
-        console.log(e.target.value);
+        this.setState({
+            customerName: e.target.value
+        });
+
+        this.validate();
     }
 
     handleCustomerEMailChange(e) {
-        this.setState({ customerEMail: e.target.value });
+        this.setState({
+            customerEMail: e.target.value
+        });
+
+        this.validate();
     }
 
     cancel() {
@@ -80,6 +120,57 @@ export default class ShuttleBooks extends React.Component {
                 })
             }
         });
+    }
+
+    orderCustom() {
+        this._submitOrder("custom");
+    }
+
+    orderCustomEventSource() {
+        this._submitOrder("custom / event-source");
+    }
+
+    orderEventSourceModule() {
+        this._submitOrder("event-source / module");
+    }
+
+    _submitOrder(targetSystem) {
+        var self = this;
+
+        if (!this.validate()) {
+            return false;
+        }
+
+        var order = {
+            productIds: [],
+            targetSystem: targetSystem,
+            customerName: this.state.customerName,
+            customerEMail: this.state.customerEMail
+        };
+
+        this.state.books.forEach(function (book) {
+            if (book.buying) {
+                order.productIds.push(book.id);
+            }
+        });
+
+        axios
+            .post(configuration.url + "/orders", order)
+            .then(() => {
+                self._clearOrder();
+
+                state.alerts.add({
+                    message: "Your order has been sent for processing.",
+                    name: "order-placed"
+                });
+            })
+            .catch(error => {
+                state.alerts.add({
+                    message: error.message,
+                    name: "order-error",
+                    type: "danger"
+                });
+            });
     }
 
     render() {
@@ -127,12 +218,19 @@ export default class ShuttleBooks extends React.Component {
                                 <h4>Checkout</h4>
                                 <label htmlFor="customerName">Name</label>
                                 <Form.Control value={this.state.customerName} placeholder="Enter your name" trim="true" onChange={this.handleCustomerNameChange} />
-                                <div className="text-warning" v-if="!$v.customerName.required">can't be blank</div>
-                                <FormControl.Feedback type="invalid">Just checking</FormControl.Feedback>
+                                {!!this.state.customerNameValidation && <div className="text-warning">{this.state.customerNameValidation}</div>}
                                 <label htmlFor="customerEMail" className="mt-2">e-mail</label>
                                 <Form.Control value={this.state.customerEMail} placeholder="abc.xyz@example.com" type="email" className="mr-1" onChange={this.handleCustomerEMailChange} />
+                                {!!this.state.customerEMailValidation && <div className="text-warning">{this.state.customerEMailValidation}</div>}
                                 <br />
-                                <Button onClick={() => this.cancel()} variant="secondary" className="mr-1">Cancel</Button>
+                                <ButtonToolbar>
+                                    <Button onClick={() => this.cancel()} variant="secondary" className="mr-1">Cancel</Button>
+                                    <DropdownButton id="dropdown-item-button" title="Order">
+                                        <Dropdown.Item as="button" onClick={() => this.orderCustom()}>Custom</Dropdown.Item>
+                                        <Dropdown.Item as="button" onClick={() => this.orderCustomEventSource()}>Custom / EventSource</Dropdown.Item>
+                                        <Dropdown.Item as="button" onClick={() => this.orderEventSourceModule()}>EventSource / Module</Dropdown.Item>
+                                    </DropdownButton>
+                                </ButtonToolbar>
                             </div>
                         )
                     }
