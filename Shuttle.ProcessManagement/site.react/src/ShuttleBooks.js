@@ -16,7 +16,6 @@ export default class ShuttleBooks extends React.Component {
 
         this.state = {
             customerName: '',
-            customerName: '',
             customerNameValidation: '',
             customerEMail: '',
             customerEMailValidation: '',
@@ -39,10 +38,6 @@ export default class ShuttleBooks extends React.Component {
                 })
             });
         });
-    }
-
-    componentWillUnmount() {
-
     }
 
     toggle(book) {

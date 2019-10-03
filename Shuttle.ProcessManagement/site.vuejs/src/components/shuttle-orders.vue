@@ -54,6 +54,7 @@ export default {
   name: "shuttle-order",
   data() {
     return {
+      poll: false,
       pollTimer: 0,
       orders: []
     };
@@ -95,6 +96,10 @@ export default {
         clearTimeout(timeout);
       }
 
+      if (!this.poll) {
+        return;
+      }
+
       timeout = setTimeout(
         function() {
           var self = this;
@@ -102,6 +107,9 @@ export default {
           axios
             .get(configuration.url + "/orders")
             .then(response => {
+              self.orders = response.data.data;
+
+              return;
               response.data.data.forEach(function(order) {
                 found = false;
 
@@ -168,11 +176,15 @@ export default {
     axios
       .get(configuration.url + "/orders")
       .then(response => {
-        this.orders = response.data.data;
+        self.orders = response.data.data;
       })
       .then(() => {
+        self.poll = true;
         self._poll();
       });
+  },
+  beforeDestroy() {
+    this.poll = false;
   }
 };
 </script>
