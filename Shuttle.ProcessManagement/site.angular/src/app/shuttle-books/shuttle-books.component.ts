@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-shuttle-books',
+  selector: 'shuttle-books',
   templateUrl: './shuttle-books.component.html',
   styleUrls: ['./shuttle-books.component.css']
 })
