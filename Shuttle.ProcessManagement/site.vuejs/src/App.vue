@@ -9,7 +9,7 @@
             href="https://vuejs.org/"
             target="_blank"
             rel="noopener"
-            aria-label="Canjs"
+            aria-label="vuejs"
           >
             <img
               src="./assets/logo.png"
@@ -31,7 +31,7 @@
               src="./assets/bootstrap-solid.svg"
               class="d-inline-block align-middle"
               alt
-              style="width: 20px; height 20px;"
+              style="width: 20px; height: 20px;"
             />
           </a>
         </li>
@@ -47,7 +47,7 @@
               src="./assets/bootstrap-vue.svg"
               class="d-inline-block align-middle"
               alt
-              style="width: 20px; height 20px;"
+              style="width: 20px; height: 20px;"
             />
           </a>
         </li>
@@ -63,7 +63,7 @@
               src="./assets/vuelidate.svg"
               class="d-inline-block align-middle"
               alt
-              style="width: 20px; height 20px;"
+              style="width: 20px; height: 20px;"
             />
           </a>
         </li>
@@ -80,7 +80,7 @@
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 512 499.36"
               focusable="false"
-              style="width: 20px; height 20px;"
+              style="width: 20px; height: 20px;"
             >
               <title>GitHub</title>
               <path
