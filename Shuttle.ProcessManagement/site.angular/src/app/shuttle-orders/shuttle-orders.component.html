@@ -1,1 +1,42 @@
-<p>shuttle-orders works!</p>
+<div>
+    <div *ngIf="orders.length">
+        <h4>Active orders</h4>
+        <table class="table table-sm">
+            <thead class="thead-light">
+                <tr class="row">
+                    <th class="col-1"></th>
+                    <th class="col-2">Customer name</th>
+                    <th class="col-2">Order number</th>
+                    <th class="col-2">Order date</th>
+                    <th class="col-3">Status</th>
+                    <th class="col-2 text-right">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let order of orders" class="row">
+                    <td class="col-1">
+                        <button *ngIf="order.canCancel" (click)="cancelOrder(order)"
+                            class="btn btn-default btn-danger btn-sm">Cancel</button>
+                        <button *ngIf="order.canArchive" (click)="archiveOrder(order)"
+                            class="btn btn-default btn-danger btn-sm">Archive</button>
+                    </td>
+                    <td class="col-2">{{order.customerName}}</td>
+                    <td class="col-2">{{order.orderNumber}}</td>
+                    <td class="col-2">{{order.orderDate}}</td>
+                    <td class="col-3">{{order.status}}</td>
+                    <td class="col-2 text-right">{{order.orderTotal}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div *ngIf="!orders.length">
+        <div class="card">
+            <div class="card-header">
+                <h4>(fetching orders)</h4>
+            </div>
+            <div class="card-body">
+                <ngb-progressbar value="1000" class="mt-2" animated="true" striped="true"></ngb-progressbar>
+            </div>
+        </div>
+    </div>
+</div>
