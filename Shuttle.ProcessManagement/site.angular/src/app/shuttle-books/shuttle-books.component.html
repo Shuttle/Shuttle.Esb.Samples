@@ -1,1 +1,64 @@
-<p>shuttle-books works!</p>
+<div>
+    <div *ngIf="books.length">
+        <h4>Available titles</h4>
+        <table class="table table-sm">
+            <thead class="thead-light">
+                <tr class="row">
+                    <th class="col-1"></th>
+                    <th class="col">Title</th>
+                    <th class="col-2 text-right">Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let book of books" class="row" [class.table-info]="book.buying">
+                    <td class="col-1">
+                        <button (click)="toggle(book)" class="btn btn-default btn-sm" [class.btn-danger]="book.buying"
+                            [class.btn-success]="!book.buying"><span *ngIf="book.buying">Remove</span><span
+                                *ngIf="!book.buying">Add</span></button>
+                    </td>
+                    <td class="col"><a :href="book.url" target="_blank">{{book.description}}</a></td>
+                    <td class="col-2 text-right">{{book.price}}</td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr class="row">
+                    <td colspan="2" class="col"></td>
+                    <td class="col-2 text-right info">{{total}}</td>
+                </tr>
+            </tfoot>
+        </table>
+        <div *ngIf="canOrder()">
+            <h4>Checkout</h4>
+            <label for="customerName">Name</label>
+            <input [(ngModel)]="customerName" class="form-control" placeholder="Enter your name" trim />
+            <div class="text-warning" *ngIf="!!customerNameValidation">{{customerNameValidation}}</div>
+            <label for="customerEMail">e-mail</label>
+            <input [(ngModel)]="customerEMail" class="form-control mr-1" type="email"
+                placeholder="abc.xyz@example.com" />
+            <div class="text-warning" *ngIf="!!customerEMailValidation">{{customerEMailValidation}}</div>
+            <br />
+            <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                <button (click)="cancel" class="btn btn-secondary mr-1">Cancel</button>
+                <div ngbDropdown>
+                    <button class="btn btn-primary" id="dropdownConfig" ngbDropdownToggle>Toggle</button>
+                    <div ngbDropdownMenu aria-labelledby="dropdownConfig">
+                        <button ngbDropdownItem (click)="orderCustom()">Custom</button>
+                        <button ngbDropdownItem (click)="orderCustomEventSource()">Custom / EventSource</button>
+                        <button ngbDropdownItem (click)="orderEventSourceModule()">EventSource / Module</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />
+    </div>
+    <div *ngIf="!books.length">
+        <div class="card">
+            <div class="card-header">
+                <h4>(fetching books)</h4>
+            </div>
+            <div class="card-body">
+                <ngb-progressbar value="1000" class="mt-2" animated="true" striped="true"></ngb-progressbar>
+            </div>
+        </div>
+    </div>
+</div>

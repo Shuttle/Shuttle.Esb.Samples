@@ -82,7 +82,7 @@ export default class ShuttleBooks extends React.Component {
             customerEMailValidation: customerEMailValidation
         });
 
-        return !customerNameValidation || !customerEMailValidation;
+        return !customerNameValidation && !customerEMailValidation;
     }
 
     handleCustomerNameChange(e) {
