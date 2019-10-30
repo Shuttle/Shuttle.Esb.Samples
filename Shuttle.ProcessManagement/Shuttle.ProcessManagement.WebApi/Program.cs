@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using log4net;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Shuttle.Core.Log4Net;
 using Shuttle.Core.Logging;
 
@@ -26,7 +27,10 @@ namespace Shuttle.ProcessManagement.WebApi
 
         public static IWebHost BuildWebHost(string[] args)
         {
+            var configuration = new ConfigurationBuilder().AddCommandLine(args).Build();
+
             return WebHost.CreateDefaultBuilder(args)
+                .UseConfiguration(configuration)
                 .UseStartup<Startup>()
                 .Build();
         }
