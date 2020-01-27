@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -7,7 +7,7 @@
 
   <ItemGroup>
     <PackageReference Include="Shuttle.Core.AutoFac" Version="10.0.4" />
-    <PackageReference Include="Shuttle.Esb.Msmq" Version="10.0.3" />
+    <PackageReference Include="Shuttle.Esb.Msmq" Version="11.0.0" />
   </ItemGroup>
 
   <ItemGroup>
