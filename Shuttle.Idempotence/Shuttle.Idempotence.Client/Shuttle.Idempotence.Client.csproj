@@ -6,8 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Shuttle.Core.SimpleInjector" Version="10.0.3" />
-    <PackageReference Include="Shuttle.Esb.Msmq" Version="10.0.2" />
+    <PackageReference Include="Shuttle.Core.SimpleInjector" Version="10.0.6" />
+    <PackageReference Include="Shuttle.Esb.Msmq" Version="11.0.1" />
   </ItemGroup>
 
   <ItemGroup>

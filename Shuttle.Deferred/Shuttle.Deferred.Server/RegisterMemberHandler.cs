@@ -15,7 +15,7 @@ namespace Shuttle.Deferred.Server
 
 	    public void ProcessMessage(IHandlerContext<RegisterMemberCommand> context)
 		{
-		    _log.Trace($"[MEMBER REGISTERED] : user name = '{context.Message.UserName}'");
+		    _log.Information($"[MEMBER REGISTERED] : user name = '{context.Message.UserName}'");
 		}
 	}
 }

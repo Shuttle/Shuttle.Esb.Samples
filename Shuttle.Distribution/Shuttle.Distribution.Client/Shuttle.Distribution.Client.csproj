@@ -6,8 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Shuttle.Core.Unity" Version="10.0.5" />
-    <PackageReference Include="Shuttle.Esb.Msmq" Version="10.0.3" />
+    <PackageReference Include="Shuttle.Core.Unity" Version="10.0.9" />
+    <PackageReference Include="Shuttle.Esb.Msmq" Version="11.0.1" />
   </ItemGroup>
 
   <ItemGroup>

@@ -11,7 +11,11 @@ namespace Shuttle.Idempotence.Client
 	{
 		private static void Main(string[] args)
 		{
-			var container = new SimpleInjectorComponentContainer(new Container());
+            var simpleInjectorContainer = new Container();
+
+            simpleInjectorContainer.Options.EnableAutoVerification = false;
+            
+            var container = new SimpleInjectorComponentContainer(simpleInjectorContainer);
 
 			ServiceBus.Register(container);
 
