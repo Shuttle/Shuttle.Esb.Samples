@@ -1,7 +1,9 @@
 ﻿using System;
 using Castle.Windsor;
 using Shuttle.Core.Castle;
+using Shuttle.Core.Container;
 using Shuttle.Esb;
+using Shuttle.Esb.Msmq;
 using Shuttle.RequestResponse.Messages;
 
 namespace Shuttle.RequestResponse.Client
@@ -12,9 +14,11 @@ namespace Shuttle.RequestResponse.Client
 		{
 			var container = new WindsorComponentContainer(new WindsorContainer());
 
-			ServiceBus.Register(container);
+			container.Register<IMsmqConfiguration, MsmqConfiguration>();
 
-			using (var bus = ServiceBus.Create(container).Start())
+			container.RegisterServiceBus();
+
+			using (var bus = container.Resolve<IServiceBus>().Start())
 			{
 				string userName;
 

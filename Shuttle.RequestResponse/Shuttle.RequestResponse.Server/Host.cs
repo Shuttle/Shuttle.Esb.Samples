@@ -1,10 +1,12 @@
 ﻿using Castle.Windsor;
 using log4net;
 using Shuttle.Core.Castle;
+using Shuttle.Core.Container;
 using Shuttle.Core.Log4Net;
 using Shuttle.Core.Logging;
 using Shuttle.Core.ServiceHost;
 using Shuttle.Esb;
+using Shuttle.Esb.Msmq;
 
 namespace Shuttle.RequestResponse.Server
 {
@@ -21,9 +23,11 @@ namespace Shuttle.RequestResponse.Server
         {
             var container = new WindsorComponentContainer(new WindsorContainer());
 
-            ServiceBus.Register(container);
+            container.Register<IMsmqConfiguration, MsmqConfiguration>();
 
-            _bus = ServiceBus.Create(container).Start();
+            container.RegisterServiceBus();
+
+            _bus = container.Resolve<IServiceBus>().Start();
         }
 
         public void Stop()
