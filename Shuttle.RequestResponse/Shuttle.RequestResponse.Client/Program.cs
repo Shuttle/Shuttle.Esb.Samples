@@ -3,7 +3,7 @@ using Castle.Windsor;
 using Shuttle.Core.Castle;
 using Shuttle.Core.Container;
 using Shuttle.Esb;
-using Shuttle.Esb.Msmq;
+using Shuttle.Esb.AzureMQ;
 using Shuttle.RequestResponse.Messages;
 
 namespace Shuttle.RequestResponse.Client
@@ -14,7 +14,7 @@ namespace Shuttle.RequestResponse.Client
 		{
 			var container = new WindsorComponentContainer(new WindsorContainer());
 
-			container.Register<IMsmqConfiguration, MsmqConfiguration>();
+			container.Register<IAzureStorageConfiguration, DefaultAzureStorageConfiguration>();
 
 			container.RegisterServiceBus();
 

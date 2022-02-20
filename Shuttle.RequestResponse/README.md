@@ -1,11 +1,6 @@
 # Running
 
-When using Visual Studio 2017 the NuGet packages should be restored automatically.  If you find that they do not or if you are using an older version of Visual Studio please execute the following in a Visual Studio command prompt:
-
-```
-cd {extraction-folder}\Shuttle.Esb.Samples\Shuttle.RequestResponse
-nuget restore
-```
+This sample makes use of [Shuttle.Esb.AzureMQ](https://github.com/Shuttle/Shuttle.Esb.AzureMQ) for the message queues.  Local Azure Storage Queues should be provided by [Azurite](https://docs.microsoft.com/en-us/azure/storage/common/storage-use-azurite?tabs=visual-studio).
 
 Once you have opened the `Shuttle.RequestResponse.sln` solution in Visual Studio set the following projects as startup projects:
 
@@ -121,19 +116,19 @@ namespace Shuttle.RequestResponse.Client
 
 	<serviceBus>
 		<messageRoutes>
-			<messageRoute uri="msmq://./shuttle-server-work">
+			<messageRoute uri="azuremq://azure/shuttle-server-work">
 				<add specification="StartsWith" value="Shuttle.RequestResponse.Messages" />
 			</messageRoute>
 		</messageRoutes>		
 
 		<inbox
-		   workQueueUri="msmq://./shuttle-client-work"
-		   errorQueueUri="msmq://./shuttle-error" />
+		   workQueueUri="azuremq://azure/shuttle-client-work"
+		   errorQueueUri="azuremq://azure/shuttle-error" />
 	</serviceBus>
 </configuration>
 ```
 
-This tells Shuttle that all messages that are sent and have a type name starting with `Shuttle.RequestResponse.Messages` should be sent to endpoint `msmq://./shuttle-server-work`.
+This tells Shuttle that all messages that are sent and have a type name starting with `Shuttle.RequestResponse.Messages` should be sent to endpoint `azuremq://azure/shuttle-server-work`.
 
 ### MemberRegisteredHandler
 
@@ -255,8 +250,8 @@ namespace Shuttle.RequestResponse.Server
 
 	<serviceBus>
 		 <inbox
-			workQueueUri="msmq://./shuttle-server-work"
-			errorQueueUri="msmq://./shuttle-error" />
+			workQueueUri="azuremq://azure/shuttle-server-work"
+			errorQueueUri="azuremq://azure/shuttle-error" />
 	</serviceBus>
 </configuration>
 ```

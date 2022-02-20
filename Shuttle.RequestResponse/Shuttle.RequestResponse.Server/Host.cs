@@ -4,9 +4,9 @@ using Shuttle.Core.Castle;
 using Shuttle.Core.Container;
 using Shuttle.Core.Log4Net;
 using Shuttle.Core.Logging;
-using Shuttle.Core.ServiceHost;
+using Shuttle.Core.WorkerService;
 using Shuttle.Esb;
-using Shuttle.Esb.Msmq;
+using Shuttle.Esb.AzureMQ;
 
 namespace Shuttle.RequestResponse.Server
 {
@@ -23,7 +23,7 @@ namespace Shuttle.RequestResponse.Server
         {
             var container = new WindsorComponentContainer(new WindsorContainer());
 
-            container.Register<IMsmqConfiguration, MsmqConfiguration>();
+            container.Register<IAzureStorageConfiguration, DefaultAzureStorageConfiguration>();
 
             container.RegisterServiceBus();
 
