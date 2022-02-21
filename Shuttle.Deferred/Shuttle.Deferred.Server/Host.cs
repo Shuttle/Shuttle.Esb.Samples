@@ -1,10 +1,13 @@
-﻿using Autofac;
+﻿using System.Text;
+using Autofac;
 using log4net;
 using Shuttle.Core.Autofac;
+using Shuttle.Core.Container;
 using Shuttle.Core.Log4Net;
 using Shuttle.Core.Logging;
-using Shuttle.Core.ServiceHost;
+using Shuttle.Core.WorkerService;
 using Shuttle.Esb;
+using Shuttle.Esb.AzureMQ;
 
 namespace Shuttle.Deferred.Server
 {
@@ -19,14 +22,17 @@ namespace Shuttle.Deferred.Server
 
         public void Start()
         {
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+
             Log.Assign(new Log4NetLog(LogManager.GetLogger(typeof(Host))));
 
             var containerBuilder = new ContainerBuilder();
             var registry = new AutofacComponentRegistry(containerBuilder);
 
-            ServiceBus.Register(registry);
+            registry.Register<IAzureStorageConfiguration, DefaultAzureStorageConfiguration>();
+            registry.RegisterServiceBus();
 
-            _bus = ServiceBus.Create(new AutofacComponentResolver(containerBuilder.Build())).Start();
+            _bus = new AutofacComponentResolver(containerBuilder.Build()).Resolve<IServiceBus>().Start();
         }
     }
 }

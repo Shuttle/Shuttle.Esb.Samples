@@ -1,8 +1,10 @@
 ﻿using System;
 using Autofac;
 using Shuttle.Core.Autofac;
+using Shuttle.Core.Container;
 using Shuttle.Deferred.Messages;
 using Shuttle.Esb;
+using Shuttle.Esb.AzureMQ;
 
 namespace Shuttle.Deferred.Client
 {
@@ -13,9 +15,10 @@ namespace Shuttle.Deferred.Client
 			var containerBuilder = new ContainerBuilder();
 			var registry = new AutofacComponentRegistry(containerBuilder);
 
-			ServiceBus.Register(registry);
+			registry.Register<IAzureStorageConfiguration, DefaultAzureStorageConfiguration>();
+			registry.RegisterServiceBus();
 
-			using (var bus = ServiceBus.Create(new AutofacComponentResolver(containerBuilder.Build())).Start())
+			using (var bus = new AutofacComponentResolver(containerBuilder.Build()).Resolve<IServiceBus>().Start())
 			{
 				string userName;
 
