@@ -266,7 +266,7 @@ namespace Shuttle.RequestResponse.Server
 
 	<log4net>
 		<appender name="RollingFileAppender" type="log4net.Appender.RollingFileAppender">
-			<file value="logs\server" />
+			<file value="logs\requestresponse-server" />
 			<appendToFile value="true" />
 			<rollingStyle value="Composite" />
 			<maxSizeRollBackups value="10" />
