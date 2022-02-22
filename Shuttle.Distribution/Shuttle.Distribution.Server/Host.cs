@@ -1,6 +1,8 @@
-﻿using Shuttle.Core.ServiceHost;
+﻿using Shuttle.Core.Container;
 using Shuttle.Core.Unity;
+using Shuttle.Core.WorkerService;
 using Shuttle.Esb;
+using Shuttle.Esb.AzureMQ;
 using Unity;
 
 namespace Shuttle.Distribution.Server
@@ -13,9 +15,10 @@ namespace Shuttle.Distribution.Server
         {
             var container = new UnityComponentContainer(new UnityContainer());
 
-            ServiceBus.Register(container);
+            container.Register<IAzureStorageConfiguration, DefaultAzureStorageConfiguration>();
+            container.RegisterServiceBus();
 
-            _bus = ServiceBus.Create(container).Start();
+            _bus = container.Resolve<IServiceBus>().Start();
         }
 
         public void Stop()

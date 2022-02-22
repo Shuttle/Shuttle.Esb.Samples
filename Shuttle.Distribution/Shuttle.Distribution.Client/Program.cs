@@ -1,7 +1,9 @@
 ﻿using System;
+using Shuttle.Core.Container;
 using Shuttle.Core.Unity;
 using Shuttle.Distribution.Messages;
 using Shuttle.Esb;
+using Shuttle.Esb.AzureMQ;
 using Unity;
 
 namespace Shuttle.Distribution.Client
@@ -12,9 +14,10 @@ namespace Shuttle.Distribution.Client
         {
             var container = new UnityComponentContainer(new UnityContainer());
 
-            ServiceBus.Register(container);
+            container.Register<IAzureStorageConfiguration, DefaultAzureStorageConfiguration>();
+            container.RegisterServiceBus();
 
-            using (var bus = ServiceBus.Create(container).Start())
+            using (var bus = container.Resolve<IServiceBus>().Start())
             {
                 string userName;
 
