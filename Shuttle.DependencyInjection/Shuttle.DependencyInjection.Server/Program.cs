@@ -1,4 +1,4 @@
-﻿using Shuttle.Core.ServiceHost;
+﻿using Shuttle.Core.WorkerService;
 
 namespace Shuttle.DependencyInjection.Server
 {

@@ -1,8 +1,10 @@
 ﻿using Ninject;
+using Shuttle.Core.Container;
 using Shuttle.Core.Ninject;
-using Shuttle.Core.ServiceHost;
+using Shuttle.Core.WorkerService;
 using Shuttle.DependencyInjection.EMail;
 using Shuttle.Esb;
+using Shuttle.Esb.AzureMQ;
 
 namespace Shuttle.DependencyInjection.Server
 {
@@ -25,9 +27,10 @@ namespace Shuttle.DependencyInjection.Server
 
             var container = new NinjectComponentContainer(_kernel);
 
-            ServiceBus.Register(container);
+            container.Register<IAzureStorageConfiguration, DefaultAzureStorageConfiguration>();
+            container.RegisterServiceBus();
 
-            _bus = ServiceBus.Create(container).Start();
+            _bus = container.Resolve<IServiceBus>().Start();
         }
     }
 }

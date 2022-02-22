@@ -1,8 +1,10 @@
 ﻿using System;
 using Ninject;
+using Shuttle.Core.Container;
 using Shuttle.Core.Ninject;
 using Shuttle.DependencyInjection.Messages;
 using Shuttle.Esb;
+using Shuttle.Esb.AzureMQ;
 
 namespace Shuttle.DependencyInjection.Client
 {
@@ -12,9 +14,10 @@ namespace Shuttle.DependencyInjection.Client
         {
             var container = new NinjectComponentContainer(new StandardKernel());
 
-            ServiceBus.Register(container);
+            container.Register<IAzureStorageConfiguration, DefaultAzureStorageConfiguration>();
+            container.RegisterServiceBus();
 
-            using (var bus = ServiceBus.Create(container).Start())
+            using (var bus = container.Resolve<IServiceBus>().Start())
             {
                 string userName;
 

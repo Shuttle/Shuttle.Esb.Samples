@@ -1,11 +1,6 @@
 # Running
 
-When using Visual Studio 2017 the NuGet packages should be restored automatically.  If you find that they do not or if you are using an older version of Visual Studio please execute the following in a Visual Studio command prompt:
-
-```
-cd {extraction-folder}\Shuttle.Esb.Samples\Shuttle.DependencyInjection
-nuget restore
-```
+This sample makes use of [Shuttle.Esb.AzureMQ](https://github.com/Shuttle/Shuttle.Esb.AzureMQ) for the message queues.  Local Azure Storage Queues should be provided by [Azurite](https://docs.microsoft.com/en-us/azure/storage/common/storage-use-azurite?tabs=visual-studio).
 
 Once you have opened the `Shuttle.DependencyInjection.sln` solution in Visual Studio set the following projects as startup projects:
 
@@ -20,10 +15,10 @@ The `DefaultMessageHandlerFactory` requires message handlers that have a default
 
 In this guide we'll create the following projects:
 
-- a **Console Application** called `Shuttle.DependencyInjection.Client`
-- a **Console Application** called `Shuttle.DependencyInjection.Server`
-- a **Class Library** called `Shuttle.DependencyInjection.EMail` that will contain a fake e-mail service implementation
-- a **Class Library** called `Shuttle.DependencyInjection.Messages` that will contain all our message classes
+- `Shuttle.DependencyInjection.Client` (**Console Application**)
+- `Shuttle.DependencyInjection.Server` (**Console Application**)
+- `Shuttle.DependencyInjection.EMail` (**Class Library**)
+- `Shuttle.DependencyInjection.Messages` (**Class Library**)
 
 ## Messages
 
@@ -49,9 +44,9 @@ namespace Shuttle.DependencyInjection.Messages
 
 > Add a new `Console Application` to the solution called `Shuttle.DependencyInjection.Client`.
 
-> Install the `Shuttle.Esb.Msmq` nuget package.
+> Install the `Shuttle.Esb.AzureMQ` nuget package.
 
-This will provide access to the Msmq `IQueue` implementation and also include the required dependencies.
+This will provide access to the Azure Storage Queues `IQueue` implementation and also include the required dependencies.
 
 > Install the `Shuttle.Core.Ninject` nuget package.
 
@@ -66,9 +61,11 @@ This will provide access to the Ninject implementation.
 ``` c#
 using System;
 using Ninject;
+using Shuttle.Core.Container;
 using Shuttle.Core.Ninject;
 using Shuttle.DependencyInjection.Messages;
 using Shuttle.Esb;
+using Shuttle.Esb.AzureMQ;
 
 namespace Shuttle.DependencyInjection.Client
 {
@@ -78,9 +75,10 @@ namespace Shuttle.DependencyInjection.Client
         {
             var container = new NinjectComponentContainer(new StandardKernel());
 
-            ServiceBus.Register(container);
+            container.Register<IAzureStorageConfiguration, DefaultAzureStorageConfiguration>();
+            container.RegisterServiceBus();
 
-            using (var bus = ServiceBus.Create(container).Start())
+            using (var bus = container.Resolve<IServiceBus>().Start())
             {
                 string userName;
 
@@ -99,26 +97,30 @@ namespace Shuttle.DependencyInjection.Client
 
 ### App.config
 
-> Create the shuttle configuration as follows:
+> Create the service bus configuration as follows:
 
 ``` xml
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
+
 <configuration>
 	<configSections>
-		<section name='serviceBus' type="Shuttle.Esb.ServiceBusSection, Shuttle.Esb"/>
+		<section name="serviceBus" type="Shuttle.Esb.ServiceBusSection, Shuttle.Esb" />
 	</configSections>
+
+	<appSettings>
+		<add key="azure" value="UseDevelopmentStorage=true;" />
+	</appSettings>
 
 	<serviceBus>
 		<messageRoutes>
-			<messageRoute uri="msmq://./shuttle-server-work">
+			<messageRoute uri="azuremq://azure/shuttle-server-work">
 				<add specification="StartsWith" value="Shuttle.DependencyInjection.Messages" />
 			</messageRoute>
-		</messageRoutes>		
+		</messageRoutes>
 	</serviceBus>
-</configuration>
-```
+</configuration>```
 
-This tells shuttle that all messages that are sent and have a type name starting with `Shuttle.DependencyInjection.Messages` should be sent to endpoint `msmq://./shuttle-server-work`.
+This tells shuttle that all messages that are sent and have a type name starting with `Shuttle.DependencyInjection.Messages` should be sent to endpoint `azuremq://azure/shuttle-server-work`.
 
 ## E-Mail
 
@@ -172,15 +174,17 @@ namespace Shuttle.DependencyInjection.EMail
 
 > Add a new `Console Application` to the solution called `Shuttle.DependencyInjection.Server`.
 
-> Install both the `Shuttle.Esb.Msmq` and `Shuttle.Core.Ninject` nuget packages.
+> Install the `Shuttle.Esb.AzureMQ` nuget package.
 
-This will provide access to the Msmq `IQueue` implementation and also include the required dependencies.
+This will provide access to the Azure Storage Queues `IQueue` implementation and also include the required dependencies.
 
-It will also include the Ninject implementation of the container interfaces.
+> Install the `Shuttle.Core.WorkerService` nuget package.
 
-> Install the `Shuttle.Core.ServiceHost` nuget package.
+This allows a console application to be hosted as a Windows Service or Systemd Unit while running as a normal console application when debugging.
 
-This will enable the console application to run as a console or be installed as a Windows service.
+> Install the `Shuttle.Core.Ninject` nuget package.
+
+This will provide access to the Ninject implementation.
 
 > Add references to both the `Shuttle.DependencyInjection.Messages` and `Shuttle.DependencyInjection.EMail` projects.
 
@@ -189,7 +193,7 @@ This will enable the console application to run as a console or be installed as 
 > Implement the `Program` class as follows:
 
 ``` c#
-using Shuttle.Core.ServiceHost;
+using Shuttle.Core.WorkerService;
 
 namespace Shuttle.DependencyInjection.Server
 {
@@ -211,10 +215,12 @@ This simply executes the `Host` class implementation.
 
 ``` c#
 using Ninject;
+using Shuttle.Core.Container;
 using Shuttle.Core.Ninject;
-using Shuttle.Core.ServiceHost;
+using Shuttle.Core.WorkerService;
 using Shuttle.DependencyInjection.EMail;
 using Shuttle.Esb;
+using Shuttle.Esb.AzureMQ;
 
 namespace Shuttle.DependencyInjection.Server
 {
@@ -237,9 +243,10 @@ namespace Shuttle.DependencyInjection.Server
 
             var container = new NinjectComponentContainer(_kernel);
 
-            ServiceBus.Register(container);
+            container.Register<IAzureStorageConfiguration, DefaultAzureStorageConfiguration>();
+            container.RegisterServiceBus();
 
-            _bus = ServiceBus.Create(container).Start();
+            _bus = container.Resolve<IServiceBus>().Start();
         }
     }
 }
@@ -250,16 +257,19 @@ namespace Shuttle.DependencyInjection.Server
 > Add an `Application Configuration File` item to create the `App.config` and populate as follows:
 
 ``` xml
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
+
 <configuration>
 	<configSections>
-		<section name='serviceBus' type="Shuttle.Esb.ServiceBusSection, Shuttle.Esb"/>
+		<section name="serviceBus" type="Shuttle.Esb.ServiceBusSection, Shuttle.Esb" />
 	</configSections>
 
+	<appSettings>
+		<add key="azure" value="UseDevelopmentStorage=true;" />
+	</appSettings>
+
 	<serviceBus>
-		<inbox
-		   workQueueUri="msmq://./shuttle-server-work"
-		   errorQueueUri="msmq://./shuttle-error" />
+		<inbox workQueueUri="azuremq://azure/shuttle-server-work" errorQueueUri="azuremq://azure/shuttle-error" />
 	</serviceBus>
 </configuration>
 ```
@@ -270,7 +280,7 @@ namespace Shuttle.DependencyInjection.Server
 
 ``` c#
 using System;
-using Shuttle.Core.Infrastructure;
+using Shuttle.Core.Contract;
 using Shuttle.DependencyInjection.EMail;
 using Shuttle.Esb;
 using Shuttle.DependencyInjection.Messages;
@@ -312,6 +322,6 @@ This will write out some information to the console window.  The injected e-mail
 
 > The **client** application will wait for you to input a user name.  For this example enter **my user name** and press enter:
 
-<div class='alert alert-info'>You will notice that the <strong>server</strong> application has processed the message and simulate sending an e-mail though the <strong>IEMailService</strong> implementation.</div>
+<div class='alert alert-info'>You will notice that the <strong>server</strong> application has processed the message and simulated sending an e-mail though the <strong>IEMailService</strong> implementation.</div>
 
 You have now implemented dependency injection for message handlers.
