@@ -2,7 +2,7 @@
 using Shuttle.Esb;
 using Shuttle.PublishSubscribe.Messages;
 
-namespace Shuttle.PublishSubscribe.Server
+namespace Shuttle.PublishSubscribe.Subscriber
 {
 	public class MemberRegisteredHandler : IMessageHandler<MemberRegisteredEvent>
 	{

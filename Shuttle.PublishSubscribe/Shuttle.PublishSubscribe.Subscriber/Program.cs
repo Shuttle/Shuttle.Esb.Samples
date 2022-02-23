@@ -1,4 +1,6 @@
-﻿using Shuttle.Core.ServiceHost;
+﻿using System.Data.Common;
+using Microsoft.Data.SqlClient;
+using Shuttle.Core.WorkerService;
 
 namespace Shuttle.PublishSubscribe.Subscriber
 {
@@ -6,6 +8,8 @@ namespace Shuttle.PublishSubscribe.Subscriber
     {
         public static void Main()
         {
+            DbProviderFactories.RegisterFactory("Microsoft.Data.SqlClient", SqlClientFactory.Instance);
+
             ServiceHost.Run<Host>();
         }
     }

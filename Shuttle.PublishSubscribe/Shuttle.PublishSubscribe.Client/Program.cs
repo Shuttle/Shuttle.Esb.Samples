@@ -1,6 +1,8 @@
 ﻿using System;
+using Shuttle.Core.Container;
 using Shuttle.Core.StructureMap;
 using Shuttle.Esb;
+using Shuttle.Esb.AzureMQ;
 using Shuttle.PublishSubscribe.Messages;
 using StructureMap;
 
@@ -10,12 +12,13 @@ namespace Shuttle.PublishSubscribe.Client
 	{
 		private static void Main(string[] args)
 		{
-			var smRegistry = new Registry();
-			var registry = new StructureMapComponentRegistry(smRegistry);
+			var registry = new Registry();
+			var componentRegistry = new StructureMapComponentRegistry(registry);
 
-			ServiceBus.Register(registry);
+			componentRegistry.Register<IAzureStorageConfiguration, DefaultAzureStorageConfiguration>();
+			componentRegistry.RegisterServiceBus();
 
-			using (var bus = ServiceBus.Create(new StructureMapComponentResolver(new Container(smRegistry))).Start())
+			using (var bus = new StructureMapComponentResolver(new Container(registry)).Resolve<IServiceBus>().Start())
 			{
 				string userName;
 

@@ -1,6 +1,10 @@
-﻿using Shuttle.Core.ServiceHost;
+﻿using Shuttle.Core.Container;
+using Shuttle.Core.Data;
 using Shuttle.Core.StructureMap;
+using Shuttle.Core.WorkerService;
 using Shuttle.Esb;
+using Shuttle.Esb.AzureMQ;
+using Shuttle.Esb.Sql.Subscription;
 using StructureMap;
 
 namespace Shuttle.PublishSubscribe.Server
@@ -11,17 +15,20 @@ namespace Shuttle.PublishSubscribe.Server
 
         public void Start()
         {
-            var smRegistry = new Registry();
-            var registry = new StructureMapComponentRegistry(smRegistry);
+            var registry = new Registry();
+            var componentRegistry = new StructureMapComponentRegistry(registry);
 
-            ServiceBus.Register(registry);
+            componentRegistry.Register<IAzureStorageConfiguration, DefaultAzureStorageConfiguration>();
+            componentRegistry.RegisterDataAccess();
+            componentRegistry.RegisterSubscription();
+            componentRegistry.RegisterServiceBus();
 
-            _bus = ServiceBus.Create(new StructureMapComponentResolver(new Container(smRegistry))).Start();
+            _bus = new StructureMapComponentResolver(new Container(registry)).Resolve<IServiceBus>().Start();
         }
 
         public void Stop()
         {
-            _bus.Dispose();
+            _bus?.Dispose();
         }
     }
 }
