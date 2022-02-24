@@ -2,6 +2,7 @@
 using Shuttle.Core.Container;
 using Shuttle.Core.SimpleInjector;
 using Shuttle.Esb;
+using Shuttle.Esb.AzureMQ;
 using Shuttle.Idempotence.Messages;
 using SimpleInjector;
 
@@ -17,11 +18,12 @@ namespace Shuttle.Idempotence.Client
             
             var container = new SimpleInjectorComponentContainer(simpleInjectorContainer);
 
-			ServiceBus.Register(container);
+            container.Register<IAzureStorageConfiguration, DefaultAzureStorageConfiguration>();
+			container.RegisterServiceBus();
 
 			var transportMessageFactory = container.Resolve<ITransportMessageFactory>();
 
-			using (var bus = ServiceBus.Create(container).Start())
+			using (var bus = container.Resolve<IServiceBus>().Start())
 			{
 				string userName;
 

@@ -2,14 +2,15 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net461</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Shuttle.Core.ServiceHost" Version="10.1.0" />
-    <PackageReference Include="Shuttle.Core.SimpleInjector" Version="10.0.6" />
-    <PackageReference Include="Shuttle.Esb.Msmq" Version="11.0.1" />
-    <PackageReference Include="Shuttle.Esb.Sql.Idempotence" Version="11.0.0" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="4.1.0" />
+    <PackageReference Include="Shuttle.Core.SimpleInjector" Version="10.1.0" />
+    <PackageReference Include="Shuttle.Core.WorkerService" Version="1.0.0" />
+    <PackageReference Include="Shuttle.Esb.AzureMQ" Version="12.0.0" />
+    <PackageReference Include="Shuttle.Esb.Sql.Idempotence" Version="12.0.0" />
   </ItemGroup>
 
   <ItemGroup>
