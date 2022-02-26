@@ -4,8 +4,9 @@ using Shuttle.Core.Castle;
 using Shuttle.Core.Container;
 using Shuttle.Core.Log4Net;
 using Shuttle.Core.Logging;
-using Shuttle.Core.ServiceHost;
+using Shuttle.Core.WorkerService;
 using Shuttle.Esb;
+using Shuttle.Esb.AzureMQ;
 
 namespace Shuttle.Ordering.Server
 {
@@ -24,9 +25,10 @@ namespace Shuttle.Ordering.Server
 
             container.RegisterSuffixed("Shuttle.Ordering");
 
-            ServiceBus.Register(container);
+            container.Register<IAzureStorageConfiguration, DefaultAzureStorageConfiguration>();
+            container.RegisterServiceBus();
 
-            _bus = ServiceBus.Create(container).Start();
+            _bus = container.Resolve<IServiceBus>().Start();
 
             Log.Assign(new Log4NetLog(LogManager.GetLogger(typeof(Host))));
         }

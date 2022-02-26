@@ -1,6 +1,7 @@
 ﻿using System.Data.Common;
 using System.Data.SqlClient;
-using Shuttle.Core.ServiceHost;
+using System.Text;
+using Shuttle.Core.WorkerService;
 
 namespace Shuttle.Invoicing.Server
 {
@@ -8,6 +9,7 @@ namespace Shuttle.Invoicing.Server
     {
         public static void Main()
         {
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             DbProviderFactories.RegisterFactory("System.Data.SqlClient", SqlClientFactory.Instance);
 
             ServiceHost.Run<Host>();

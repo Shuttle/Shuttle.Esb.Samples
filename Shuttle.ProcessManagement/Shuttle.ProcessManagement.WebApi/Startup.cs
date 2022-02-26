@@ -5,9 +5,11 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Shuttle.Core.Container;
 using Shuttle.Core.Castle;
 using Shuttle.Esb;
+using Shuttle.Esb.AzureMQ;
 using Shuttle.ProcessManagement.Services;
 
 namespace Shuttle.ProcessManagement.WebApi
@@ -28,22 +30,22 @@ namespace Shuttle.ProcessManagement.WebApi
             services.AddMvc();
             services.AddCors();
 
-            var container = new WindsorContainer();
+            var windsorContainer = new WindsorContainer();
 
-            var componentContainer = new WindsorComponentContainer(container);
+            var container = new WindsorComponentContainer(windsorContainer);
 
-            componentContainer.RegisterSuffixed("Shuttle.ProcessManagement");
-            componentContainer.Register<IOrderProcessService, OrderProcessService>();
+            container.RegisterSuffixed("Shuttle.ProcessManagement");
+            container.Register<IOrderProcessService, OrderProcessService>();
 
-            ServiceBus.Register(componentContainer);
+            container.Register<IAzureStorageConfiguration, DefaultAzureStorageConfiguration>();
+            container.RegisterServiceBus();
 
-            _bus = ServiceBus.Create(componentContainer).Start();
+            _bus = container.Resolve<IServiceBus>().Start();
 
-            return WindsorRegistrationHelper.CreateServiceProvider(container, services);
+            return WindsorRegistrationHelper.CreateServiceProvider(windsorContainer, services);
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IApplicationLifetime applicationLifetime)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHostApplicationLifetime applicationLifetime)
         {
             applicationLifetime.ApplicationStopping.Register(OnShutdown);
 
@@ -56,7 +58,9 @@ namespace Shuttle.ProcessManagement.WebApi
                 options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()
             );
 
-            app.UseMvc();
+            app.UseRouting();
+            app.UseAuthorization();
+            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
 
         public void OnShutdown()

@@ -1,13 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Shuttle.Core.Data" Version="11.0.4" />
-    <PackageReference Include="Shuttle.Esb" Version="11.0.1" />
+    <PackageReference Include="Shuttle.Core.Data" Version="12.0.0" />
+    <PackageReference Include="Shuttle.Esb" Version="12.0.0" />
   </ItemGroup>
 
   <ItemGroup>

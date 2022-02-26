@@ -1,10 +1,12 @@
 ﻿using Castle.Windsor;
 using log4net;
 using Shuttle.Core.Castle;
+using Shuttle.Core.Container;
 using Shuttle.Core.Log4Net;
 using Shuttle.Core.Logging;
-using Shuttle.Core.ServiceHost;
+using Shuttle.Core.WorkerService;
 using Shuttle.Esb;
+using Shuttle.Esb.AzureMQ;
 
 namespace Shuttle.EMailSender.Server
 {
@@ -21,9 +23,10 @@ namespace Shuttle.EMailSender.Server
 
             var container = new WindsorComponentContainer(_container);
 
-            ServiceBus.Register(container);
+            container.Register<IAzureStorageConfiguration, DefaultAzureStorageConfiguration>();
+            container.RegisterServiceBus();
 
-            _bus = ServiceBus.Create(container).Start();
+            _bus = container.Resolve<IServiceBus>().Start();
         }
 
         public void Stop()

@@ -55,19 +55,19 @@ namespace Shuttle.ProcessManagement.WebApi.Controllers
             {
                 case "custom":
                 {
-                    message.TargetSystemUri = "rabbitmq://shuttle:shuttle!@localhost/process-custom-server";
+                    message.TargetSystemUri = "azuremq://azure/process-custom-server";
 
                     break;
                 }
                 case "custom / event-source":
                 {
-                    message.TargetSystemUri = "rabbitmq://shuttle:shuttle!@localhost/process-custom-es-server";
+                    message.TargetSystemUri = "azuremq://azure/process-custom-es-server";
 
                     break;
                 }
                 case "event-source / module":
                 {
-                    message.TargetSystemUri = "rabbitmq://shuttle:shuttle!@localhost/process-es-module-server";
+                    message.TargetSystemUri = "azuremq://azure/process-es-module-server";
 
                     break;
                 }
