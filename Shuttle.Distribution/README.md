@@ -1,4 +1,8 @@
-# Running
+# Message Distribution
+
+::: info
+Remember that you can download the samples from the <a href="https://github.com/Shuttle/Shuttle.Esb.Samples" target="_blank">GitHub repository</a>.
+:::
 
 This sample makes use of [Shuttle.Esb.AzureMQ](https://github.com/Shuttle/Shuttle.Esb.AzureMQ) for the message queues.  Local Azure Storage Queues should be provided by [Azurite](https://docs.microsoft.com/en-us/azure/storage/common/storage-use-azurite?tabs=visual-studio).
 
@@ -8,11 +12,17 @@ Once you have opened the `Shuttle.Distribution.sln` solution in Visual Studio se
 - Shuttle.Distribution.Server
 - Shuttle.Distribution.Worker
 
-# Implementation
+## Implementation
 
 When you find that a single endpoint, even with ample threads, cannot keep up with the required processing and is falling behind you can opt for message distribution.
 
-<div class='alert alert-info'>When using a broker architecture (such as RabbitMQ, Azure Storage Queues, or Amazon SQS) you do not need to use message distribution as workers can all access the same inbox work queue.  In this case you could simply scale horizontally.</div>
+::: info
+When using a broker architecture (such as RabbitMQ, Azure Storage Queues, or Amazon SQS) you do not need to use message distribution as workers can all access the same inbox work queue.  In this case you could simply scale horizontally.
+:::
+
+::: warning
+Keep in mind that deferred queues are required for each endpoint and cannot be shared.
+:::
 
 Plesae note that the project structure here is used as a sample to facilitate the execution of the solution.  In a real-world scenario the endpoint project would not be separated into a distributor and a worker; rather, there would be a single implementation and you would simply install the service multiple times on, possibly, multiple machines and then configure the workers and distributor as such.  When using the distribution mechanism there is always a **1 to *N*** relationship between the distribution endpoint and the worker(s).
 
@@ -369,10 +379,12 @@ This will write out some information to the console window.
 
 > The **client** application will wait for you to input a user name.  For this example enter **my user name** and press enter:
 
-<div class='alert alert-info'>You will observe that the <strong>server</strong> application forwards the message to the worker.</div>
+::: info
+You will observe that the server application forwards the message to the worker.
+:::
 
-<div class='alert alert-info'>The <strong>worker</strong> application will perform the actual processing.</div>
+::: info
+The worker application will perform the actual processing.
+:::
 
 You have now implemented message distribution.
-
-[transport-message]: {{ site.baseurl }}/transport-message

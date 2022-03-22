@@ -1,4 +1,8 @@
-# Running
+# Deferred Messages
+
+::: info
+Remember that you can download the samples from the <a href="https://github.com/Shuttle/Shuttle.Esb.Samples" target="_blank">GitHub repository</a>.
+:::
 
 This sample makes use of [Shuttle.Esb.AzureMQ](https://github.com/Shuttle/Shuttle.Esb.AzureMQ) for the message queues.  Local Azure Storage Queues should be provided by [Azurite](https://docs.microsoft.com/en-us/azure/storage/common/storage-use-azurite?tabs=visual-studio).
 
@@ -7,11 +11,13 @@ Once you have opened the `Shuttle.Deferred.sln` solution in Visual Studio set th
 - Shuttle.Deferred.Client
 - Shuttle.Deferred.Server
 
-# Implementation
+## Implementation
 
 Deferred messages refer to messages that are not immediately processed when available but are rather set to only process at a given future date.
 
-<div class='alert alert-info'>It is important to note that each endpoint instance <strong>must</strong> have its own deferred queue.</div>
+::: danger
+It is important to note that each endpoint instance must have its own deferred queue.
+:::
 
 In this guide we'll create the following projects:
 
@@ -302,8 +308,10 @@ This will use Log4Net to write out some information to the console window as wel
 
 > The **client** application will wait for you to input a user name.  For this example enter **my user name** and press enter:
 
-<div class='alert alert-info'>After 5 seconds you will observe that the <strong>server</strong> application has processed the message.</div>
+::: info 
+After 5 seconds you will observe that the server application has processed the message.
+:::
 
 You have now implemented deferred message sending.
 
-You will also notice that `Log4Net` has created the log file under **~\Shuttle.Deferred\Shuttle.Deferred.Server\bin\Debug\{framework}\logs**.
+You will also notice that `Log4Net` has created the log file under `~\Shuttle.Deferred\Shuttle.Deferred.Server\bin\Debug\{framework}\logs`.

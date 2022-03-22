@@ -1,4 +1,8 @@
-# Running
+# Dependency Injection
+
+::: info
+Remember that you can download the samples from the <a href="https://github.com/Shuttle/Shuttle.Esb.Samples" target="_blank">GitHub repository</a>.
+:::
 
 This sample makes use of [Shuttle.Esb.AzureMQ](https://github.com/Shuttle/Shuttle.Esb.AzureMQ) for the message queues.  Local Azure Storage Queues should be provided by [Azurite](https://docs.microsoft.com/en-us/azure/storage/common/storage-use-azurite?tabs=visual-studio).
 
@@ -7,7 +11,7 @@ Once you have opened the `Shuttle.DependencyInjection.sln` solution in Visual St
 - Shuttle.DependencyInjection.Client
 - Shuttle.DependencyInjection.Server
 
-# Implementation
+## Implementation
 
 By default Shuttle.Esb does not require a dependency injection container.  Shuttle makes use of an `IMessageHandlerFactory` implementation to create message handlers.  If no dependency injection container is required one could stick with the `DefaultMessageHandlerFactory` instantiated by default.
 
@@ -26,7 +30,7 @@ In this guide we'll create the following projects:
 
 **Note**: remember to change the *Solution name*.
 
-## RegisterMemberCommand
+### RegisterMemberCommand
 
 > Rename the `Class1` default file to `RegisterMemberCommand` and add a `UserName` property.
 
@@ -274,7 +278,7 @@ namespace Shuttle.DependencyInjection.Server
 </configuration>
 ```
 
-## RegisterMemberHandler
+### RegisterMemberHandler
 
 > Add a new class called `RegisterMemberHandler` that implements the `IMessageHandler<RegisterMemberCommand>` interface as follows:
 
@@ -322,6 +326,8 @@ This will write out some information to the console window.  The injected e-mail
 
 > The **client** application will wait for you to input a user name.  For this example enter **my user name** and press enter:
 
-<div class='alert alert-info'>You will notice that the <strong>server</strong> application has processed the message and simulated sending an e-mail though the <strong>IEMailService</strong> implementation.</div>
+::: info
+You will notice that the server application has processed the message and simulated sending an e-mail though the `IEMailService` implementation.
+:::
 
 You have now implemented dependency injection for message handlers.

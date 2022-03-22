@@ -1,12 +1,14 @@
-# Overview
+# Process Management
+
+::: info
+Remember that you can download the samples from the <a href="https://github.com/Shuttle/Shuttle.Esb.Samples" target="_blank">GitHub repository</a>.
+:::
 
 Our sample case is a fictitious online book store where you can order books.  An order allows you 20 seconds to cancel the order before it is accepted.
 
 The process management sample represents something closer to a real-world scenario where one would have a front-end integrating with a web-api.  The web-api issues commands that are processed by the process managers.
 
-In this sample the front-end is a static site implemented using [CanJS](https://canjs.com/).  The rest api is an asp.net web-api.  There are three physical implementations of the same logical process manager to demonstrate the various options and the read-model is kept updated using CQRS with system messages.  For the event-sourcing side one could just as easily use event processing to update the read model but since the system event messages are being processed it is re-used for the event sourcing implementation also.
-
-When using Visual Studio 2017 the NuGet packages should be restored automatically.
+In this sample the front-end is a static [Vue.js](https://vuejs.org/).  The REST API is an `dotnet` web-api.  There are three physical implementations of the same logical process manager to demonstrate the various options and the read-model is kept updated using CQRS with system messages.  For the event-sourcing side one could just as easily use event processing to update the read model but since the system event messages are being processed it is re-used for the event sourcing implementation also.
 
 Once you have opened the `Shuttle.ProcessManagement.sln` solution in Visual Studio set the following projects as startup projects:
 
@@ -19,13 +21,13 @@ Once you have opened the `Shuttle.ProcessManagement.sln` solution in Visual Stud
 - Shuttle.Process.QueryServer
 - Shuttle.ProcessManagement.WebApi
 
-# Front-End (site.canjs)
+## Front-End (site.canjs)
 
 In order to run the single-page application CanJS front-end you need to host the site using any hosting software.  A simple solution is using node.js and installing the `http-server` package.  You can then host the site from the `site.canjs` folder by opening a command prompt and running `http-server` in the `site.canjs` folder.
 
 You will also need to create and configure a Sql Server database for this sample and remember to update the **App.config** `connectionString` settings to point to your database.  Please reference the **Database** section below.
 
-# Database
+## Database
 
 We need a store for our subscriptions.  In this example we will be using **Sql Server**.  If you use the express version remember to change the `data source` value to `.\sqlexpress` from the standard `.`.
 
@@ -55,7 +57,7 @@ In addition to this the actual process management application also requires some
 
 You should now be able to run the application.
 
-# Process
+## Process
 
 Once you add books to your order you can place the order using any of the following processes:
 

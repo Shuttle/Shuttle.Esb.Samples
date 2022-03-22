@@ -1,4 +1,4 @@
-# Running
+# Idempotence
 
 This sample makes use of [Shuttle.Esb.AzureMQ](https://github.com/Shuttle/Shuttle.Esb.AzureMQ) for the message queues.  Local Azure Storage Queues should be provided by [Azurite](https://docs.microsoft.com/en-us/azure/storage/common/storage-use-azurite?tabs=visual-studio).
 
@@ -9,7 +9,7 @@ Once you have opened the `Shuttle.Idempotence.sln` solution in Visual Studio set
 
 You will also need to create and configure a Sql Server database for this sample and remember to update the **App.config** `connectionString` settings to point to your database.  Please reference the **Database** section below.
 
-# Implementation
+## Implementation
 
 When operations, or in our case messages, can be applied multiple times with the same result they are said to be **idempotent**.  Idempotence is something you should strive to implement directly on your endpoint by keeping track of some unique property of each message and whether the operation has been completed for that unique property.
 
@@ -312,6 +312,8 @@ This will write out some information to the console window.
 
 > The **client** application will wait for you to input a user name.  For this example enter **my user name** and press enter:
 
-<div class='alert alert-info'>You will need to scroll through the message but you will observe that the <strong>server</strong> application has processed the three messages.</div>
+::: info
+You will need to scroll through the messages but you will observe that the server application has processed all three messages.
+:::
 
 You have now implemented message idempotence.

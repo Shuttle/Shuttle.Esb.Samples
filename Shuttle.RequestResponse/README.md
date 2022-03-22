@@ -1,4 +1,8 @@
-# Running
+# Request / Response
+
+::: info
+Remember that you can download the samples from the <a href="https://github.com/Shuttle/Shuttle.Esb.Samples" target="_blank">GitHub repository</a>.
+:::
 
 This sample makes use of [Shuttle.Esb.AzureMQ](https://github.com/Shuttle/Shuttle.Esb.AzureMQ) for the message queues.  Local Azure Storage Queues should be provided by [Azurite](https://docs.microsoft.com/en-us/azure/storage/common/storage-use-azurite?tabs=visual-studio).
 
@@ -7,7 +11,7 @@ Once you have opened the `Shuttle.RequestResponse.sln` solution in Visual Studio
 - Shuttle.RequestResponse.Client
 - Shuttle.RequestResponse.Server
 
-# Implementation
+## Implementation
 
 In order to get any processing done in Shuttle.Esb a message will need to be generated and sent to an endpoint for processing.  The idea behind a **command** message is that there is exactly **one** endpoint handling the message.  Since it is an instruction the message absolutely ***has*** to be handled and we also need to have only a single endpoint process the message to ensure a consistent result.
 
@@ -327,9 +331,13 @@ namespace Shuttle.RequestResponse.Server
 
 > The **client** application will wait for you to input a user name.  For this example enter **my user name** and press enter:
 
-<div class='alert alert-info'>You will observe that the <strong>server</strong> application has processed the message.</div>
+::: info 
+You will observe that the server application has processed the message.
+:::
 
-<div class='alert alert-info'>The <strong>client</strong> application will then process the response returned by the <strong>server</strong>.</div>
+::: info 
+The client application will then process the response returned by the server.
+:::
 
 You have now completed a full request / response call chain.
 

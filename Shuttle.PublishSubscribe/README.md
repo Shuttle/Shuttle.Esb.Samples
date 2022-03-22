@@ -1,4 +1,8 @@
-# Running
+# Publish / Subscribe
+
+::: info
+Remember that you can download the samples from the <a href="https://github.com/Shuttle/Shuttle.Esb.Samples" target="_blank">GitHub repository</a>.
+:::
 
 This sample makes use of [Shuttle.Esb.AzureMQ](https://github.com/Shuttle/Shuttle.Esb.AzureMQ) for the message queues.  Local Azure Storage Queues should be provided by [Azurite](https://docs.microsoft.com/en-us/azure/storage/common/storage-use-azurite?tabs=visual-studio).
 
@@ -10,7 +14,7 @@ Once you have opened the `Shuttle.PublishSubscribe.sln` solution in Visual Studi
 
 You will also need to create and configure a Sql Server database for this sample and remember to update the **App.config** `connectionString` settings to point to your database.  Please reference the **Database** section below.
 
-# Implementation
+## Implementation
 
 **Events** are interesting things that happen in our system that other systems may be interested in.  There may be `0..N` number of subscribers for an event.  Typically there should be at least one subscriber to an event.
 
@@ -474,8 +478,12 @@ This will write out some information to the console window.
 
 > The **client** application will wait for you to input a user name.  For this example enter **my user name** and press enter:
 
-<div class='alert alert-info'>You will observe that the <strong>server</strong> application has processed the message.</div>
+::: info 
+You will observe that the server application has processed the message.
+:::
 
-<div class='alert alert-info'>The <strong>subscriber</strong> application will then process the event published by the <strong>server</strong>.</div>
+::: info
+The subscriber application will then process the event published by the server.
+:::
 
 You have now completed a full publish / subscribe call chain.
