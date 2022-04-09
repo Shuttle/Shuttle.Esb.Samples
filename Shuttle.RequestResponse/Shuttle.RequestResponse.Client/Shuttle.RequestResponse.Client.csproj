@@ -6,8 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Shuttle.Core.Castle" Version="10.1.0" />
-    <PackageReference Include="Shuttle.Esb.AzureMQ" Version="12.0.0" />
+    <PackageReference Include="Shuttle.Core.Castle" Version="10.1.1" />
+    <PackageReference Include="Shuttle.Esb.AzureMQ" Version="12.0.1" />
   </ItemGroup>
 
   <ItemGroup>
