@@ -1,7 +1,6 @@
 ﻿using System;
-using Castle.Windsor;
-using Shuttle.Core.Castle;
-using Shuttle.Core.Container;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Shuttle.Esb;
 using Shuttle.Esb.AzureMQ;
 using Shuttle.RequestResponse.Messages;
@@ -12,12 +11,23 @@ namespace Shuttle.RequestResponse.Client
 	{
 		private static void Main(string[] args)
 		{
-			var container = new WindsorComponentContainer(new WindsorContainer());
+			var services = new ServiceCollection();
 
-			container.Register<IAzureStorageConfiguration, DefaultAzureStorageConfiguration>();
-			container.RegisterServiceBus();
+			var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
 
-			using (var bus = container.Resolve<IServiceBus>().Start())
+			services.AddSingleton<IConfiguration>(configuration);
+
+			services.AddServiceBus(builder =>
+			{
+				configuration.GetSection(ServiceBusOptions.SectionName).Bind(builder.Options);
+			});
+
+			services.AddAzureStorageQueues(builder =>
+			{
+				builder.AddConnectionString("azure");
+			});
+
+			using (var bus = services.BuildServiceProvider().GetRequiredService<IServiceBus>().Start())
 			{
 				string userName;
 

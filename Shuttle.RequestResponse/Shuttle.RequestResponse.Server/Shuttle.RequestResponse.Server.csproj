@@ -6,14 +6,19 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Shuttle.Core.Castle" Version="10.1.1" />
-    <PackageReference Include="Shuttle.Core.Log4Net" Version="10.0.4" />
-    <PackageReference Include="Shuttle.Core.WorkerService" Version="1.0.1" />
-    <PackageReference Include="Shuttle.Esb.AzureMQ" Version="12.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
+    <PackageReference Include="Shuttle.Core.WorkerService" Version="2.0.0" />
+    <PackageReference Include="Shuttle.Esb.AzureMQ" Version="13.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Shuttle.RequestResponse.Messages\Shuttle.RequestResponse.Messages.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
