@@ -1,35 +1,44 @@
 ﻿using System;
-using Autofac;
-using Shuttle.Core.Autofac;
-using Shuttle.Core.Container;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Shuttle.Deferred.Messages;
 using Shuttle.Esb;
 using Shuttle.Esb.AzureMQ;
 
 namespace Shuttle.Deferred.Client
 {
-	internal class Program
-	{
-		private static void Main(string[] args)
-		{
-			var containerBuilder = new ContainerBuilder();
-			var registry = new AutofacComponentRegistry(containerBuilder);
+    internal class Program
+    {
+        private static void Main(string[] args)
+        {
+            var services = new ServiceCollection();
 
-			registry.Register<IAzureStorageConfiguration, DefaultAzureStorageConfiguration>();
-			registry.RegisterServiceBus();
+            var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
 
-			using (var bus = new AutofacComponentResolver(containerBuilder.Build()).Resolve<IServiceBus>().Start())
-			{
-				string userName;
+            services.AddSingleton<IConfiguration>(configuration);
 
-				while (!string.IsNullOrEmpty(userName = Console.ReadLine()))
-				{
-					bus.Send(new RegisterMemberCommand
-					{
-						UserName = userName
-					}, c => c.Defer(DateTime.Now.AddSeconds(5)));
-				}
-			}
-		}
-	}
+            services.AddServiceBus(builder =>
+            {
+                configuration.GetSection(ServiceBusOptions.SectionName).Bind(builder.Options);
+            });
+
+            services.AddAzureStorageQueues(builder =>
+            {
+                builder.AddConnectionString("azure");
+            });
+
+            using (var bus = services.BuildServiceProvider().GetRequiredService<IServiceBus>().Start())
+            {
+                string userName;
+
+                while (!string.IsNullOrEmpty(userName = Console.ReadLine()))
+                {
+                    bus.Send(new RegisterMemberCommand
+                    {
+                        UserName = userName
+                    }, c => c.Defer(DateTime.Now.AddSeconds(5)));
+                }
+            }
+        }
+    }
 }
