@@ -1,6 +1,13 @@
 ﻿using System.Data.Common;
 using Microsoft.Data.SqlClient;
-using Shuttle.Core.WorkerService;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Shuttle.Core.Data;
+using Shuttle.Esb;
+using Shuttle.Esb.AzureMQ;
+using Shuttle.Esb.Sql.Subscription;
+using Shuttle.PublishSubscribe.Messages;
 
 namespace Shuttle.PublishSubscribe.Subscriber
 {
@@ -10,7 +17,42 @@ namespace Shuttle.PublishSubscribe.Subscriber
         {
             DbProviderFactories.RegisterFactory("Microsoft.Data.SqlClient", SqlClientFactory.Instance);
 
-            ServiceHost.Run<Host>();
+            var host = Host.CreateDefaultBuilder()
+                .ConfigureServices(services =>
+                {
+                    var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+
+                    services.AddSingleton<IConfiguration>(configuration);
+
+                    services.AddDataAccess(builder =>
+                    {
+                        builder.AddConnectionString("Subscription", "Microsoft.Data.SqlClient");
+                    });
+
+                    services.AddSqlSubscription();
+
+                    services.AddServiceBus(builder =>
+                    {
+                        configuration.GetSection(ServiceBusOptions.SectionName).Bind(builder.Options);
+                    });
+
+                    services.AddAzureStorageQueues(builder =>
+                    {
+                        builder.AddConnectionString("azure");
+                    });
+                })
+                .Build();
+
+            host.Services.GetRequiredService<ISubscriptionService>().Subscribe<MemberRegisteredEvent>();
+
+            var serviceBus = host.Services.GetRequiredService<IServiceBus>().Start();
+
+            host.Services.GetRequiredService<IHostApplicationLifetime>().ApplicationStopping.Register(() =>
+            {
+                serviceBus.Dispose();
+            });
+
+            host.Run();
         }
     }
 }
