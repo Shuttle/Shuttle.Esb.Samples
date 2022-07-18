@@ -1,4 +1,9 @@
-﻿using Shuttle.Core.WorkerService;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Shuttle.DependencyInjection.EMail;
+using Shuttle.Esb;
+using Shuttle.Esb.AzureMQ;
 
 namespace Shuttle.DependencyInjection.Server
 {
@@ -6,7 +11,35 @@ namespace Shuttle.DependencyInjection.Server
     {
         public static void Main()
         {
-            ServiceHost.Run<Host>();
+            var host = Host.CreateDefaultBuilder()
+                .ConfigureServices(services =>
+                {
+                    var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+
+                    services.AddSingleton<IConfiguration>(configuration);
+
+                    services.AddSingleton<IEMailService, EMailService>();
+
+                    services.AddServiceBus(builder =>
+                    {
+                        configuration.GetSection(ServiceBusOptions.SectionName).Bind(builder.Options);
+                    });
+
+                    services.AddAzureStorageQueues(builder =>
+                    {
+                        builder.AddConnectionString("azure");
+                    });
+                })
+                .Build();
+
+            var serviceBus = host.Services.GetRequiredService<IServiceBus>().Start();
+
+            host.Services.GetRequiredService<IHostApplicationLifetime>().ApplicationStopping.Register(() =>
+            {
+                serviceBus.Dispose();
+            });
+
+            host.Run();
         }
     }
 }
