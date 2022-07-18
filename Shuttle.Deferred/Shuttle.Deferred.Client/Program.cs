@@ -27,6 +27,9 @@ namespace Shuttle.Deferred.Client
                 builder.AddConnectionString("azure");
             });
 
+            Console.WriteLine("Type some characters and then press [enter] to submit; an empty line submission stops execution:");
+            Console.WriteLine();
+
             using (var bus = services.BuildServiceProvider().GetRequiredService<IServiceBus>().Start())
             {
                 string userName;

@@ -1,10 +1,9 @@
 ﻿using System;
-using Shuttle.Core.Container;
-using Shuttle.Core.Unity;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Shuttle.Distribution.Messages;
 using Shuttle.Esb;
 using Shuttle.Esb.AzureMQ;
-using Unity;
 
 namespace Shuttle.Distribution.Client
 {
@@ -12,12 +11,26 @@ namespace Shuttle.Distribution.Client
     {
         private static void Main(string[] args)
         {
-            var container = new UnityComponentContainer(new UnityContainer());
+            var services = new ServiceCollection();
 
-            container.Register<IAzureStorageConfiguration, DefaultAzureStorageConfiguration>();
-            container.RegisterServiceBus();
+            var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
 
-            using (var bus = container.Resolve<IServiceBus>().Start())
+            services.AddSingleton<IConfiguration>(configuration);
+
+            services.AddServiceBus(builder =>
+            {
+                configuration.GetSection(ServiceBusOptions.SectionName).Bind(builder.Options);
+            });
+
+            services.AddAzureStorageQueues(builder =>
+            {
+                builder.AddConnectionString("azure");
+            });
+
+            Console.WriteLine("Type some characters and then press [enter] to submit; an empty line submission stops execution:");
+            Console.WriteLine();
+
+            using (var bus = services.BuildServiceProvider().GetRequiredService<IServiceBus>().Start())
             {
                 string userName;
 
