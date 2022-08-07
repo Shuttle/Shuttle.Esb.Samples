@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Shuttle.DependencyInjection.EMail;
 using Shuttle.Esb;
-using Shuttle.Esb.AzureMQ;
+using Shuttle.Esb.AzureStorageQueues;
 
 namespace Shuttle.DependencyInjection.Server
 {
@@ -11,7 +11,7 @@ namespace Shuttle.DependencyInjection.Server
     {
         public static void Main()
         {
-            var host = Host.CreateDefaultBuilder()
+            Host.CreateDefaultBuilder()
                 .ConfigureServices(services =>
                 {
                     var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
@@ -27,19 +27,14 @@ namespace Shuttle.DependencyInjection.Server
 
                     services.AddAzureStorageQueues(builder =>
                     {
-                        builder.AddConnectionString("azure");
+                        builder.AddOptions("azure", new AzureStorageQueueOptions
+                        {
+                            ConnectionString = configuration.GetConnectionString("azure")
+                        });
                     });
                 })
-                .Build();
-
-            var serviceBus = host.Services.GetRequiredService<IServiceBus>().Start();
-
-            host.Services.GetRequiredService<IHostApplicationLifetime>().ApplicationStopping.Register(() =>
-            {
-                serviceBus.Dispose();
-            });
-
-            host.Run();
+                .Build()
+                .Run();
         }
     }
 }

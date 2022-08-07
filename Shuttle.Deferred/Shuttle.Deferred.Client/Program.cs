@@ -3,7 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Shuttle.Deferred.Messages;
 using Shuttle.Esb;
-using Shuttle.Esb.AzureMQ;
+using Shuttle.Esb.AzureStorageQueues;
 
 namespace Shuttle.Deferred.Client
 {
@@ -24,7 +24,10 @@ namespace Shuttle.Deferred.Client
 
             services.AddAzureStorageQueues(builder =>
             {
-                builder.AddConnectionString("azure");
+                builder.AddOptions("azure", new AzureStorageQueueOptions
+                {
+                    ConnectionString = "UseDevelopmentStorage=true;"
+                });
             });
 
             Console.WriteLine("Type some characters and then press [enter] to submit; an empty line submission stops execution:");

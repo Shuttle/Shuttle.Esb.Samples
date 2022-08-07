@@ -121,7 +121,7 @@ The message sent will have its `IgnoreTilleDate` set to 5 seconds into the futur
 
 	<serviceBus>
 		<messageRoutes>
-			<messageRoute uri="azuremq://azure/shuttle-server-work">
+			<messageRoute uri="azuresq://azure/shuttle-server-work">
 				<add specification="StartsWith" value="Shuttle.Deferred.Messages" />
 			</messageRoute>
 		</messageRoutes>
@@ -129,7 +129,7 @@ The message sent will have its `IgnoreTilleDate` set to 5 seconds into the futur
 </configuration>
 ```
 
-This tells the service bus that all messages sent having a type name starting with `Shuttle.Deferred.Messages` should be sent to endpoint `azuremq://azure/shuttle-server-work`.
+This tells the service bus that all messages sent having a type name starting with `Shuttle.Deferred.Messages` should be sent to endpoint `azuresq://azure/shuttle-server-work`.
 
 ## Server
 
@@ -260,9 +260,9 @@ namespace Shuttle.Deferred.Server
 	</log4net>
 
 	<serviceBus>
-		<inbox workQueueUri="azuremq://azure/shuttle-server-work" 
-		       deferredQueueUri="azuremq://azure/shuttle-server-deferred"
-		       errorQueueUri="azuremq://azure/shuttle-error" />
+		<inbox workQueueUri="azuresq://azure/shuttle-server-work" 
+		       deferredQueueUri="azuresq://azure/shuttle-server-deferred"
+		       errorQueueUri="azuresq://azure/shuttle-error" />
 	</serviceBus>
 
 </configuration>

@@ -4,7 +4,7 @@
 Remember that you can download the samples from the <a href="https://github.com/Shuttle/Shuttle.Esb.Samples" target="_blank">GitHub repository</a>.
 :::
 
-This sample makes use of [Shuttle.Esb.AzureMQ](https://github.com/Shuttle/Shuttle.Esb.AzureMQ) for the message queues.  Local Azure Storage Queues should be provided by [Azurite](https://docs.microsoft.com/en-us/azure/storage/common/storage-use-azurite?tabs=visual-studio).
+This sample makes use of [Shuttle.Esb.azuresq](https://github.com/Shuttle/Shuttle.Esb.azuresq) for the message queues.  Local Azure Storage Queues should be provided by [Azurite](https://docs.microsoft.com/en-us/azure/storage/common/storage-use-azurite?tabs=visual-studio).
 
 Once you have opened the `Shuttle.Distribution.sln` solution in Visual Studio set the following projects as startup projects:
 
@@ -59,7 +59,7 @@ namespace Shuttle.Distribution.Messages
 
 > Add a new `Console Application` to the solution called `Shuttle.Distribution.Client`.
 
-> Install the `Shuttle.Esb.AzureMQ` nuget package.
+> Install the `Shuttle.Esb.azuresq` nuget package.
 
 This will provide access to the Azure Storage Queues `IQueue` implementation and also include the required dependencies.
 
@@ -79,7 +79,7 @@ using Shuttle.Core.Container;
 using Shuttle.Core.Unity;
 using Shuttle.Distribution.Messages;
 using Shuttle.Esb;
-using Shuttle.Esb.AzureMQ;
+using Shuttle.Esb.azuresq;
 using Unity;
 
 namespace Shuttle.Distribution.Client
@@ -128,7 +128,7 @@ namespace Shuttle.Distribution.Client
 
 	<serviceBus>
 		<messageRoutes>
-			<messageRoute uri="azuremq://azure/shuttle-server-work">
+			<messageRoute uri="azuresq://azure/shuttle-server-work">
 				<add specification="StartsWith" value="Shuttle.Distribution.Messages" />
 			</messageRoute>
 		</messageRoutes>
@@ -136,13 +136,13 @@ namespace Shuttle.Distribution.Client
 </configuration>
 ```
 
-This tells the service bus that all messages sent having a type name starting with `Shuttle.Distribution.Messages` should be sent to endpoint `azuremq://azure/shuttle-server-work`.
+This tells the service bus that all messages sent having a type name starting with `Shuttle.Distribution.Messages` should be sent to endpoint `azuresq://azure/shuttle-server-work`.
 
 ## Server
 
 > Add a new `Console Application` to the solution called `Shuttle.Distribution.Server`.
 
-> Install the `Shuttle.Esb.AzureMQ` nuget package.
+> Install the `Shuttle.Esb.azuresq` nuget package.
 
 This will provide access to the Azure Storage Queues `IQueue` implementation and also include the required dependencies.
 
@@ -182,7 +182,7 @@ using Shuttle.Core.Container;
 using Shuttle.Core.Unity;
 using Shuttle.Core.WorkerService;
 using Shuttle.Esb;
-using Shuttle.Esb.AzureMQ;
+using Shuttle.Esb.azuresq;
 using Unity;
 
 namespace Shuttle.Distribution.Server
@@ -227,13 +227,13 @@ namespace Shuttle.Distribution.Server
 
 	<serviceBus>
 		<control
-			workQueueUri="azuremq://azure/shuttle-server-control-inbox-work"
-			errorQueueUri="azuremq://azure/shuttle-samples-error" />
+			workQueueUri="azuresq://azure/shuttle-server-control-inbox-work"
+			errorQueueUri="azuresq://azure/shuttle-samples-error" />
 
 		<inbox
 			distribute="true"
-			workQueueUri="azuremq://azure/shuttle-server-work"
-			errorQueueUri="azuremq://azure/shuttle-error" />
+			workQueueUri="azuresq://azure/shuttle-server-work"
+			errorQueueUri="azuresq://azure/shuttle-error" />
 	</serviceBus>
 </configuration>
 ```
@@ -246,7 +246,7 @@ It also configures the control inbox that the endpoint will use to process admin
 
 > Add a new `Console Application` to the solution called `Shuttle.Distribution.Worker`.
 
-> Install the `Shuttle.Esb.AzureMQ` nuget package.
+> Install the `Shuttle.Esb.azuresq` nuget package.
 
 This will provide access to the Azure Storage Queues `IQueue` implementation and also include the required dependencies.
 
@@ -288,7 +288,7 @@ using Shuttle.Core.Container;
 using Shuttle.Core.Unity;
 using Shuttle.Core.WorkerService;
 using Shuttle.Esb;
-using Shuttle.Esb.AzureMQ;
+using Shuttle.Esb.azuresq;
 using Unity;
 
 namespace Shuttle.Distribution.Worker
@@ -333,11 +333,11 @@ namespace Shuttle.Distribution.Worker
 
 	<serviceBus>
 		<worker
-			distributorControlWorkQueueUri="azuremq://azure/shuttle-server-control-inbox-work" />
+			distributorControlWorkQueueUri="azuresq://azure/shuttle-server-control-inbox-work" />
 
 		<inbox
-			workQueueUri="azuremq://azure/shuttle-worker-work"
-			errorQueueUri="azuremq://azure/shuttle-error" />
+			workQueueUri="azuresq://azure/shuttle-worker-work"
+			errorQueueUri="azuresq://azure/shuttle-error" />
 	</serviceBus>
 </configuration>
 ```

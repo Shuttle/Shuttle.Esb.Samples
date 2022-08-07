@@ -133,7 +133,7 @@ namespace Shuttle.PublishSubscribe.Client
 
 	<serviceBus>
 		<messageRoutes>
-			<messageRoute uri="azuremq://azure/shuttle-server-work">
+			<messageRoute uri="azuresq://azure/shuttle-server-work">
 				<add specification="StartsWith" value="Shuttle.PublishSubscribe.Messages" />
 			</messageRoute>
 		</messageRoutes>
@@ -141,7 +141,7 @@ namespace Shuttle.PublishSubscribe.Client
 </configuration>
 ```
 
-This tells the service bus that all messages sent having a type name starting with `Shuttle.PublishSubscribe.Messages` should be sent to endpoint `azuremq://azure/shuttle-server-work`.
+This tells the service bus that all messages sent having a type name starting with `Shuttle.PublishSubscribe.Messages` should be sent to endpoint `azuresq://azure/shuttle-server-work`.
 
 ## Server
 
@@ -273,8 +273,8 @@ Whenever the `Publish` method is invoked on the `ServiceBus` instance the regist
 
 	<serviceBus>
 		<inbox
-			workQueueUri="azuremq://azure/shuttle-server-work"
-			errorQueueUri="azuremq://azure/shuttle-error" />
+			workQueueUri="azuresq://azure/shuttle-server-work"
+			errorQueueUri="azuresq://azure/shuttle-error" />
 	</serviceBus>
 </configuration>
 ```
@@ -437,8 +437,8 @@ It is important to note that in a production environment one would not typically
 
 	<serviceBus>
 		<inbox
-			workQueueUri="azuremq://azure/shuttle-subscriber-work"
-			errorQueueUri="azuremq://azure/shuttle-error" />
+			workQueueUri="azuresq://azure/shuttle-subscriber-work"
+			errorQueueUri="azuresq://azure/shuttle-error" />
 	</serviceBus>
 </configuration>
 ```

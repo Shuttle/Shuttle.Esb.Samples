@@ -1,10 +1,10 @@
 ﻿using System;
-using Shuttle.Core.Container;
-using Shuttle.Core.SimpleInjector;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Shuttle.Core.Pipelines;
 using Shuttle.Esb;
-using Shuttle.Esb.AzureMQ;
+using Shuttle.Esb.AzureStorageQueues;
 using Shuttle.Idempotence.Messages;
-using SimpleInjector;
 
 namespace Shuttle.Idempotence.Client
 {
@@ -12,18 +12,34 @@ namespace Shuttle.Idempotence.Client
 	{
 		private static void Main(string[] args)
 		{
-            var simpleInjectorContainer = new Container();
+			var services = new ServiceCollection();
 
-            simpleInjectorContainer.Options.EnableAutoVerification = false;
-            
-            var container = new SimpleInjectorComponentContainer(simpleInjectorContainer);
+			var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
 
-            container.Register<IAzureStorageConfiguration, DefaultAzureStorageConfiguration>();
-			container.RegisterServiceBus();
+			services.AddSingleton<IConfiguration>(configuration);
 
-			var transportMessageFactory = container.Resolve<ITransportMessageFactory>();
+			services.AddServiceBus(builder =>
+			{
+				configuration.GetSection(ServiceBusOptions.SectionName).Bind(builder.Options);
+			});
 
-			using (var bus = container.Resolve<IServiceBus>().Start())
+			services.AddAzureStorageQueues(builder =>
+			{
+				builder.AddOptions("azure", new AzureStorageQueueOptions
+				{
+					ConnectionString = configuration.GetConnectionString("azure")
+				});
+			});
+
+			Console.WriteLine("Type some characters and then press [enter] to submit; an empty line submission stops execution:");
+			Console.WriteLine();
+
+			var serviceProvider = services.BuildServiceProvider();
+			var pipelineFactory = serviceProvider.GetRequiredService<IPipelineFactory>();
+			var messageSender = serviceProvider.GetRequiredService<IMessageSender>();
+			var transportMessagePipeline = pipelineFactory.GetPipeline<TransportMessagePipeline>();
+
+			using (var bus = serviceProvider.GetRequiredService<IServiceBus>().Start())
 			{
 				string userName;
 
@@ -34,11 +50,13 @@ namespace Shuttle.Idempotence.Client
 						UserName = userName
 					};
 
-					var transportMessage = transportMessageFactory.Create(command, c => { });
+					transportMessagePipeline.Execute(command, null, null);
+
+					var transportMessage = transportMessagePipeline.State.GetTransportMessage();
 
 					for (var i = 0; i < 5; i++)
 					{
-						bus.Dispatch(transportMessage); // will be processed once since message id is the same
+						messageSender.Dispatch(transportMessage, null); // will be processed only once since message id is the same
 					}
 
 					bus.Send(command); // will be processed since it has a new message id

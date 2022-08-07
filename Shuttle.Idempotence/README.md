@@ -134,7 +134,7 @@ The next two `Send` operations do not use the `TransportMessage` but rather send
 
 	<serviceBus>
 		<messageRoutes>
-			<messageRoute uri="azuremq://azure/shuttle-server-work">
+			<messageRoute uri="azuresq://azure/shuttle-server-work">
 				<add specification="StartsWith" value="Shuttle.Idempotence.Messages" />
 			</messageRoute>
 		</messageRoutes>
@@ -142,7 +142,7 @@ The next two `Send` operations do not use the `TransportMessage` but rather send
 </configuration>
 ```
 
-This tells the service bus that all messages sent having a type name starting with `Shuttle.Idempotence.Messages` should be sent to endpoint `azuremq://azure/shuttle-server-work`.
+This tells the service bus that all messages sent having a type name starting with `Shuttle.Idempotence.Messages` should be sent to endpoint `azuresq://azure/shuttle-server-work`.
 
 ## Server
 
@@ -269,8 +269,8 @@ The `{version}` bit will be in a `semver` format.
 
 	<serviceBus>
 		<inbox
-			workQueueUri="azuremq://azure/shuttle-server-work"
-			errorQueueUri="azuremq://azure/shuttle-error" />
+			workQueueUri="azuresq://azure/shuttle-server-work"
+			errorQueueUri="azuresq://azure/shuttle-error" />
 	</serviceBus>
 </configuration>
 ```

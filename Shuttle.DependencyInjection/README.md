@@ -117,14 +117,14 @@ namespace Shuttle.DependencyInjection.Client
 
 	<serviceBus>
 		<messageRoutes>
-			<messageRoute uri="azuremq://azure/shuttle-server-work">
+			<messageRoute uri="azuresq://azure/shuttle-server-work">
 				<add specification="StartsWith" value="Shuttle.DependencyInjection.Messages" />
 			</messageRoute>
 		</messageRoutes>
 	</serviceBus>
 </configuration>```
 
-This tells shuttle that all messages that are sent and have a type name starting with `Shuttle.DependencyInjection.Messages` should be sent to endpoint `azuremq://azure/shuttle-server-work`.
+This tells shuttle that all messages that are sent and have a type name starting with `Shuttle.DependencyInjection.Messages` should be sent to endpoint `azuresq://azure/shuttle-server-work`.
 
 ## E-Mail
 
@@ -273,7 +273,7 @@ namespace Shuttle.DependencyInjection.Server
 	</appSettings>
 
 	<serviceBus>
-		<inbox workQueueUri="azuremq://azure/shuttle-server-work" errorQueueUri="azuremq://azure/shuttle-error" />
+		<inbox workQueueUri="azuresq://azure/shuttle-server-work" errorQueueUri="azuresq://azure/shuttle-error" />
 	</serviceBus>
 </configuration>
 ```

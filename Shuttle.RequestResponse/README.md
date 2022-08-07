@@ -128,17 +128,17 @@ namespace Shuttle.RequestResponse.Client
 
 	<serviceBus>
 		<messageRoutes>
-			<messageRoute uri="azuremq://azure/shuttle-server-work">
+			<messageRoute uri="azuresq://azure/shuttle-server-work">
 				<add specification="StartsWith" value="Shuttle.RequestResponse.Messages"/>
 			</messageRoute>
 		</messageRoutes>
 
-		<inbox workQueueUri="azuremq://azure/shuttle-client-work" errorQueueUri="azuremq://azure/shuttle-error" threadCount="1"/>
+		<inbox workQueueUri="azuresq://azure/shuttle-client-work" errorQueueUri="azuresq://azure/shuttle-error" threadCount="1"/>
 	</serviceBus>
 </configuration>
 ```
 
-This tells the service bus that all messages sent having a type name starting with `Shuttle.RequestResponse.Messages` should be routed to endpoint `azuremq://azure/shuttle-server-work`.
+This tells the service bus that all messages sent having a type name starting with `Shuttle.RequestResponse.Messages` should be routed to endpoint `azuresq://azure/shuttle-server-work`.
 
 ### MemberRegisteredHandler
 
@@ -288,7 +288,7 @@ namespace Shuttle.RequestResponse.Server
 	</log4net>
 
 	<serviceBus>
-		<inbox workQueueUri="azuremq://azure/shuttle-server-work" errorQueueUri="azuremq://azure/shuttle-error" />
+		<inbox workQueueUri="azuresq://azure/shuttle-server-work" errorQueueUri="azuresq://azure/shuttle-error" />
 	</serviceBus>
 </configuration>
 ```

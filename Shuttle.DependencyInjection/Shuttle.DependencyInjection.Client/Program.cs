@@ -3,7 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Shuttle.DependencyInjection.Messages;
 using Shuttle.Esb;
-using Shuttle.Esb.AzureMQ;
+using Shuttle.Esb.AzureStorageQueues;
 
 namespace Shuttle.DependencyInjection.Client
 {
@@ -24,7 +24,10 @@ namespace Shuttle.DependencyInjection.Client
 
             services.AddAzureStorageQueues(builder =>
             {
-                builder.AddConnectionString("azure");
+                builder.AddOptions("azure", new AzureStorageQueueOptions
+                {
+                    ConnectionString = "UseDevelopmentStorage=true;"
+                });
             });
 
             using (var bus = services.BuildServiceProvider().GetRequiredService<IServiceBus>().Start())

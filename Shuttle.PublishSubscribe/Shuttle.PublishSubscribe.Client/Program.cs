@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Shuttle.Esb;
-using Shuttle.Esb.AzureMQ;
+using Shuttle.Esb.AzureStorageQueues;
 using Shuttle.PublishSubscribe.Messages;
 
 namespace Shuttle.PublishSubscribe.Client
@@ -24,7 +24,10 @@ namespace Shuttle.PublishSubscribe.Client
 
             services.AddAzureStorageQueues(builder =>
             {
-                builder.AddConnectionString("azure");
+                builder.AddOptions("azure", new AzureStorageQueueOptions
+                {
+                    ConnectionString = "UseDevelopmentStorage=true;"
+                });
             });
 
             Console.WriteLine("Type some characters and then press [enter] to submit; an empty line submission stops execution:");

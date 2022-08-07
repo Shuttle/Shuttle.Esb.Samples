@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Shuttle.Core.Data;
 using Shuttle.Esb;
-using Shuttle.Esb.AzureMQ;
+using Shuttle.Esb.AzureStorageQueues;
 using Shuttle.Esb.Sql.Subscription;
 using Shuttle.PublishSubscribe.Messages;
 
@@ -17,7 +17,7 @@ namespace Shuttle.PublishSubscribe.Subscriber
         {
             DbProviderFactories.RegisterFactory("Microsoft.Data.SqlClient", SqlClientFactory.Instance);
 
-            var host = Host.CreateDefaultBuilder()
+            Host.CreateDefaultBuilder()
                 .ConfigureServices(services =>
                 {
                     var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
@@ -34,25 +34,20 @@ namespace Shuttle.PublishSubscribe.Subscriber
                     services.AddServiceBus(builder =>
                     {
                         configuration.GetSection(ServiceBusOptions.SectionName).Bind(builder.Options);
+
+                        builder.AddSubscription<MemberRegisteredEvent>();
                     });
 
                     services.AddAzureStorageQueues(builder =>
                     {
-                        builder.AddConnectionString("azure");
+                        builder.AddOptions("azure", new AzureStorageQueueOptions
+                        {
+                            ConnectionString = configuration.GetConnectionString("azure")
+                        });
                     });
                 })
-                .Build();
-
-            host.Services.GetRequiredService<ISubscriptionService>().Subscribe<MemberRegisteredEvent>();
-
-            var serviceBus = host.Services.GetRequiredService<IServiceBus>().Start();
-
-            host.Services.GetRequiredService<IHostApplicationLifetime>().ApplicationStopping.Register(() =>
-            {
-                serviceBus.Dispose();
-            });
-
-            host.Run();
+                .Build()
+                .Run();
         }
     }
 }
