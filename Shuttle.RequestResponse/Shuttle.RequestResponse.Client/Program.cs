@@ -39,7 +39,7 @@ namespace Shuttle.RequestResponse.Client
 
 				while (!string.IsNullOrEmpty(userName = Console.ReadLine()))
 				{
-					bus.Send(new RegisterMemberCommand
+					bus.Send(new RegisterMember
 					{
 						UserName = userName
 					}, c => c.WillExpire(DateTime.Now.AddSeconds(5)));

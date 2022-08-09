@@ -4,18 +4,18 @@ using Shuttle.RequestResponse.Messages;
 
 namespace Shuttle.RequestResponse.Server
 {
-	public class RegisterMemberHandler : IMessageHandler<RegisterMemberCommand>
+	public class RegisterMemberHandler : IMessageHandler<RegisterMember>
 	{
-		public void ProcessMessage(IHandlerContext<RegisterMemberCommand> context)
+		public void ProcessMessage(IHandlerContext<RegisterMember> context)
 		{
 			Console.WriteLine();
 			Console.WriteLine("[MEMBER REGISTERED] : user name = '{0}'", context.Message.UserName);
 			Console.WriteLine();
 
-			context.Send(new MemberRegisteredEvent
+			context.Send(new MemberRegistered
 			{
 				UserName = context.Message.UserName
-			}, c => c.Reply());
+			}, builder => builder.Reply());
 		}
 	}
 }

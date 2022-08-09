@@ -1,6 +1,6 @@
 ﻿namespace Shuttle.RequestResponse.Messages
 {
-	public class MemberRegisteredEvent
+	public class RegisterMember
 	{
 		public string UserName { get; set; }
 	}
