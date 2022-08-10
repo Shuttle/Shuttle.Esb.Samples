@@ -39,7 +39,7 @@ namespace Shuttle.Distribution.Client
 
                 while (!string.IsNullOrEmpty(userName = Console.ReadLine()))
                 {
-                    bus.Send(new RegisterMemberCommand
+                    bus.Send(new RegisterMember
                     {
                         UserName = userName
                     });

@@ -1,6 +1,6 @@
 ﻿namespace Shuttle.Distribution.Messages
 {
-	public class RegisterMemberCommand
+	public class RegisterMember
 	{
 		public string UserName { get; set; }
 	}
