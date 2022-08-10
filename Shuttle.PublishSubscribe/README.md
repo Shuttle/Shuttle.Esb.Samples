@@ -243,7 +243,7 @@ namespace Shuttle.PublishSubscribe.Server
 
 We need a store for our subscriptions.  In this example we will be using **Sql Server**.  Remember to make any required changges to the relevant connection strings.
 
-When you reference the `Shuttle.Esb.Sql.Subscription` package a `scripts` folder is included in the relevant package folder.  Click on the Nuget referenced assembly in the `Dependencies` and navigate to the package folder (in the `Path` property)  to find the `scripts` folder.
+When you reference the `Shuttle.Esb.Sql.Subscription` package a `scripts` folder is included in the relevant package folder.  Click on the NuGet referenced assembly in the `Dependencies` and navigate to the package folder (in the `Path` property) to find the `scripts` folder.
 
 The `{version}` bit will be in a `semver` format.
 

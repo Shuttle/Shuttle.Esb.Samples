@@ -45,7 +45,7 @@ namespace Shuttle.Idempotence.Client
 
 				while (!string.IsNullOrEmpty(userName = Console.ReadLine()))
 				{
-					var command = new RegisterMemberCommand
+					var command = new RegisterMember
 					{
 						UserName = userName
 					};
