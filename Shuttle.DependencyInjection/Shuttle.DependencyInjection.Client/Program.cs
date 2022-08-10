@@ -30,13 +30,16 @@ namespace Shuttle.DependencyInjection.Client
                 });
             });
 
+            Console.WriteLine("Type some characters and then press [enter] to submit; an empty line submission stops execution:");
+            Console.WriteLine();
+
             using (var bus = services.BuildServiceProvider().GetRequiredService<IServiceBus>().Start())
             {
                 string userName;
 
                 while (!string.IsNullOrEmpty(userName = Console.ReadLine()))
                 {
-                    bus.Send(new RegisterMemberCommand
+                    bus.Send(new RegisterMember
                     {
                         UserName = userName
                     });
