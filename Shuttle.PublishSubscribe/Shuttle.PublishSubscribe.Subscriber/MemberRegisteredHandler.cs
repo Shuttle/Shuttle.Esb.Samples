@@ -4,9 +4,9 @@ using Shuttle.PublishSubscribe.Messages;
 
 namespace Shuttle.PublishSubscribe.Subscriber
 {
-	public class MemberRegisteredHandler : IMessageHandler<MemberRegisteredEvent>
+	public class MemberRegisteredHandler : IMessageHandler<MemberRegistered>
 	{
-		public void ProcessMessage(IHandlerContext<MemberRegisteredEvent> context)
+		public void ProcessMessage(IHandlerContext<MemberRegistered> context)
 		{
 			Console.WriteLine();
 			Console.WriteLine("[EVENT RECEIVED] : user name = '{0}'", context.Message.UserName);

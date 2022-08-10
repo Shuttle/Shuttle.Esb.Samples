@@ -35,7 +35,7 @@ namespace Shuttle.PublishSubscribe.Subscriber
                     {
                         configuration.GetSection(ServiceBusOptions.SectionName).Bind(builder.Options);
 
-                        builder.AddSubscription<MemberRegisteredEvent>();
+                        builder.AddSubscription<MemberRegistered>();
                     });
 
                     services.AddAzureStorageQueues(builder =>
