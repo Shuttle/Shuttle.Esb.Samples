@@ -39,10 +39,10 @@ namespace Shuttle.Deferred.Client
 
                 while (!string.IsNullOrEmpty(userName = Console.ReadLine()))
                 {
-                    bus.Send(new RegisterMemberCommand
+                    bus.Send(new RegisterMember
                     {
                         UserName = userName
-                    }, c => c.Defer(DateTime.Now.AddSeconds(5)));
+                    }, builder => builder.Defer(DateTime.Now.AddSeconds(5)));
                 }
             }
         }
