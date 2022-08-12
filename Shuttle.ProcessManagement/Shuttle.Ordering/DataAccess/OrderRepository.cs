@@ -20,11 +20,11 @@ namespace Shuttle.Ordering.DataAccess
 
         public void Add(Order order)
         {
-            _databaseGateway.ExecuteUsing(_queryFactory.Add(order));
+            _databaseGateway.Execute(_queryFactory.Add(order));
 
             foreach (var item in order.Items)
             {
-                _databaseGateway.ExecuteUsing(_queryFactory.AddItem(item, order.Id));
+                _databaseGateway.Execute(_queryFactory.AddItem(item, order.Id));
             }
         }
     }

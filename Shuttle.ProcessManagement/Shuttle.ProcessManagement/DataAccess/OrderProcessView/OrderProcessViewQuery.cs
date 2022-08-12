@@ -23,27 +23,27 @@ namespace Shuttle.ProcessManagement
 
         public IEnumerable<DataRow> All()
         {
-            return _databaseGateway.GetRowsUsing(_queryFactory.All());
+            return _databaseGateway.GetRows(_queryFactory.All());
         }
 
         public void Add(OrderProcessRegisteredEvent message)
         {
-            _databaseGateway.ExecuteUsing(_queryFactory.Add(message));
+            _databaseGateway.Execute(_queryFactory.Add(message));
         }
 
         public DataRow Find(Guid id)
         {
-            return _databaseGateway.GetSingleRowUsing(_queryFactory.Find(id));
+            return _databaseGateway.GetRow(_queryFactory.Find(id));
         }
 
         public void Remove(Guid id)
         {
-            _databaseGateway.ExecuteUsing(_queryFactory.Remove(id));
+            _databaseGateway.Execute(_queryFactory.Remove(id));
         }
 
         public void SaveStatus(Guid orderProcessId, string status)
         {
-            _databaseGateway.ExecuteUsing(_queryFactory.SaveStatus(orderProcessId, status));
+            _databaseGateway.Execute(_queryFactory.SaveStatus(orderProcessId, status));
         }
     }
 }
