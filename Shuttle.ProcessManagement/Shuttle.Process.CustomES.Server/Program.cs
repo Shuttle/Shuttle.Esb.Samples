@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Shuttle.Core.Data;
+using Shuttle.Core.Transactions;
 using Shuttle.EMailSender.Messages;
 using Shuttle.Esb;
 using Shuttle.Esb.AzureStorageQueues;
@@ -43,9 +44,9 @@ namespace Shuttle.Process.CustomES.Server
 
                         builder.Options.Subscription.ConnectionStringName = "ProcessManagement";
 
-                        builder.AddSubscription<OrderCreatedEvent>();
-                        builder.AddSubscription<InvoiceCreatedEvent>();
-                        builder.AddSubscription<EMailSentEvent>();
+                        builder.AddSubscription<OrderCreated>();
+                        builder.AddSubscription<InvoiceCreated>();
+                        builder.AddSubscription<EMailSent>();
                     });
 
                     services.AddAzureStorageQueues(builder =>

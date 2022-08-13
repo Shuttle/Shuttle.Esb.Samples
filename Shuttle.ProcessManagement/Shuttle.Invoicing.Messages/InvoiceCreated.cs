@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace Shuttle.Invoicing.Messages
 {
-    public class InvoiceCreatedEvent
+    public class InvoiceCreated
     {
-        public InvoiceCreatedEvent()
+        public InvoiceCreated()
         {
             Items = new List<MessageInvoiceItem>();
         }

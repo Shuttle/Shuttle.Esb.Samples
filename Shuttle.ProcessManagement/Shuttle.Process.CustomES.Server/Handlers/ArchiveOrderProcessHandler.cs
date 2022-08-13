@@ -8,7 +8,7 @@ using Shuttle.Recall;
 
 namespace Shuttle.Process.CustomES.Server
 {
-    public class ArchiveOrderProcessHandler : IMessageHandler<ArchiveOrderProcessCommand>
+    public class ArchiveOrderProcessHandler : IMessageHandler<ArchiveOrderProcess>
     {
         private readonly IDatabaseContextFactory _databaseContextFactory;
         private readonly IEventStore _eventStore;
@@ -22,9 +22,7 @@ namespace Shuttle.Process.CustomES.Server
             _eventStore = eventStore;
         }
 
-        public bool IsReusable => true;
-
-        public void ProcessMessage(IHandlerContext<ArchiveOrderProcessCommand> context)
+        public void ProcessMessage(IHandlerContext<ArchiveOrderProcess> context)
         {
             using (_databaseContextFactory.Create(ProcessManagementData.ConnectionStringName))
             {
@@ -34,7 +32,7 @@ namespace Shuttle.Process.CustomES.Server
 
                 if (!orderProcess.CanArchive)
                 {
-                    context.Publish(new ArchiveOrderProcessRejectedEvent
+                    context.Publish(new ArchiveOrderProcessRejected
                     {
                         OrderProcessId = context.Message.OrderProcessId,
                         Status = orderProcess.Status
@@ -48,7 +46,7 @@ namespace Shuttle.Process.CustomES.Server
                 _eventStore.Save(stream);
             }
 
-            context.Publish(new OrderProcessArchivedEvent
+            context.Publish(new OrderProcessArchived
             {
                 OrderProcessId = context.Message.OrderProcessId
             });

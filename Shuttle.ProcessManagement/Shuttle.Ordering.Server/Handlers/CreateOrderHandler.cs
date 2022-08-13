@@ -7,7 +7,7 @@ using Shuttle.Ordering.Messages;
 
 namespace Shuttle.Ordering.Server
 {
-    public class CreateOrderHandler : IMessageHandler<CreateOrderCommand>
+    public class CreateOrderHandler : IMessageHandler<CreateOrder>
     {
         private readonly IDatabaseContextFactory _databaseContextFactory;
         private readonly IOrderRepository _repository;
@@ -21,9 +21,7 @@ namespace Shuttle.Ordering.Server
             _repository = repository;
         }
 
-        public bool IsReusable => true;
-
-        public void ProcessMessage(IHandlerContext<CreateOrderCommand> context)
+        public void ProcessMessage(IHandlerContext<CreateOrder> context)
         {
             // simulate slow processing
             Thread.Sleep(1000);
@@ -40,12 +38,12 @@ namespace Shuttle.Ordering.Server
                 order.AddItem(item.Description, item.Price);
             }
 
-            using (_databaseContextFactory.Create(OrderingData.ConnectionStringName))
+            using (_databaseContextFactory.Create())
             {
                 _repository.Add(order);
             }
 
-            var orderCreatedEvent = new OrderCreatedEvent
+            var orderCreatedEvent = new OrderCreated
             {
                 OrderId = order.Id,
                 OrderNumber = message.OrderNumber,

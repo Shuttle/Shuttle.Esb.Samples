@@ -6,7 +6,7 @@ using Shuttle.ProcessManagement;
 
 namespace Shuttle.Process.QueryServer
 {
-    public class OrderCreatedHandler : IMessageHandler<OrderCreatedEvent>
+    public class OrderCreatedHandler : IMessageHandler<OrderCreated>
     {
         private readonly IDatabaseContextFactory _databaseContextFactory;
         private readonly IOrderProcessViewQuery _orderProcessViewQuery;
@@ -21,9 +21,7 @@ namespace Shuttle.Process.QueryServer
             _orderProcessViewQuery = orderProcessViewQuery;
         }
 
-        public bool IsReusable => true;
-
-        public void ProcessMessage(IHandlerContext<OrderCreatedEvent> context)
+        public void ProcessMessage(IHandlerContext<OrderCreated> context)
         {
             using (_databaseContextFactory.Create(ProcessManagementData.ConnectionStringName))
             {

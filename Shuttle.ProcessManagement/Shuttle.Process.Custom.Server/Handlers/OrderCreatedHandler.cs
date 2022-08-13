@@ -9,7 +9,7 @@ using Shuttle.ProcessManagement;
 
 namespace Shuttle.Process.Custom.Server
 {
-    public class OrderCreatedHandler : IMessageHandler<OrderCreatedEvent>
+    public class OrderCreatedHandler : IMessageHandler<OrderCreated>
     {
         private readonly IDatabaseContextFactory _databaseContextFactory;
         private readonly IOrderProcessRepository _repository;
@@ -23,9 +23,7 @@ namespace Shuttle.Process.Custom.Server
             _repository = repository;
         }
 
-        public bool IsReusable => true;
-
-        public void ProcessMessage(IHandlerContext<OrderCreatedEvent> context)
+        public void ProcessMessage(IHandlerContext<OrderCreated> context)
         {
             if (!context.TransportMessage.IsHandledHere())
             {
@@ -41,8 +39,7 @@ namespace Shuttle.Process.Custom.Server
                 if (orderProcess == null)
                 {
                     throw new ApplicationException(
-                        string.Format("Could not find an order process with correlation id '{0}'.",
-                            context.TransportMessage.CorrelationId));
+                        $"Could not find an order process with correlation id '{context.TransportMessage.CorrelationId}'.");
                 }
 
                 var orderProcessStatus = new OrderProcessStatus("Order Created");
@@ -53,7 +50,7 @@ namespace Shuttle.Process.Custom.Server
                 _repository.AddStatus(orderProcessStatus, orderProcess.Id);
             }
 
-            var createInvoiceCommand = new CreateInvoiceCommand
+            var createInvoiceCommand = new CreateInvoice
             {
                 OrderId = context.Message.OrderId,
                 AccountContactName = orderProcess.CustomerName,

@@ -56,14 +56,14 @@ namespace Shuttle.ProcessManagement.Services
                     return;
                 }
 
-                _bus.Send(new CancelOrderProcessCommand
+                _bus.Send(new CancelOrderProcess
                 {
                     OrderProcessId = id
-                }, c =>
+                }, builder =>
                 {
-                    c.WithRecipient(OrderProcessViewColumns.TargetSystemUri.MapFrom(row));
-                    c.WithCorrelationId(id.ToString("N"));
-                    c.Headers.Add(new TransportHeader
+                    builder.WithRecipient(OrderProcessViewColumns.TargetSystemUri.MapFrom(row));
+                    builder.WithCorrelationId(id.ToString("N"));
+                    builder.Headers.Add(new TransportHeader
                     {
                         Key = "TargetSystem",
                         Value = OrderProcessViewColumns.TargetSystem.MapFrom(row)
@@ -85,14 +85,14 @@ namespace Shuttle.ProcessManagement.Services
                     return;
                 }
 
-                _bus.Send(new ArchiveOrderProcessCommand
+                _bus.Send(new ArchiveOrderProcess
                 {
                     OrderProcessId = id
-                }, c =>
+                }, builder =>
                 {
-                    c.WithRecipient(OrderProcessViewColumns.TargetSystemUri.MapFrom(row));
-                    c.WithCorrelationId(id.ToString("N"));
-                    c.Headers.Add(new TransportHeader
+                    builder.WithRecipient(OrderProcessViewColumns.TargetSystemUri.MapFrom(row));
+                    builder.WithCorrelationId(id.ToString("N"));
+                    builder.Headers.Add(new TransportHeader
                     {
                         Key = "TargetSystem",
                         Value = OrderProcessViewColumns.TargetSystem.MapFrom(row)

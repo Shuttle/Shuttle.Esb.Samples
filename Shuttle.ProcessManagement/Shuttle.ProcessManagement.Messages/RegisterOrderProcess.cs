@@ -2,14 +2,9 @@
 
 namespace Shuttle.ProcessManagement.Messages
 {
-    public class RegisterOrderProcessCommand
+    public class RegisterOrderProcess
     {
-        public RegisterOrderProcessCommand()
-        {
-            QuotedProducts = new List<QuotedProduct>();
-        }
-
-        public List<QuotedProduct> QuotedProducts { get; set; }
+        public List<QuotedProduct> QuotedProducts { get; set; } = new List<QuotedProduct>();
         public string CustomerName { get; set; }
         public string CustomerEMail { get; set; }
         public string TargetSystem { get; set; }

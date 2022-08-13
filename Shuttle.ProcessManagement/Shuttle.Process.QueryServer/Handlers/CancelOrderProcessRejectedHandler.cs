@@ -6,7 +6,7 @@ using Shuttle.ProcessManagement.Messages;
 
 namespace Shuttle.Process.QueryServer
 {
-    public class CancelOrderProcessRejectedHandler : IMessageHandler<CancelOrderProcessRejectedEvent>
+    public class CancelOrderProcessRejectedHandler : IMessageHandler<CancelOrderProcessRejected>
     {
         private readonly IDatabaseContextFactory _databaseContextFactory;
         private readonly IOrderProcessViewQuery _orderProcessViewQuery;
@@ -21,9 +21,7 @@ namespace Shuttle.Process.QueryServer
             _orderProcessViewQuery = orderProcessViewQuery;
         }
 
-        public bool IsReusable => true;
-
-        public void ProcessMessage(IHandlerContext<CancelOrderProcessRejectedEvent> context)
+        public void ProcessMessage(IHandlerContext<CancelOrderProcessRejected> context)
         {
             using (_databaseContextFactory.Create(ProcessManagementData.ConnectionStringName))
             {

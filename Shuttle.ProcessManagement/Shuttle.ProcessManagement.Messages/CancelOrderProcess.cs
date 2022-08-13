@@ -2,7 +2,7 @@
 
 namespace Shuttle.ProcessManagement.Messages
 {
-    public class CancelOrderProcessCommand
+    public class CancelOrderProcess
     {
         public Guid OrderProcessId { get; set; }
     }

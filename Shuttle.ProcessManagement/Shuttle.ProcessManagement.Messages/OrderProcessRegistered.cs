@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Shuttle.ProcessManagement.Messages
 {
-    public class OrderProcessRegisteredEvent
+    public class OrderProcessRegistered
     {
         public Guid OrderProcessId { get; set; }
         public List<QuotedProduct> QuotedProducts { get; set; }

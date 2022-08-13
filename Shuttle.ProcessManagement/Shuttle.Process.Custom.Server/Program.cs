@@ -1,10 +1,13 @@
-﻿using System.Data.Common;
+﻿using System;
+using System.Data.Common;
 using System.Data.SqlClient;
+using System.Reflection;
 using System.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Shuttle.Core.Data;
+using Shuttle.Core.DependencyInjection;
 using Shuttle.EMailSender.Messages;
 using Shuttle.Esb;
 using Shuttle.Esb.AzureStorageQueues;
@@ -28,6 +31,9 @@ namespace Shuttle.Process.Custom.Server
 
                     services.AddSingleton<IConfiguration>(configuration);
 
+                    services.FromAssembly(Assembly.Load("Shuttle.ProcessManagement")).Add();
+                    services.FromAssembly(Assembly.Load("Shuttle.Process.Custom.Server")).Add();
+
                     services.AddDataAccess(builder =>
                     {
                         builder.AddConnectionString("ProcessManagement", "System.Data.SqlClient");
@@ -41,16 +47,17 @@ namespace Shuttle.Process.Custom.Server
 
                         builder.Options.Subscription.ConnectionStringName = "ProcessManagement";
 
-                        builder.AddSubscription<OrderCreatedEvent>();
-                        builder.AddSubscription<InvoiceCreatedEvent>();
-                        builder.AddSubscription<EMailSentEvent>();
+                        builder.AddSubscription<OrderCreated>();
+                        builder.AddSubscription<InvoiceCreated>();
+                        builder.AddSubscription<EMailSent>();
                     });
 
                     services.AddAzureStorageQueues(builder =>
                     {
                         builder.AddOptions("azure", new AzureStorageQueueOptions
                         {
-                            ConnectionString = configuration.GetConnectionString("azure")
+                            ConnectionString = configuration.GetConnectionString("azure"),
+                            VisibilityTimeout = TimeSpan.FromMinutes(5)
                         });
                     });
                 })

@@ -31,8 +31,8 @@ namespace Shuttle.Invoicing.Domain
 
         public void GenerateInvoiceNumber()
         {
-            InvoiceNumber = string.Format("INV-{0}-{1}", InvoiceDate.Ticks.ToString().Substring(8, 6),
-                Guid.NewGuid().ToString("N").Substring(6));
+            InvoiceNumber =
+                $"INV-{InvoiceDate.Ticks.ToString().Substring(8, 6)}-{Guid.NewGuid().ToString("N")[6..]}";
         }
 
         public void AddItem(string description, decimal price)

@@ -7,7 +7,7 @@ using Shuttle.Invoicing.Messages;
 
 namespace Shuttle.Invoicing.Server
 {
-    public class CreateInvoiceHandler : IMessageHandler<CreateInvoiceCommand>
+    public class CreateInvoiceHandler : IMessageHandler<CreateInvoice>
     {
         private readonly IDatabaseContextFactory _databaseContextFactory;
         private readonly IInvoiceRepository _repository;
@@ -21,9 +21,7 @@ namespace Shuttle.Invoicing.Server
             _repository = repository;
         }
 
-        public bool IsReusable => true;
-
-        public void ProcessMessage(IHandlerContext<CreateInvoiceCommand> context)
+        public void ProcessMessage(IHandlerContext<CreateInvoice> context)
         {
             // simulate slow processing
             Thread.Sleep(1000);
@@ -42,12 +40,12 @@ namespace Shuttle.Invoicing.Server
 
             invoice.GenerateInvoiceNumber();
 
-            using (_databaseContextFactory.Create(InvoicingData.ConnectionStringName))
+            using (_databaseContextFactory.Create())
             {
                 _repository.Add(invoice);
             }
 
-            var orderCreatedEvent = new InvoiceCreatedEvent
+            var orderCreatedEvent = new InvoiceCreated
             {
                 InvoiceId = invoice.Id,
                 InvoiceNumber = invoice.InvoiceNumber,

@@ -4,17 +4,15 @@ using Shuttle.Esb;
 
 namespace Shuttle.EMailSender.Server
 {
-    public class SendEMailHandler : IMessageHandler<SendEMailCommand>
+    public class SendEMailHandler : IMessageHandler<SendEMail>
     {
-        public bool IsReusable => true;
-
-        public void ProcessMessage(IHandlerContext<SendEMailCommand> context)
+        public void ProcessMessage(IHandlerContext<SendEMail> context)
         {
             // simulate sending an e-mail
 
             Thread.Sleep(2000);
 
-            context.Publish(new EMailSentEvent
+            context.Publish(new EMailSent
             {
                 EMailId = context.Message.EMailId
             });

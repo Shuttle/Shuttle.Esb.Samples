@@ -8,7 +8,7 @@ namespace Shuttle.ProcessManagement
     public interface IOrderProcessViewQuery
     {
         IEnumerable<DataRow> All();
-        void Add(OrderProcessRegisteredEvent message);
+        void Add(OrderProcessRegistered message);
         DataRow Find(Guid id);
         void Remove(Guid id);
         void SaveStatus(Guid orderProcessId, string status);

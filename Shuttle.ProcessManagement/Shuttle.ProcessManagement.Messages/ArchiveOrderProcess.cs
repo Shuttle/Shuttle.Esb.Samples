@@ -2,7 +2,7 @@
 
 namespace Shuttle.ProcessManagement.Messages
 {
-    public class OrderProcessCompletedEvent
+    public class ArchiveOrderProcess
     {
         public Guid OrderProcessId { get; set; }
     }

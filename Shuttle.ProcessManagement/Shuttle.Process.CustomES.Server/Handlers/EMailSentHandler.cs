@@ -10,7 +10,7 @@ using Shuttle.Recall;
 
 namespace Shuttle.Process.CustomES.Server
 {
-    public class EMailSentHandler : IMessageHandler<EMailSentEvent>
+    public class EMailSentHandler : IMessageHandler<EMailSent>
     {
         private readonly IDatabaseContextFactory _databaseContextFactory;
         private readonly IEventStore _eventStore;
@@ -24,9 +24,7 @@ namespace Shuttle.Process.CustomES.Server
             _eventStore = eventStore;
         }
 
-        public bool IsReusable => true;
-
-        public void ProcessMessage(IHandlerContext<EMailSentEvent> context)
+        public void ProcessMessage(IHandlerContext<EMailSent> context)
         {
             if (!context.TransportMessage.IsHandledHere())
             {
@@ -42,8 +40,7 @@ namespace Shuttle.Process.CustomES.Server
                 if (stream.IsEmpty)
                 {
                     throw new ApplicationException(
-                        string.Format("Could not find an order process with correlation id '{0}'.",
-                            context.TransportMessage.CorrelationId));
+                        $"Could not find an order process with correlation id '{context.TransportMessage.CorrelationId}'.");
                 }
 
                 var orderProcess = new OrderProcess(orderProcessId);
@@ -54,7 +51,7 @@ namespace Shuttle.Process.CustomES.Server
                 _eventStore.Save(stream);
             }
 
-            context.Send(new CompleteOrderProcessCommand
+            context.Send(new CompleteOrderProcess
             {
                 OrderProcessId = orderProcessId
             }, c => c.Local());

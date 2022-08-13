@@ -3,18 +3,14 @@ using System.Collections.Generic;
 
 namespace Shuttle.Ordering.Messages
 {
-    public class CreateOrderCommand
+    public class OrderCreated
     {
-        public CreateOrderCommand()
-        {
-            Items = new List<MessageOrderItem>();
-        }
-
+        public Guid OrderId { get; set; }
         public string OrderNumber { get; set; }
         public DateTime OrderDate { get; set; }
         public string CustomerName { get; set; }
         public string CustomerEMail { get; set; }
 
-        public List<MessageOrderItem> Items { get; set; }
+        public List<MessageOrderItem> Items { get; set; } = new List<MessageOrderItem>();
     }
 }

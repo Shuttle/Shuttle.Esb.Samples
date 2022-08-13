@@ -6,7 +6,7 @@ using Shuttle.ProcessManagement.Messages;
 
 namespace Shuttle.Process.Custom.Server
 {
-    public class CancelOrderProcessHandler : IMessageHandler<CancelOrderProcessCommand>
+    public class CancelOrderProcessHandler : IMessageHandler<CancelOrderProcess>
     {
         private readonly IDatabaseContextFactory _databaseContextFactory;
         private readonly IOrderProcessRepository _repository;
@@ -21,9 +21,7 @@ namespace Shuttle.Process.Custom.Server
             _repository = repository;
         }
 
-        public bool IsReusable => true;
-
-        public void ProcessMessage(IHandlerContext<CancelOrderProcessCommand> context)
+        public void ProcessMessage(IHandlerContext<CancelOrderProcess> context)
         {
             using (_databaseContextFactory.Create(ProcessManagementData.ConnectionStringName))
             {
@@ -37,7 +35,7 @@ namespace Shuttle.Process.Custom.Server
                 _repository.Remove(orderProcess);
             }
 
-            context.Publish(new OrderProcessCancelledEvent
+            context.Publish(new OrderProcessCancelled
             {
                 OrderProcessId = context.Message.OrderProcessId
             });

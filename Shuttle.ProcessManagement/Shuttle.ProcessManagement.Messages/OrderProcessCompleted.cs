@@ -2,9 +2,8 @@
 
 namespace Shuttle.ProcessManagement.Messages
 {
-    public class CancelOrderProcessRejectedEvent
+    public class OrderProcessCompleted
     {
         public Guid OrderProcessId { get; set; }
-        public string Status { get; set; }
     }
 }

@@ -1,10 +1,12 @@
 ﻿using System.Data.Common;
 using System.Data.SqlClient;
+using System.Reflection;
 using System.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Shuttle.Core.Data;
+using Shuttle.Core.DependencyInjection;
 using Shuttle.Esb;
 using Shuttle.Esb.AzureStorageQueues;
 using Shuttle.Esb.Sql.Subscription;
@@ -25,9 +27,12 @@ namespace Shuttle.Invoicing.Server
 
                     services.AddSingleton<IConfiguration>(configuration);
 
+                    services.FromAssembly(Assembly.Load("Shuttle.Invoicing")).Add();
+
                     services.AddDataAccess(builder =>
                     {
                         builder.AddConnectionString("ProcessManagement", "System.Data.SqlClient");
+                        builder.Options.DatabaseContextFactory.ConnectionStringName = "ProcessManagement";
                     });
 
                     services.AddSqlSubscription();

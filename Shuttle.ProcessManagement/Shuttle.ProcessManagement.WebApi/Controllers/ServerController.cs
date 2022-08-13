@@ -5,7 +5,7 @@ namespace Shuttle.ProcessManagement.WebApi.Controllers
     public class ServerController : Controller
     {
         [HttpGet]
-        [Route("api/server/properties")]
+        [Route("server/properties")]
         public dynamic Properties()
         {
             return new

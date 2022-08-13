@@ -1,10 +1,12 @@
 ﻿using System.Data.Common;
 using System.Data.SqlClient;
+using System.Reflection;
 using System.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Shuttle.Core.Data;
+using Shuttle.Core.DependencyInjection;
 using Shuttle.EMailSender.Messages;
 using Shuttle.Esb;
 using Shuttle.Esb.AzureStorageQueues;
@@ -29,6 +31,8 @@ namespace Shuttle.Process.QueryServer
 
                     services.AddSingleton<IConfiguration>(configuration);
 
+                    services.FromAssembly(Assembly.Load("Shuttle.ProcessManagement")).Add();
+
                     services.AddDataAccess(builder =>
                     {
                         builder.AddConnectionString("ProcessManagement", "System.Data.SqlClient");
@@ -50,16 +54,16 @@ namespace Shuttle.Process.QueryServer
 
                         builder.Options.Subscription.ConnectionStringName = "ProcessManagement";
 
-                        builder.AddSubscription<OrderProcessRegisteredEvent>();
-                        builder.AddSubscription<OrderProcessCancelledEvent>();
-                        builder.AddSubscription<OrderProcessAcceptedEvent>();
-                        builder.AddSubscription<OrderProcessCompletedEvent>();
-                        builder.AddSubscription<OrderProcessArchivedEvent>();
-                        builder.AddSubscription<OrderCreatedEvent>();
-                        builder.AddSubscription<CancelOrderProcessRejectedEvent>();
-                        builder.AddSubscription<ArchiveOrderProcessRejectedEvent>();
-                        builder.AddSubscription<InvoiceCreatedEvent>();
-                        builder.AddSubscription<EMailSentEvent>();
+                        builder.AddSubscription<OrderProcessRegistered>();
+                        builder.AddSubscription<OrderProcessCancelled>();
+                        builder.AddSubscription<OrderProcessAccepted>();
+                        builder.AddSubscription<OrderProcessCompleted>();
+                        builder.AddSubscription<OrderProcessArchived>();
+                        builder.AddSubscription<OrderCreated>();
+                        builder.AddSubscription<CancelOrderProcessRejected>();
+                        builder.AddSubscription<ArchiveOrderProcessRejected>();
+                        builder.AddSubscription<InvoiceCreated>();
+                        builder.AddSubscription<EMailSent>();
                     });
                 })
                 .Build()

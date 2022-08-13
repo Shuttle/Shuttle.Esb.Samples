@@ -1,5 +1,6 @@
 ﻿using System.Data.Common;
 using System.Data.SqlClient;
+using System.Runtime.CompilerServices;
 using System.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,6 +9,7 @@ using Shuttle.Core.Data;
 using Shuttle.EMailSender.Messages;
 using Shuttle.Esb;
 using Shuttle.Esb.AzureStorageQueues;
+using Shuttle.Esb.Process;
 using Shuttle.Esb.Sql.Subscription;
 using Shuttle.Invoicing.Messages;
 using Shuttle.Ordering.Messages;
@@ -35,6 +37,10 @@ namespace Shuttle.Process.ESModule.Server
                         builder.AddConnectionString("ProcessManagement", "System.Data.SqlClient");
                     });
 
+                    services.AddProcessManagement(builder =>
+                    {
+                        builder.Options.ConnectionStringName = "ProcessManagement";
+                    });
                     services.AddSqlSubscription();
 
                     services.AddServiceBus(builder =>
@@ -43,9 +49,9 @@ namespace Shuttle.Process.ESModule.Server
 
                         builder.Options.Subscription.ConnectionStringName = "ProcessManagement";
 
-                        builder.AddSubscription<OrderCreatedEvent>();
-                        builder.AddSubscription<InvoiceCreatedEvent>();
-                        builder.AddSubscription<EMailSentEvent>();
+                        builder.AddSubscription<OrderCreated>();
+                        builder.AddSubscription<InvoiceCreated>();
+                        builder.AddSubscription<EMailSent>();
                     });
 
                     services.AddAzureStorageQueues(builder =>

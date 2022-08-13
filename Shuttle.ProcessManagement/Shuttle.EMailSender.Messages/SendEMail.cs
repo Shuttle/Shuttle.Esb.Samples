@@ -2,7 +2,7 @@
 
 namespace Shuttle.EMailSender.Messages
 {
-    public class SendEMailCommand
+    public class SendEMail
     {
         public Guid EMailId { get; set; }
         public string RecipientEMail { get; set; }

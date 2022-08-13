@@ -26,7 +26,7 @@ namespace Shuttle.ProcessManagement
             return _databaseGateway.GetRows(_queryFactory.All());
         }
 
-        public void Add(OrderProcessRegisteredEvent message)
+        public void Add(OrderProcessRegistered message)
         {
             _databaseGateway.Execute(_queryFactory.Add(message));
         }
