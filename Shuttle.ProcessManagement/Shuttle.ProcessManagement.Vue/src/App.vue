@@ -1,23 +1,29 @@
 <template>
-  <v-app>
-    <v-main>
-      <HelloWorld/>
-    </v-main>
-  </v-app>
+    <v-app>
+        <v-main>
+            <v-app-bar title="Shuttle.Processmanagement" flat></v-app-bar>
+            <div class="app-container">
+                <Books />
+                <Orders />
+            </div>
+        </v-main>
+    </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Books from './components/Books.vue'
+import Orders from './components/Orders.vue'
 
 export default {
-  name: 'App',
+    name: 'App',
 
-  components: {
-    HelloWorld,
-  },
+    components: {
+        Books,
+        Orders,
+    },
 
-  data: () => ({
-    //
-  }),
+    data: () => ({
+        //
+    }),
 }
 </script>
