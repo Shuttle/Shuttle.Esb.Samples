@@ -241,7 +241,11 @@ namespace Shuttle.PublishSubscribe.Server
 
 ### Database
 
-We need a store for our subscriptions.  In this example we will be using **Sql Server**.  Remember to make any required changges to the relevant connection strings.
+We need a store for our subscriptions.  In this example we will be using **Sql Server**.  If you are using docker you can quickly get up-and-running with the following:
+
+```
+docker run -d --name sql -h sql -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=Pass!000" -e "MSSQL_PID=Express" -p 1433:1433 -v C:\SQLServer.Data\:/var/opt/mssql/data mcr.microsoft.com/mssql/server:2019-latest
+```
 
 When you reference the `Shuttle.Esb.Sql.Subscription` package a `scripts` folder is included in the relevant package folder.  Click on the NuGet referenced assembly in the `Dependencies` and navigate to the package folder (in the `Path` property) to find the `scripts` folder.
 
