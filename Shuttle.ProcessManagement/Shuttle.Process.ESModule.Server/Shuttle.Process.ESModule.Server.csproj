@@ -7,14 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Shuttle.Core.Castle" Version="10.1.1" />
-    <PackageReference Include="Shuttle.Core.Data.SqlClient" Version="10.0.5" />
-    <PackageReference Include="Shuttle.Core.Log4Net" Version="10.0.4" />
-    <PackageReference Include="Shuttle.Core.WorkerService" Version="1.0.1" />
-    <PackageReference Include="Shuttle.Esb.AzureMQ" Version="12.0.1" />
-    <PackageReference Include="Shuttle.Esb.Process" Version="12.0.2" />
-    <PackageReference Include="Shuttle.Esb.Sql.Subscription" Version="12.0.2" />
-    <PackageReference Include="Shuttle.Recall.Sql.Storage" Version="13.0.2" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
+    <PackageReference Include="Shuttle.Esb.AzureStorageQueues" Version="13.0.0" />
+    <PackageReference Include="Shuttle.Esb.Process" Version="13.0.0" />
+    <PackageReference Include="Shuttle.Esb.Sql.Subscription" Version="13.0.0" />
+    <PackageReference Include="Shuttle.Recall.Sql.Storage" Version="16.0.0" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
   </ItemGroup>
 
   <ItemGroup>
@@ -23,6 +21,12 @@
     <ProjectReference Include="..\Shuttle.Ordering.Messages\Shuttle.Ordering.Messages.csproj" />
     <ProjectReference Include="..\Shuttle.Process.CustomES.Server\Shuttle.Process.CustomES.Server.csproj" />
     <ProjectReference Include="..\Shuttle.ProcessManagement.Messages\Shuttle.ProcessManagement.Messages.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

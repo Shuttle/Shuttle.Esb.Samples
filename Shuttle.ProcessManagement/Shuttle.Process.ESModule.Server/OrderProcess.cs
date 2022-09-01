@@ -13,14 +13,14 @@ namespace Shuttle.Process.ESModule.Server
 {
     public class OrderProcess :
         IProcessManager,
-        IProcessStartMessageHandler<RegisterOrderProcessCommand>,
-        IProcessMessageHandler<CancelOrderProcessCommand>,
-        IProcessMessageHandler<AcceptOrderProcessCommand>,
-        IProcessMessageHandler<OrderCreatedEvent>,
-        IProcessMessageHandler<InvoiceCreatedEvent>,
-        IProcessMessageHandler<EMailSentEvent>,
-        IProcessMessageHandler<CompleteOrderProcessCommand>,
-        IProcessMessageHandler<ArchiveOrderProcessCommand>
+        IProcessStartMessageHandler<RegisterOrderProcess>,
+        IProcessMessageHandler<CancelOrderProcess>,
+        IProcessMessageHandler<AcceptOrderProcess>,
+        IProcessMessageHandler<OrderCreated>,
+        IProcessMessageHandler<InvoiceCreated>,
+        IProcessMessageHandler<EMailSent>,
+        IProcessMessageHandler<CompleteOrderProcess>,
+        IProcessMessageHandler<ArchiveOrderProcess>
     {
         private readonly List<CustomES.Server.Domain.OrderProcess.Events.ItemAdded> _items = new List<CustomES.Server.Domain.OrderProcess.Events.ItemAdded>();
         private CustomES.Server.Domain.OrderProcess.Events.CustomerAssigned _customerAssigned;
@@ -50,7 +50,7 @@ namespace Shuttle.Process.ESModule.Server
 
         public Guid CorrelationId { get; set; }
 
-        public void ProcessMessage(IProcessHandlerContext<AcceptOrderProcessCommand> context)
+        public void ProcessMessage(IProcessHandlerContext<AcceptOrderProcess> context)
         {
             if (context.Stream.IsEmpty)
             {
@@ -59,7 +59,7 @@ namespace Shuttle.Process.ESModule.Server
 
             context.Stream.AddEvent(ChangeStatus("Order Accepted"));
 
-            var command = new CreateOrderCommand
+            var command = new CreateOrder
             {
                 OrderNumber = _initialized.OrderNumber,
                 OrderDate = _initialized.DateRegistered,
@@ -78,17 +78,17 @@ namespace Shuttle.Process.ESModule.Server
 
             context.Send(command);
 
-            context.Publish(new OrderProcessAcceptedEvent
+            context.Publish(new OrderProcessAccepted
             {
                 OrderProcessId = CorrelationId
             });
         }
 
-        public void ProcessMessage(IProcessHandlerContext<ArchiveOrderProcessCommand> context)
+        public void ProcessMessage(IProcessHandlerContext<ArchiveOrderProcess> context)
         {
             if (!CanArchive)
             {
-                context.Publish(new ArchiveOrderProcessRejectedEvent
+                context.Publish(new ArchiveOrderProcessRejected
                 {
                     OrderProcessId = context.Message.OrderProcessId,
                     Status = Status
@@ -99,17 +99,17 @@ namespace Shuttle.Process.ESModule.Server
 
             context.Stream.AddEvent(ChangeStatus("Order Archived"));
 
-            context.Publish(new OrderProcessArchivedEvent
+            context.Publish(new OrderProcessArchived
             {
                 OrderProcessId = context.Message.OrderProcessId
             });
         }
 
-        public void ProcessMessage(IProcessHandlerContext<CancelOrderProcessCommand> context)
+        public void ProcessMessage(IProcessHandlerContext<CancelOrderProcess> context)
         {
             if (!CanCancel)
             {
-                context.Publish(new CancelOrderProcessRejectedEvent
+                context.Publish(new CancelOrderProcessRejected
                 {
                     OrderProcessId = context.Message.OrderProcessId,
                     Status = Status
@@ -120,23 +120,23 @@ namespace Shuttle.Process.ESModule.Server
 
             context.Stream.Remove();
 
-            context.Publish(new OrderProcessCancelledEvent
+            context.Publish(new OrderProcessCancelled
             {
                 OrderProcessId = context.Message.OrderProcessId
             });
         }
 
-        public void ProcessMessage(IProcessHandlerContext<CompleteOrderProcessCommand> context)
+        public void ProcessMessage(IProcessHandlerContext<CompleteOrderProcess> context)
         {
             context.Stream.AddEvent(ChangeStatus("Completed"));
 
-            context.Publish(new OrderProcessCompletedEvent
+            context.Publish(new OrderProcessCompleted
             {
                 OrderProcessId = CorrelationId
             });
         }
 
-        public void ProcessMessage(IProcessHandlerContext<EMailSentEvent> context)
+        public void ProcessMessage(IProcessHandlerContext<EMailSent> context)
         {
             if (!ShouldProcess(context.TransportMessage, context.Stream))
             {
@@ -145,13 +145,13 @@ namespace Shuttle.Process.ESModule.Server
 
             context.Stream.AddEvent(ChangeStatus("Dispatched-EMail Sent"));
 
-            context.Send(new CompleteOrderProcessCommand
+            context.Send(new CompleteOrderProcess
             {
                 OrderProcessId = CorrelationId
             }, c => c.Local());
         }
 
-        public void ProcessMessage(IProcessHandlerContext<InvoiceCreatedEvent> context)
+        public void ProcessMessage(IProcessHandlerContext<InvoiceCreated> context)
         {
             if (!ShouldProcess(context.TransportMessage, context.Stream))
             {
@@ -161,17 +161,15 @@ namespace Shuttle.Process.ESModule.Server
             context.Stream.AddEvent(ChangeStatus("Invoice Created"));
             context.Stream.AddEvent(AssignInvoiceId(context.Message.InvoiceId));
 
-            context.Send(new SendEMailCommand
+            context.Send(new SendEMail
             {
                 RecipientEMail = _customerAssigned.CustomerEMail,
                 HtmlBody =
-                    string.Format(
-                        "Hello {0},<br/><br/>Your order number {1} has been dispatched.<br/><br/>Regards,<br/>The Shuttle Books Team",
-                        _customerAssigned.CustomerName, _initialized.OrderNumber)
+                    $"Hello {_customerAssigned.CustomerName},<br/><br/>Your order number {_initialized.OrderNumber} has been dispatched.<br/><br/>Regards,<br/>The Shuttle Books Team"
             });
         }
 
-        public void ProcessMessage(IProcessHandlerContext<OrderCreatedEvent> context)
+        public void ProcessMessage(IProcessHandlerContext<OrderCreated> context)
         {
             if (!ShouldProcess(context.TransportMessage, context.Stream))
             {
@@ -181,7 +179,7 @@ namespace Shuttle.Process.ESModule.Server
             context.Stream.AddEvent(ChangeStatus("Order Created"));
             context.Stream.AddEvent(AssignOrderId(context.Message.OrderId));
 
-            var command = new CreateInvoiceCommand
+            var command = new CreateInvoice
             {
                 OrderId = _orderIdAssigned.OrderId,
                 AccountContactName = _customerAssigned.CustomerName,
@@ -200,7 +198,7 @@ namespace Shuttle.Process.ESModule.Server
             context.Send(command);
         }
 
-        public void ProcessMessage(IProcessHandlerContext<RegisterOrderProcessCommand> context)
+        public void ProcessMessage(IProcessHandlerContext<RegisterOrderProcess> context)
         {
             var message = context.Message;
 
@@ -215,7 +213,7 @@ namespace Shuttle.Process.ESModule.Server
                     AddItem(quotedProduct.ProductId, quotedProduct.Description, quotedProduct.Price));
             }
 
-            context.Publish(new OrderProcessRegisteredEvent
+            context.Publish(new OrderProcessRegistered
             {
                 OrderProcessId = CorrelationId,
                 QuotedProducts = message.QuotedProducts,
@@ -230,7 +228,7 @@ namespace Shuttle.Process.ESModule.Server
                 TargetSystemUri = message.TargetSystemUri
             });
 
-            context.Send(new AcceptOrderProcessCommand
+            context.Send(new AcceptOrderProcess
             {
                 OrderProcessId = CorrelationId
             }, c => c.Defer(DateTime.Now.AddSeconds(10)).Local().WithCorrelationId(CorrelationId.ToString("N")));
@@ -256,9 +254,7 @@ namespace Shuttle.Process.ESModule.Server
 
         private string GenerateOrderNumber(DateTime dateRegistered)
         {
-            return string.Format("ORD-{0}-{1}",
-                dateRegistered.Ticks.ToString().Substring(8, 6),
-                Guid.NewGuid().ToString("N").Substring(6));
+            return $"ORD-{dateRegistered.Ticks.ToString().Substring(8, 6)}-{Guid.NewGuid().ToString("N")[6..]}";
         }
 
         public CustomES.Server.Domain.OrderProcess.Events.CustomerAssigned AssignCustomer(string customerName, string customerEMail)
@@ -370,8 +366,7 @@ namespace Shuttle.Process.ESModule.Server
             if (stream.IsEmpty)
             {
                 throw new ApplicationException(
-                    string.Format("Could not find an order process with correlation id '{0}'.",
-                        transportMessage.CorrelationId));
+                    $"Could not find an order process with correlation id '{transportMessage.CorrelationId}'.");
             }
 
             return true;

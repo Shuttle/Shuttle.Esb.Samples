@@ -9,7 +9,7 @@ using Shuttle.ProcessManagement.Messages;
 
 namespace Shuttle.Process.Custom.Server
 {
-    public class EMailSentHandler : IMessageHandler<EMailSentEvent>
+    public class EMailSentHandler : IMessageHandler<EMailSent>
     {
         private readonly IDatabaseContextFactory _databaseContextFactory;
         private readonly IOrderProcessRepository _repository;
@@ -23,9 +23,7 @@ namespace Shuttle.Process.Custom.Server
             _repository = repository;
         }
 
-        public bool IsReusable => true;
-
-        public void ProcessMessage(IHandlerContext<EMailSentEvent> context)
+        public void ProcessMessage(IHandlerContext<EMailSent> context)
         {
             if (!context.TransportMessage.IsHandledHere())
             {
@@ -41,8 +39,7 @@ namespace Shuttle.Process.Custom.Server
                 if (orderProcess == null)
                 {
                     throw new ApplicationException(
-                        string.Format("Could not find an order process with correlation id '{0}'.",
-                            context.TransportMessage.CorrelationId));
+                        $"Could not find an order process with correlation id '{context.TransportMessage.CorrelationId}'.");
                 }
 
                 var orderProcessStatus = new OrderProcessStatus("EMail Sent");
@@ -52,7 +49,7 @@ namespace Shuttle.Process.Custom.Server
                 _repository.AddStatus(orderProcessStatus, orderProcess.Id);
             }
 
-            context.Send(new CompleteOrderProcessCommand
+            context.Send(new CompleteOrderProcess
             {
                 OrderProcessId = orderProcess.Id
             }, c => c.Local());

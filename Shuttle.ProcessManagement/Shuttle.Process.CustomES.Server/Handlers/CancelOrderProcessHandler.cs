@@ -8,7 +8,7 @@ using Shuttle.Recall;
 
 namespace Shuttle.Process.CustomES.Server
 {
-    public class CancelOrderProcessHandler : IMessageHandler<CancelOrderProcessCommand>
+    public class CancelOrderProcessHandler : IMessageHandler<CancelOrderProcess>
     {
         private readonly IDatabaseContextFactory _databaseContextFactory;
         private readonly IEventStore _eventStore;
@@ -22,9 +22,7 @@ namespace Shuttle.Process.CustomES.Server
             _eventStore = eventStore;
         }
 
-        public bool IsReusable => true;
-
-        public void ProcessMessage(IHandlerContext<CancelOrderProcessCommand> context)
+        public void ProcessMessage(IHandlerContext<CancelOrderProcess> context)
         {
             using (_databaseContextFactory.Create(ProcessManagementData.ConnectionStringName))
             {
@@ -34,7 +32,7 @@ namespace Shuttle.Process.CustomES.Server
 
                 if (!orderProcess.CanCancel)
                 {
-                    context.Publish(new CancelOrderProcessRejectedEvent
+                    context.Publish(new CancelOrderProcessRejected
                     {
                         OrderProcessId = context.Message.OrderProcessId,
                         Status = orderProcess.Status
@@ -46,7 +44,7 @@ namespace Shuttle.Process.CustomES.Server
                 _eventStore.Remove(context.Message.OrderProcessId);
             }
 
-            context.Publish(new OrderProcessCancelledEvent
+            context.Publish(new OrderProcessCancelled
             {
                 OrderProcessId = context.Message.OrderProcessId
             });

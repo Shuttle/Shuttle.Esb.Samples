@@ -7,7 +7,7 @@ using Shuttle.ProcessManagement.Messages;
 
 namespace Shuttle.Process.Custom.Server
 {
-    public class CompleteOrderProcessHandler : IMessageHandler<CompleteOrderProcessCommand>
+    public class CompleteOrderProcessHandler : IMessageHandler<CompleteOrderProcess>
     {
         private readonly IDatabaseContextFactory _databaseContextFactory;
         private readonly IOrderProcessRepository _repository;
@@ -22,9 +22,7 @@ namespace Shuttle.Process.Custom.Server
             _repository = repository;
         }
 
-        public bool IsReusable => true;
-
-        public void ProcessMessage(IHandlerContext<CompleteOrderProcessCommand> context)
+        public void ProcessMessage(IHandlerContext<CompleteOrderProcess> context)
         {
             OrderProcess orderProcess;
 
@@ -39,7 +37,7 @@ namespace Shuttle.Process.Custom.Server
                 _repository.AddStatus(orderProcessStatus, orderProcess.Id);
             }
 
-            context.Publish(new OrderProcessCompletedEvent
+            context.Publish(new OrderProcessCompleted
             {
                 OrderProcessId = orderProcess.Id
             });

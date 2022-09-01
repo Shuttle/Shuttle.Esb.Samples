@@ -57,9 +57,7 @@ namespace Shuttle.Process.CustomES.Server.Domain
 
         private string GenerateOrderNumber(DateTime dateRegistered)
         {
-            return string.Format("ORD-{0}-{1}",
-                dateRegistered.Ticks.ToString().Substring(8, 6),
-                Guid.NewGuid().ToString("N").Substring(6));
+            return $"ORD-{dateRegistered.Ticks.ToString().Substring(8, 6)}-{Guid.NewGuid().ToString("N")[6..]}";
         }
 
         public Events.CustomerAssigned AssignCustomer(string customerName, string customerEMail)
@@ -131,9 +129,9 @@ namespace Shuttle.Process.CustomES.Server.Domain
             return itemAdded;
         }
 
-        public CreateOrderCommand CreateOrderCommand()
+        public CreateOrder CreateOrderCommand()
         {
-            var result = new CreateOrderCommand
+            var result = new CreateOrder
             {
                 OrderNumber = _initialized.OrderNumber,
                 OrderDate = _initialized.DateRegistered,
@@ -183,9 +181,9 @@ namespace Shuttle.Process.CustomES.Server.Domain
             return _orderIdAssigned = orderIdAssigned;
         }
 
-        public SendEMailCommand SendEMailCommand()
+        public SendEMail SendEMailCommand()
         {
-            return new SendEMailCommand
+            return new SendEMail
             {
                 RecipientEMail = _customerAssigned.CustomerEMail,
                 HtmlBody =
@@ -195,9 +193,9 @@ namespace Shuttle.Process.CustomES.Server.Domain
             };
         }
 
-        public CreateInvoiceCommand CreateInvoiceCommand()
+        public CreateInvoice CreateInvoiceCommand()
         {
-            var result = new CreateInvoiceCommand
+            var result = new CreateInvoice
             {
                 OrderId = _orderIdAssigned.OrderId,
                 AccountContactName = _customerAssigned.CustomerName,

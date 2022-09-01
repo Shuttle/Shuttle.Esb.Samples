@@ -1,21 +1,14 @@
-﻿using Shuttle.Core.Logging;
+﻿using System;
 using Shuttle.Esb;
 using Shuttle.Deferred.Messages;
 
 namespace Shuttle.Deferred.Server
 {
-	public class RegisterMemberHandler : IMessageHandler<RegisterMemberCommand>
+	public class RegisterMemberHandler : IMessageHandler<RegisterMember>
 	{
-	    private readonly ILog _log;
-
-	    public RegisterMemberHandler()
-	    {
-	        _log = Log.For(this);
-	    }
-
-	    public void ProcessMessage(IHandlerContext<RegisterMemberCommand> context)
+	    public void ProcessMessage(IHandlerContext<RegisterMember> context)
 		{
-		    _log.Information($"[MEMBER REGISTERED] : user name = '{context.Message.UserName}'");
+		    Console.WriteLine($"[MEMBER REGISTERED] : user name = '{context.Message.UserName}'");
 		}
 	}
 }

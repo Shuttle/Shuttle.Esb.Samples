@@ -34,22 +34,22 @@ namespace Shuttle.ProcessManagement
         {
             Guard.AgainstNull(orderProcess, nameof(orderProcess));
 
-            _databaseGateway.ExecuteUsing(_queryFactory.Add(orderProcess));
+            _databaseGateway.Execute(_queryFactory.Add(orderProcess));
 
             foreach (var orderProcessItem in orderProcess.OrderProcessItems)
             {
-                _databaseGateway.ExecuteUsing(_queryFactory.AddItem(orderProcessItem, orderProcess.Id));
+                _databaseGateway.Execute(_queryFactory.AddItem(orderProcessItem, orderProcess.Id));
             }
 
             foreach (var status in orderProcess.Statuses)
             {
-                _databaseGateway.ExecuteUsing(_queryFactory.AddStatus(status, orderProcess.Id));
+                _databaseGateway.Execute(_queryFactory.AddStatus(status, orderProcess.Id));
             }
         }
 
         public OrderProcess Get(Guid id)
         {
-            var orderProcessRow = _databaseGateway.GetSingleRowUsing(_queryFactory.Get(id));
+            var orderProcessRow = _databaseGateway.GetRow(_queryFactory.Get(id));
 
             if (orderProcessRow == null)
             {
@@ -58,12 +58,12 @@ namespace Shuttle.ProcessManagement
 
             var orderProcess = _orderProcessMapper.Map(orderProcessRow).Result;
 
-            foreach (var row in _databaseGateway.GetRowsUsing(_queryFactory.GetItems(id)))
+            foreach (var row in _databaseGateway.GetRows(_queryFactory.GetItems(id)))
             {
                 orderProcess.AddItem(_orderProcessItemMapper.Map(row).Result);
             }
 
-            foreach (var row in _databaseGateway.GetRowsUsing(_queryFactory.GetStatuses(id)))
+            foreach (var row in _databaseGateway.GetRows(_queryFactory.GetStatuses(id)))
             {
                 orderProcess.AddStatus(_orderProcessStatusMapper.Map(row).Result);
             }
@@ -73,22 +73,22 @@ namespace Shuttle.ProcessManagement
 
         public void Remove(OrderProcess orderProcess)
         {
-            _databaseGateway.ExecuteUsing(_queryFactory.Remove(orderProcess.Id));
+            _databaseGateway.Execute(_queryFactory.Remove(orderProcess.Id));
         }
 
         public void AddStatus(OrderProcessStatus orderProcessStatus, Guid id)
         {
-            _databaseGateway.ExecuteUsing(_queryFactory.AddStatus(orderProcessStatus, id));
+            _databaseGateway.Execute(_queryFactory.AddStatus(orderProcessStatus, id));
         }
 
         public void SaveOrderId(Guid orderId, Guid id)
         {
-            _databaseGateway.ExecuteUsing(_queryFactory.SaveOrderId(orderId, id));
+            _databaseGateway.Execute(_queryFactory.SaveOrderId(orderId, id));
         }
 
         public void SaveInvoiceId(Guid invoiceId, Guid id)
         {
-            _databaseGateway.ExecuteUsing(_queryFactory.SaveInvoiceId(invoiceId, id));
+            _databaseGateway.Execute(_queryFactory.SaveInvoiceId(invoiceId, id));
         }
     }
 }

@@ -70,8 +70,8 @@ namespace Shuttle.Process.Custom.Server.Domain
 
         public void GenerateOrderNumber()
         {
-            OrderNumber = string.Format("ORD-{0}-{1}", DateRegistered.Ticks.ToString().Substring(8, 6),
-                Guid.NewGuid().ToString("N").Substring(6));
+            OrderNumber =
+                $"ORD-{DateRegistered.Ticks.ToString().Substring(8, 6)}-{Guid.NewGuid().ToString("N")[6..]}";
         }
 
         public decimal Total()

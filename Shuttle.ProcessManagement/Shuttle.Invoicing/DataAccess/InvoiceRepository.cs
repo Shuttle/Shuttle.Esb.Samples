@@ -20,11 +20,11 @@ namespace Shuttle.Invoicing.DataAccess
 
         public void Add(Invoice invoice)
         {
-            _databaseGateway.ExecuteUsing(_queryFactory.Add(invoice));
+            _databaseGateway.Execute(_queryFactory.Add(invoice));
 
             foreach (var item in invoice.Items)
             {
-                _databaseGateway.ExecuteUsing(_queryFactory.AddItem(item, invoice.Id));
+                _databaseGateway.Execute(_queryFactory.AddItem(item, invoice.Id));
             }
         }
     }

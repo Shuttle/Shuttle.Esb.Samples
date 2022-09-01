@@ -1,23 +1,21 @@
-﻿using System;
-using Castle.Windsor;
-using Castle.Windsor.MsDependencyInjection;
+﻿using System.Collections.Generic;
+using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Shuttle.Core.Container;
-using Shuttle.Core.Castle;
+using Microsoft.OpenApi.Models;
+using Shuttle.Core.Data;
+using Shuttle.Core.DependencyInjection;
 using Shuttle.Esb;
-using Shuttle.Esb.AzureMQ;
+using Shuttle.Esb.AzureStorageQueues;
 using Shuttle.ProcessManagement.Services;
 
 namespace Shuttle.ProcessManagement.WebApi
 {
     public class Startup
     {
-        private IServiceBus _bus;
-
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -25,30 +23,34 @@ namespace Shuttle.ProcessManagement.WebApi
 
         public IConfiguration Configuration { get; }
 
-        public IServiceProvider ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
             services.AddCors();
 
-            var windsorContainer = new WindsorContainer();
+            services.FromAssembly(Assembly.Load("Shuttle.ProcessManagement")).Add();
+            services.AddDataAccess(builder =>
+            {
+                builder.AddConnectionString("ProcessManagement", "System.Data.SqlClient", "server=.;database=ProcessManagement;user id=sa;password=Pass!000");
+            });
+            services.AddSingleton<IOrderProcessService, OrderProcessService>();
+            services.AddAzureStorageQueues(builder =>
+            {
+                builder.AddOptions("azure", new AzureStorageQueueOptions
+                {
+                    ConnectionString = "UseDevelopmentStorage=true;"
+                });
+            });
+            services.AddServiceBus();
 
-            var container = new WindsorComponentContainer(windsorContainer);
-
-            container.RegisterSuffixed("Shuttle.ProcessManagement");
-            container.Register<IOrderProcessService, OrderProcessService>();
-
-            container.Register<IAzureStorageConfiguration, DefaultAzureStorageConfiguration>();
-            container.RegisterServiceBus();
-
-            _bus = container.Resolve<IServiceBus>().Start();
-
-            return WindsorRegistrationHelper.CreateServiceProvider(windsorContainer, services);
+            services.AddSwaggerGen(options =>
+            {
+                options.SwaggerDoc("v1", new OpenApiInfo { Title = "Shuttle.ProcessManagement.WebApi", Version = "v1" });
+            });
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHostApplicationLifetime applicationLifetime)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            applicationLifetime.ApplicationStopping.Register(OnShutdown);
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -61,11 +63,12 @@ namespace Shuttle.ProcessManagement.WebApi
             app.UseRouting();
             app.UseAuthorization();
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
-        }
 
-        public void OnShutdown()
-        {
-            _bus?.Dispose();
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Shuttle.ProcessManagement.WebApi");
+            });
         }
     }
 }

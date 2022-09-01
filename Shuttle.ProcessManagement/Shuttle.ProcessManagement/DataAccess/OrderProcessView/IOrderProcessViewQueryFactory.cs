@@ -7,7 +7,7 @@ namespace Shuttle.ProcessManagement
     public interface IOrderProcessViewQueryFactory
     {
         IQuery All();
-        IQuery Add(OrderProcessRegisteredEvent message);
+        IQuery Add(OrderProcessRegistered message);
         IQuery Find(Guid id);
         IQuery Remove(Guid id);
         IQuery SaveStatus(Guid id, string status);

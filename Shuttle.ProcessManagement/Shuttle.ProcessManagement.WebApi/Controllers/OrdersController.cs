@@ -7,7 +7,7 @@ using Shuttle.ProcessManagement.Messages;
 
 namespace Shuttle.ProcessManagement.WebApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public class OrdersController : Controller
     {
         private readonly IServiceBus _bus;
@@ -44,7 +44,7 @@ namespace Shuttle.ProcessManagement.WebApi.Controllers
             Guard.AgainstNull(model.TargetSystem, nameof(model.TargetSystem));
             Guard.Against<Exception>(model.ProductIds.Count == 0, "No products have been selected.");
 
-            var message = new RegisterOrderProcessCommand
+            var message = new RegisterOrderProcess
             {
                 CustomerName = model.CustomerName,
                 CustomerEMail = model.CustomerEMail,
@@ -55,25 +55,25 @@ namespace Shuttle.ProcessManagement.WebApi.Controllers
             {
                 case "custom":
                 {
-                    message.TargetSystemUri = "azuremq://azure/process-custom-server";
+                    message.TargetSystemUri = "azuresq://azure/process-custom-server";
 
                     break;
                 }
                 case "custom / event-source":
                 {
-                    message.TargetSystemUri = "azuremq://azure/process-custom-es-server";
+                    message.TargetSystemUri = "azuresq://azure/process-custom-es-server";
 
                     break;
                 }
                 case "event-source / module":
                 {
-                    message.TargetSystemUri = "azuremq://azure/process-es-module-server";
+                    message.TargetSystemUri = "azuresq://azure/process-es-module-server";
 
                     break;
                 }
                 default:
                 {
-                    throw new ApplicationException(string.Format("Unknown target system '{0}'.", model.TargetSystem));
+                    throw new ApplicationException($"Unknown target system '{model.TargetSystem}'.");
                 }
             }
 
@@ -81,7 +81,7 @@ namespace Shuttle.ProcessManagement.WebApi.Controllers
             {
                 if (!Guid.TryParse(productIdValue, out var productId))
                 {
-                    throw new ArgumentException(string.Format("Product id '{0}' is not a valid guid.", productIdValue));
+                    throw new ArgumentException($"Product id '{productIdValue}' is not a valid guid.");
                 }
 
                 var productRow = _productQuery.Get(productId);
@@ -94,10 +94,10 @@ namespace Shuttle.ProcessManagement.WebApi.Controllers
                 });
             }
 
-            _bus.Send(message, c =>
+            _bus.Send(message, builder =>
             {
-                c.WithRecipient(message.TargetSystemUri);
-                c.Headers.Add(new TransportHeader
+                builder.WithRecipient(message.TargetSystemUri);
+                builder.Headers.Add(new TransportHeader
                 {
                     Key = "TargetSystem",
                     Value = message.TargetSystem

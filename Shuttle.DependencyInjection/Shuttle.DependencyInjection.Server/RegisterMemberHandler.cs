@@ -6,18 +6,18 @@ using Shuttle.DependencyInjection.Messages;
 
 namespace Shuttle.DependencyInjection.Server
 {
-	public class RegisterMemberHandler : IMessageHandler<RegisterMemberCommand>
+	public class RegisterMemberHandler : IMessageHandler<RegisterMember>
 	{
 		private readonly IEMailService _emailService;
 
 		public RegisterMemberHandler(IEMailService emailService)
 		{
-			Guard.AgainstNull(emailService, "emailService");
+			Guard.AgainstNull(emailService, nameof(emailService));
 
 			_emailService = emailService;
 		}
 
-		public void ProcessMessage(IHandlerContext<RegisterMemberCommand> context)
+		public void ProcessMessage(IHandlerContext<RegisterMember> context)
 		{
 			Console.WriteLine();
 			Console.WriteLine("[MEMBER REGISTERED] : user name = '{0}'", context.Message.UserName);

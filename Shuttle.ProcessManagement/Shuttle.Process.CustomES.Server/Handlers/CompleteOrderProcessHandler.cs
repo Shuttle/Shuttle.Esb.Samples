@@ -8,7 +8,7 @@ using Shuttle.Recall;
 
 namespace Shuttle.Process.CustomES.Server
 {
-    public class CompleteOrderProcessHandler : IMessageHandler<CompleteOrderProcessCommand>
+    public class CompleteOrderProcessHandler : IMessageHandler<CompleteOrderProcess>
     {
         private readonly IDatabaseContextFactory _databaseContextFactory;
         private readonly IEventStore _eventStore;
@@ -22,9 +22,7 @@ namespace Shuttle.Process.CustomES.Server
             _eventStore = eventStore;
         }
 
-        public bool IsReusable => true;
-
-        public void ProcessMessage(IHandlerContext<CompleteOrderProcessCommand> context)
+        public void ProcessMessage(IHandlerContext<CompleteOrderProcess> context)
         {
             OrderProcess orderProcess;
 
@@ -39,7 +37,7 @@ namespace Shuttle.Process.CustomES.Server
                 _eventStore.Save(stream);
             }
 
-            context.Publish(new OrderProcessCompletedEvent
+            context.Publish(new OrderProcessCompleted
             {
                 OrderProcessId = orderProcess.Id
             });

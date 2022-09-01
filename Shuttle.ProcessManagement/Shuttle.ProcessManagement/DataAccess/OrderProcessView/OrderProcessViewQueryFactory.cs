@@ -11,7 +11,7 @@ namespace Shuttle.ProcessManagement
             return RawQuery.Create(string.Concat(SelectClause(), "order by OrderDate"));
         }
 
-        public IQuery Add(OrderProcessRegisteredEvent message)
+        public IQuery Add(OrderProcessRegistered message)
         {
             return RawQuery.Create(@"
 insert into dbo.OrderProcessView
