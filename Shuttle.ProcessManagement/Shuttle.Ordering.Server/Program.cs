@@ -32,7 +32,7 @@ namespace Shuttle.Ordering.Server
                     services.AddDataAccess(builder =>
                     {
                         builder.AddConnectionString("ProcessManagement", "System.Data.SqlClient");
-                        builder.Options.DatabaseContextFactory.ConnectionStringName = "ProcessManagement";
+                        builder.Options.DatabaseContextFactory.DefaultConnectionStringName = "ProcessManagement";
                     });
 
                     services.AddSqlSubscription();

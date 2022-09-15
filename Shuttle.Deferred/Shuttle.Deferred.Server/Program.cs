@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Shuttle.Core.Pipelines;
 using Shuttle.Esb;
 using Shuttle.Esb.AzureStorageQueues;
 
@@ -16,6 +17,8 @@ namespace Shuttle.Deferred.Server
                     var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
 
                     services.AddSingleton<IConfiguration>(configuration);
+
+                    services.AddPipelineModule<DeferredModule>();
 
                     services.AddServiceBus(builder =>
                     {

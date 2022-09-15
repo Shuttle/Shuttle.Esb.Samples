@@ -9,8 +9,8 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
     <PackageReference Include="Shuttle.Core.DependencyInjection" Version="1.0.0" />
-    <PackageReference Include="Shuttle.Esb.AzureStorageQueues" Version="13.0.0" />
-    <PackageReference Include="Shuttle.Esb.Sql.Subscription" Version="13.0.0" />
+    <PackageReference Include="Shuttle.Esb.AzureStorageQueues" Version="13.2.0" />
+    <PackageReference Include="Shuttle.Esb.Sql.Subscription" Version="13.2.0" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
   </ItemGroup>
 
