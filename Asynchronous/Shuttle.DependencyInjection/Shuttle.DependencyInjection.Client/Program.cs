@@ -1,11 +1,11 @@
 ﻿using System;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Shuttle.Distribution.Messages;
+using Shuttle.DependencyInjection.Messages;
 using Shuttle.Esb;
 using Shuttle.Esb.AzureStorageQueues;
 
-namespace Shuttle.Distribution.Client
+namespace Shuttle.DependencyInjection.Client
 {
     internal class Program
     {

@@ -109,13 +109,13 @@ namespace Shuttle.Distribution.Client
             Console.WriteLine("Type some characters and then press [enter] to submit; an empty line submission stops execution:");
             Console.WriteLine();
 
-            using (var bus = services.BuildServiceProvider().GetRequiredService<IServiceBus>().Start())
+            using (var serviceBus = services.BuildServiceProvider().GetRequiredService<IServiceBus>().Start())
             {
                 string userName;
 
                 while (!string.IsNullOrEmpty(userName = Console.ReadLine()))
                 {
-                    bus.Send(new RegisterMember
+                    serviceBus.Send(new RegisterMember
                     {
                         UserName = userName
                     });

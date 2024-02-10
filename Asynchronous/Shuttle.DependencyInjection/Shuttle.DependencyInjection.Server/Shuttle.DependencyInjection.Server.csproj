@@ -7,11 +7,13 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
     <PackageReference Include="Shuttle.Esb.AzureStorageQueues" Version="14.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Shuttle.Distribution.Messages\Shuttle.Distribution.Messages.csproj" />
+    <ProjectReference Include="..\Shuttle.DependencyInjection.EMail\Shuttle.DependencyInjection.EMail.csproj" />
+    <ProjectReference Include="..\Shuttle.DependencyInjection.Messages\Shuttle.DependencyInjection.Messages.csproj" />
   </ItemGroup>
 
   <ItemGroup>

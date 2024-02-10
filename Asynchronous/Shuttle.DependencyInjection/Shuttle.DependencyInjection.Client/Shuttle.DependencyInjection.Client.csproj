@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Shuttle.Distribution.Messages\Shuttle.Distribution.Messages.csproj" />
+    <ProjectReference Include="..\Shuttle.DependencyInjection.Messages\Shuttle.DependencyInjection.Messages.csproj" />
   </ItemGroup>
 
   <ItemGroup>
