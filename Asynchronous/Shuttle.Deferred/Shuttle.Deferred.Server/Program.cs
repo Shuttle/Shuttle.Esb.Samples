@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Shuttle.Core.Pipelines;
@@ -9,9 +10,9 @@ namespace Shuttle.Deferred.Server
 {
     public class Programs
     {
-        public static void Main()
+        public static async Task Main()
         {
-            Host.CreateDefaultBuilder()
+            await Host.CreateDefaultBuilder()
                 .ConfigureServices(services =>
                 {
                     var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
@@ -36,7 +37,7 @@ namespace Shuttle.Deferred.Server
                     });
                 })
                 .Build()
-                .Run();
+                .RunAsync();
         }
     }
 }
