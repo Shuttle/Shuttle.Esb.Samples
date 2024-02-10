@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Shuttle.Esb;
@@ -9,7 +10,7 @@ namespace Shuttle.RequestResponse.Client
 {
 	internal class Program
 	{
-		private static void Main(string[] args)
+		private static async Task Main(string[] args)
 		{
 			var services = new ServiceCollection();
 
@@ -33,13 +34,13 @@ namespace Shuttle.RequestResponse.Client
 			Console.WriteLine("Type some characters and then press [enter] to submit; an empty line submission stops execution:");
 			Console.WriteLine();
 
-			using (var bus = services.BuildServiceProvider().GetRequiredService<IServiceBus>().Start())
+			await using (var serviceBus = await services.BuildServiceProvider().GetRequiredService<IServiceBus>().StartAsync())
 			{
 				string userName;
 
 				while (!string.IsNullOrEmpty(userName = Console.ReadLine()))
 				{
-					bus.Send(new RegisterMember
+					await serviceBus.SendAsync(new RegisterMember
 					{
 						UserName = userName
 					}, c => c.WillExpire(DateTime.Now.AddSeconds(5)));

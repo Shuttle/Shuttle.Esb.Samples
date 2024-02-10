@@ -20,6 +20,8 @@ namespace Shuttle.RequestResponse.Server
                     services.AddServiceBus(builder =>
                     {
                         configuration.GetSection(ServiceBusOptions.SectionName).Bind(builder.Options);
+
+                        builder.Options.Asynchronous = true;
                     });
 
                     services.AddAzureStorageQueues(builder =>

@@ -109,13 +109,13 @@ namespace Shuttle.RequestResponse.Client
 			Console.WriteLine("Type some characters and then press [enter] to submit; an empty line submission stops execution:");
 			Console.WriteLine();
 
-			using (var bus = services.BuildServiceProvider().GetRequiredService<IServiceBus>().Start())
+			await using (var serviceBus = await services.BuildServiceProvider().GetRequiredService<IServiceBus>().StartAsync())
 			{
 				string userName;
 
 				while (!string.IsNullOrEmpty(userName = Console.ReadLine()))
 				{
-					bus.Send(new RegisterMember
+					await serviceBus.SendAsync(new RegisterMember
 					{
 						UserName = userName
 					}, c => c.WillExpire(DateTime.Now.AddSeconds(5)));
@@ -168,13 +168,15 @@ using Shuttle.RequestResponse.Messages;
 
 namespace Shuttle.RequestResponse.Client
 {
-	public class MemberRegisteredHandler : IMessageHandler<MemberRegistered>
+	public class MemberRegisteredHandler : IAsyncMessageHandler<MemberRegistered>
 	{
-		public void ProcessMessage(IHandlerContext<MemberRegistered> context)
+		public async Task ProcessMessageAsync(IHandlerContext<MemberRegistered> context)
 		{
 			Console.WriteLine();
 			Console.WriteLine("[RESPONSE RECEIVED] : user name = '{0}'", context.Message.UserName);
 			Console.WriteLine();
+
+			await Task.CompletedTask;
 		}
 	}
 }
@@ -225,6 +227,8 @@ namespace Shuttle.RequestResponse.Server
                     services.AddServiceBus(builder =>
                     {
                         configuration.GetSection(ServiceBusOptions.SectionName).Bind(builder.Options);
+
+                        builder.Options.Asynchronous = true; // NOTE: this tells the service bus to run internal mechanisms asynchronously
                     });
 
                     services.AddAzureStorageQueues(builder =>
@@ -273,15 +277,15 @@ using Shuttle.RequestResponse.Messages;
 
 namespace Shuttle.RequestResponse.Server
 {
-	public class RegisterMemberHandler : IMessageHandler<RegisterMember>
+	public class RegisterMemberHandler : IAsyncMessageHandler<RegisterMember>
 	{
-		public void ProcessMessage(IHandlerContext<RegisterMember> context)
+		public async Task ProcessMessageAsync(IHandlerContext<RegisterMember> context)
 		{
 			Console.WriteLine();
 			Console.WriteLine("[MEMBER REGISTERED] : user name = '{0}'", context.Message.UserName);
 			Console.WriteLine();
 
-			context.Send(new MemberRegistered
+			await context.SendAsync(new MemberRegistered
 			{
 				UserName = context.Message.UserName
 			}, builder => builder.Reply());
