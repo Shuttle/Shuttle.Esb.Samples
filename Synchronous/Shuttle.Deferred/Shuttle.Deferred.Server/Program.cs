@@ -18,7 +18,7 @@ namespace Shuttle.Deferred.Server
 
                     services.AddSingleton<IConfiguration>(configuration);
 
-                    services.AddPipelineModule<DeferredModule>();
+                    services.AddHostedService<DeferredHostedService>();
 
                     services.AddServiceBus(builder =>
                     {
