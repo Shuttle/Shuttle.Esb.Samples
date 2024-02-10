@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Shuttle.Esb;
@@ -8,9 +9,9 @@ namespace Shuttle.RequestResponse.Server
 {
     internal class Program
     {
-        private static void Main()
+        private static async Task Main()
         {
-            Host.CreateDefaultBuilder()
+            await Host.CreateDefaultBuilder()
                 .ConfigureServices(services =>
                 {
                     var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
@@ -33,7 +34,7 @@ namespace Shuttle.RequestResponse.Server
                     });
                 })
                 .Build()
-                .Run();
+                .RunAsync();
         }
     }
 }

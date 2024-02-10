@@ -215,9 +215,9 @@ namespace Shuttle.RequestResponse.Server
 {
     internal class Program
     {
-        private static void Main()
+        private static async Task Main()
         {
-            Host.CreateDefaultBuilder()
+            await Host.CreateDefaultBuilder()
                 .ConfigureServices(services =>
                 {
                     var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
@@ -228,7 +228,7 @@ namespace Shuttle.RequestResponse.Server
                     {
                         configuration.GetSection(ServiceBusOptions.SectionName).Bind(builder.Options);
 
-                        builder.Options.Asynchronous = true; // NOTE: this tells the service bus to run internal mechanisms asynchronously
+                        builder.Options.Asynchronous = true;
                     });
 
                     services.AddAzureStorageQueues(builder =>
@@ -240,7 +240,7 @@ namespace Shuttle.RequestResponse.Server
                     });
                 })
                 .Build()
-                .Run();
+                .RunAsync();
         }
     }
 }
