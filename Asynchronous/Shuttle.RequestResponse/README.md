@@ -85,7 +85,7 @@ namespace Shuttle.RequestResponse.Client
 {
 	internal class Program
 	{
-		private static void Main(string[] args)
+		private static async Task Main(string[] args)
 		{
 			var services = new ServiceCollection();
 
