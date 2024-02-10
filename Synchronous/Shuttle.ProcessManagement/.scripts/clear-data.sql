@@ -1,0 +1,8 @@
+delete from dbo.[Order]
+delete from dbo.[Invoice]
+delete from dbo.[OrderProcess]
+delete from dbo.[OrderProcessView]
+delete from dbo.[EventStore]
+delete from dbo.[SnapshotStore]
+delete from dbo.[KeyStore]
+delete from dbo.[Projection]
