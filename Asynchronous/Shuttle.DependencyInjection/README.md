@@ -221,9 +221,9 @@ namespace Shuttle.DependencyInjection.Server
 {
     public class Program
     {
-        public static void Main()
+        public static async Task Main()
         {
-            Host.CreateDefaultBuilder()
+            await Host.CreateDefaultBuilder()
                 .ConfigureServices(services =>
                 {
                     var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
@@ -235,6 +235,8 @@ namespace Shuttle.DependencyInjection.Server
                     services.AddServiceBus(builder =>
                     {
                         configuration.GetSection(ServiceBusOptions.SectionName).Bind(builder.Options);
+
+                        builder.Options.Asynchronous = true;
                     });
 
                     services.AddAzureStorageQueues(builder =>
@@ -246,7 +248,7 @@ namespace Shuttle.DependencyInjection.Server
                     });
                 })
                 .Build()
-                .Run();
+                .RunAsync();
         }
     }
 }
@@ -285,7 +287,7 @@ using Shuttle.DependencyInjection.Messages;
 
 namespace Shuttle.DependencyInjection.Server
 {
-	public class RegisterMemberHandler : IMessageHandler<RegisterMember>
+	public class RegisterMemberHandler : IAsyncMessageHandler<RegisterMember>
 	{
 		private readonly IEMailService _emailService;
 
@@ -296,13 +298,15 @@ namespace Shuttle.DependencyInjection.Server
 			_emailService = emailService;
 		}
 
-		public void ProcessMessage(IHandlerContext<RegisterMember> context)
+		public async Task ProcessMessageAsync(IHandlerContext<RegisterMember> context)
 		{
 			Console.WriteLine();
 			Console.WriteLine("[MEMBER REGISTERED] : user name = '{0}'", context.Message.UserName);
 			Console.WriteLine();
 
 			_emailService.Send(context.Message.UserName);
+
+			await Task.CompletedTask;
 		}
 	}
 }
