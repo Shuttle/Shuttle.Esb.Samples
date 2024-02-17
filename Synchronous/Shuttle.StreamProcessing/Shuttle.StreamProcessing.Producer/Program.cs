@@ -40,7 +40,7 @@ namespace Shuttle.StreamProcessing.Producer
             var random = new Random();
             decimal temperature = random.Next(-5, 30);
 
-            using (var bus = services.BuildServiceProvider().GetRequiredService<IServiceBus>().Start())
+            using (var serviceBus = services.BuildServiceProvider().GetRequiredService<IServiceBus>().Start())
             {
                 string name;
 
@@ -48,7 +48,7 @@ namespace Shuttle.StreamProcessing.Producer
                 {
                     for (var minute = 0; minute < 1440; minute++)
                     {
-                        bus.Send(new TemperatureRead
+                        serviceBus.Send(new TemperatureRead
                         {
                             Name = name,
                             Minute = minute,
