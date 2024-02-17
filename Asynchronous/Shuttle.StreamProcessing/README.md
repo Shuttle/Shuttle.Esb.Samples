@@ -131,7 +131,7 @@ namespace Shuttle.StreamProcessing.Producer
 {
     internal class Program
     {
-        private static void Main(string[] args)
+        private static async Task Main(string[] args)
         {
             var services = new ServiceCollection();
 
@@ -163,7 +163,7 @@ namespace Shuttle.StreamProcessing.Producer
             var random = new Random();
             decimal temperature = random.Next(-5, 30);
 
-            using (var bus = services.BuildServiceProvider().GetRequiredService<IServiceBus>().Start())
+            using (var serviceBus = services.BuildServiceProvider().GetRequiredService<IServiceBus>().Start())
             {
                 string name;
 
@@ -171,7 +171,7 @@ namespace Shuttle.StreamProcessing.Producer
                 {
                     for (var minute = 0; minute < 1440; minute++)
                     {
-                        bus.Send(new TemperatureRead
+                        serviceBus.Send(new TemperatureRead
                         {
                             Name = name,
                             Minute = minute,
@@ -253,9 +253,9 @@ namespace Shuttle.StreamProcessing.Consumer
 {
     internal class Program
     {
-        private static void Main()
+        private static async Task Main()
         {
-            Host.CreateDefaultBuilder()
+            await Host.CreateDefaultBuilder()
                 .ConfigureServices(services =>
                 {
                     var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
@@ -265,6 +265,8 @@ namespace Shuttle.StreamProcessing.Consumer
                     services.AddServiceBus(builder =>
                     {
                         configuration.GetSection(ServiceBusOptions.SectionName).Bind(builder.Options);
+
+                        builder.Options.Asynchronous = true;
                     });
 
                     services.AddKafka(builder =>
@@ -281,7 +283,7 @@ namespace Shuttle.StreamProcessing.Consumer
                     });
                 })
                 .Build()
-                .Run();
+                .RunAsync();
         }
     }
 }
@@ -313,11 +315,13 @@ using Shuttle.StreamProcessing.Messages;
 
 namespace Shuttle.StreamProcessing.Consumer;
 
-public class TemperatureReadHandler : IMessageHandler<TemperatureRead>
+public class TemperatureReadHandler : IAsyncMessageHandler<TemperatureRead>
 {
-    public void ProcessMessage(IHandlerContext<TemperatureRead> context)
+    public async Task ProcessMessageAsync(IHandlerContext<TemperatureRead> context)
     {
         Console.WriteLine($"[TEMPERATURE READ] : name = '{context.Message.Name}' / minute = {context.Message.Minute} / celsius = {context.Message.Celsius:F}");
+
+        await Task.CompletedTask;
     }
 }
 ```

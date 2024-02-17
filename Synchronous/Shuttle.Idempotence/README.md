@@ -101,7 +101,7 @@ namespace Shuttle.Idempotence.Client
 			var messageSender = serviceProvider.GetRequiredService<IMessageSender>();
 			var transportMessagePipeline = pipelineFactory.GetPipeline<TransportMessagePipeline>();
 
-			using (var bus = serviceProvider.GetRequiredService<IServiceBus>().Start())
+			using (var serviceBus = serviceProvider.GetRequiredService<IServiceBus>().Start())
 			{
 				string userName;
 
@@ -121,8 +121,8 @@ namespace Shuttle.Idempotence.Client
 						messageSender.Dispatch(transportMessage, null); // will be processed only once since message id is the same
 					}
 
-					bus.Send(command); // will be processed since it has a new message id
-					bus.Send(command); // will also be processed since it too has a new message id
+					serviceBus.Send(command); // will be processed since it has a new message id
+					serviceBus.Send(command); // will also be processed since it too has a new message id
 				}
 			}
 		}
