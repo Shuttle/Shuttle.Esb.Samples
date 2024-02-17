@@ -2,9 +2,9 @@
 version: '2'
 services:
   zookeeper:
-    image: confluentinc/cp-zookeeper:7.1.1
+    image: confluentinc/cp-zookeeper:latest
     hostname: zookeeper
-    container_name: zookeeper
+    container_name: shuttle-stream-zookeeper
     ports:
       - "2181:2181"
     environment:
@@ -12,9 +12,9 @@ services:
       ZOOKEEPER_TICK_TIME: 2000
 
   broker:
-    image: confluentinc/cp-server:7.1.1
+    image: confluentinc/cp-server:latest
     hostname: broker
-    container_name: broker
+    container_name: shuttle-stream-broker
     depends_on:
       - zookeeper
     ports:
@@ -41,7 +41,7 @@ services:
       CONFLUENT_SUPPORT_CUSTOMER_ID: 'anonymous'
 
   kafka-ui:
-    container_name: kafka-ui
+    container_name: shuttle-stream-kafka-ui
     image: provectuslabs/kafka-ui:latest
     ports:
       - 8080:8080

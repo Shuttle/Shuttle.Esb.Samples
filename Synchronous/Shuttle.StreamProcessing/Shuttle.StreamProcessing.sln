@@ -7,13 +7,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shuttle.StreamProcessing.Me
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F6374E4A-1EA8-486F-A1EA-77E96D966E47}"
 	ProjectSection(SolutionItems) = preProject
+		docker-compose-up.cmd = docker-compose-up.cmd
 		docker-compose.yml = docker-compose.yml
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shuttle.StreamProcessing.Producer", "Shuttle.StreamProcessing.Producer\Shuttle.StreamProcessing.Producer.csproj", "{101BEABE-FF1A-467D-80D0-4E90FBC2AC17}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shuttle.StreamProcessing.Producer", "Shuttle.StreamProcessing.Producer\Shuttle.StreamProcessing.Producer.csproj", "{101BEABE-FF1A-467D-80D0-4E90FBC2AC17}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shuttle.StreamProcessing.Consumer", "Shuttle.StreamProcessing.Consumer\Shuttle.StreamProcessing.Consumer.csproj", "{0CC5E21A-7E05-4448-B9C2-9A66D26B8C35}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shuttle.StreamProcessing.Consumer", "Shuttle.StreamProcessing.Consumer\Shuttle.StreamProcessing.Consumer.csproj", "{0CC5E21A-7E05-4448-B9C2-9A66D26B8C35}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
