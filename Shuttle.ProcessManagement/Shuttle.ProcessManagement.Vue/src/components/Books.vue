@@ -110,8 +110,6 @@ const canOrder = computed(() => {
 });
 
 const submitOrder = async targetSystem => {
-    const self = this;
-
     const valid = await v$.value.$validate();
 
     if (!valid) {
