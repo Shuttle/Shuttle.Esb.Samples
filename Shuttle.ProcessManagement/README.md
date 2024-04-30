@@ -10,7 +10,7 @@ The process management sample represents something closer to a real-world scenar
 
 In this sample the front-end is a static [Vue.js](https://vuejs.org/).  The REST API is a `dotnet` web-api.  There are three physical implementations of the same logical process manager to demonstrate the various options, and the read-model is kept updated using CQRS with system messages.  For the event-sourcing side one could just as easily use event processing to update the read model but since the system event messages are being processed it is re-used for the event sourcing implementation also.
 
-Once you have opened the `Shuttle.ProcessManagement.sln` solution in Visual Studio set the following projects as startup projects:
+Once you have opened either the `Synchronous\Shuttle.ProcessManagement.sln` or `Asynchronous\Shuttle.ProcessManagement.sln` solution in Visual Studio set the following projects as startup projects:
 
 - Shuttle.EMailSender.Server
 - Shuttle.Invoicing.Server
@@ -46,9 +46,9 @@ We need a store for our subscriptions.  In this example we will be using **Sql S
 docker run -d --name sql -h sql -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=Pass!000" -e "MSSQL_PID=Express" -p 1433:1433 -v C:\SQLServer.Data\:/var/opt/mssql/data mcr.microsoft.com/mssql/server:2019-latest
 ```
 
-When you reference the `Shuttle.Esb.Sql.Subscription` package a `scripts` folder is included in the relevant package folder.  Click on the NuGet referenced assembly in the `Dependencies` and navigate to the package folder (in the `Path` property) to find the `scripts` folder.
+When you reference the `Shuttle.Esb.Sql.Subscription` package a `scripts` folder is included in the relevant NuGet package folder.  Click on the NuGet referenced assembly in the `Dependencies` and navigate to the package folder (in the `Path` property) to find the `scripts` folder.
 
-The `{version}` bit will be in a `semver` format.
+The `{version}` will be in a `semver` format.
 
 > Create a new database called **ProcessManagement** and execute the script `{provider}\SubscriptionManagerCreate.sql` in the newly created database.
 
@@ -69,13 +69,13 @@ You should now be able to run the application.
 
 ## Process
 
-Once you add books to your order you can place the order using any of the following processes:
+Once you add books to your order you can place the order using any of the following processes by clicking on the relevant button:
 
-- Custom
+- Order (Custom)
 	* A hand-rolled process manager storing the process state in custom tables.  This is a more traditional approach to data access.
-- Custom / EventSource
+- Order (Event Source)
 	* A hand-rolled process manager that stored the process state using the `Shuttle.Recall` event sourcing mechanism directly.
-- EventSource / Module
+- Order (Process Management)
 	* This uses the `Shuttle.Esb.Process` module to handle the process state storage for you.
 	
 Once you register an order by clicking on the button the `RegisterOrderProcess` command is immediately sent to the relevant endpoint for processing.  An `AcceptOrderProcess` command is then sent locally (to the same endpoint) but it is deferred for 20 seconds.  This allows you time to cancel the order.

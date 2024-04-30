@@ -52,10 +52,9 @@
                     <v-row>
                         <v-col class="text-right">
                             <v-btn class="mr-2" @click="submitOrder('custom')">Order (Custom)</v-btn>
-                            <v-btn class="mr-2" @click="submitOrder('custom / event-source')">Order (Custom -
-                                EventSource)
+                            <v-btn class="mr-2" @click="submitOrder('event-source')">Order (Event Source)
                             </v-btn>
-                            <v-btn @click="submitOrder('event-source / module')">Order (EventSource - Module)</v-btn>
+                            <v-btn @click="submitOrder('process-management')">Order (Process Management)</v-btn>
                         </v-col>
                     </v-row>
                 </v-container>
@@ -111,8 +110,6 @@ const canOrder = computed(() => {
 });
 
 const submitOrder = async targetSystem => {
-    const self = this;
-
     const valid = await v$.value.$validate();
 
     if (!valid) {
@@ -151,7 +148,7 @@ const submitOrder = async targetSystem => {
 
 onMounted(() => {
     axios.get(configuration.url + "/products").then(response => {
-        books.value = response.data.data.map(book => {
+        books.value = response.data.map(book => {
             book.buying = false;
             return book;
         });

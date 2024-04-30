@@ -64,7 +64,7 @@ const cancelOrder = order => {
 
 const archiveOrder = order => {
     axios
-        .delete(configuration.url + "/archivedorders/" + order.id)
+        .delete(configuration.url + "/orders/" + order.id + '/archive')
         .then(() => {
             message.value = "Your archive request has been sent for processing.";
             messageType.value = "info";
@@ -83,9 +83,9 @@ const fetchOrders = () => {
         axios
             .get(configuration.url + "/orders")
             .then(response => {
-                self.orders = response.data.data;
+                self.orders = response.data;
 
-                response.data.data.forEach(order => {
+                response.data.forEach(order => {
                     found = false;
 
                     orders.value.forEach(element => {
@@ -111,7 +111,7 @@ const fetchOrders = () => {
                 orders.value.forEach(existingOrder => {
                     found = false;
 
-                    response.data.data.forEach(function (order) {
+                    response.data.forEach(function (order) {
                         if (found) {
                             return;
                         }
