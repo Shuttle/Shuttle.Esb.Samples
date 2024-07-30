@@ -56,7 +56,6 @@ public class Program
                     .AddSqlEventStorage(builder =>
                     {
                         builder.Options.ConnectionStringName = "ProcessManagement";
-                        builder.Options.ManageEventStoreConnections = true;
                     })
                     .AddEventStore()
                     .AddProcessManagement();
