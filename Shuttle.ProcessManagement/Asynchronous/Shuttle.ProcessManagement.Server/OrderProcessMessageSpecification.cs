@@ -2,7 +2,7 @@
 using Shuttle.Esb;
 using Shuttle.Esb.Process;
 
-namespace Shuttle.Process.ESModule.Server
+namespace Shuttle.ProcessManagement.Server
 {
     public class OrderProcessMessageSpecification : IProcessMessageSpecification
     {

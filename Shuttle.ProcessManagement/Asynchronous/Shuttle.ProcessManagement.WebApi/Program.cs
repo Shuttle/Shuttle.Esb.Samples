@@ -106,7 +106,7 @@ app.MapPost("/orders", async (IServiceBus serviceBus, IProductQuery productQuery
             }
     }
 
-    foreach (var productIdValue in model.ProductIds)
+    foreach (var productIdValue in model.ProductIds!)
     {
         if (!Guid.TryParse(productIdValue, out var productId))
         {

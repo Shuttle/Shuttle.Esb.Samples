@@ -2,7 +2,7 @@
 using Shuttle.Core.Contract;
 using Shuttle.Esb;
 
-namespace Shuttle.Process.ESModule.Server
+namespace Shuttle.ProcessManagement.Server
 {
     public static class TransportMessageExtensions
     {

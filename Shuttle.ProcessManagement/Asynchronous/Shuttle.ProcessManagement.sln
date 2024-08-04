@@ -50,6 +50,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shuttle.Process.Recall.Serv
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shuttle.ProcessManagement.WebApi", "Shuttle.ProcessManagement.WebApi\Shuttle.ProcessManagement.WebApi.csproj", "{52E707D4-D468-4CC1-A05C-9CDBC6D1BC63}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shuttle.ProcessManagement.Logging", "Shuttle.ProcessManagement.Logging\Shuttle.ProcessManagement.Logging.csproj", "{C6BE11B5-9465-494E-A1D6-875B92667FB3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -130,6 +132,10 @@ Global
 		{52E707D4-D468-4CC1-A05C-9CDBC6D1BC63}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{52E707D4-D468-4CC1-A05C-9CDBC6D1BC63}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{52E707D4-D468-4CC1-A05C-9CDBC6D1BC63}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C6BE11B5-9465-494E-A1D6-875B92667FB3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6BE11B5-9465-494E-A1D6-875B92667FB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6BE11B5-9465-494E-A1D6-875B92667FB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6BE11B5-9465-494E-A1D6-875B92667FB3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

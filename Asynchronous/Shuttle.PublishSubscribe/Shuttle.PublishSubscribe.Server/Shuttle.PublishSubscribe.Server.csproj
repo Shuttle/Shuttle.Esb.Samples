@@ -6,11 +6,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.1.5" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
-    <PackageReference Include="Shuttle.Esb.AzureStorageQueues" Version="14.0.0" />
-    <PackageReference Include="Shuttle.Esb.Sql.Subscription" Version="14.0.0" />
+    <PackageReference Include="Shuttle.Esb.AzureStorageQueues" Version="15.0.0" />
+    <PackageReference Include="Shuttle.Esb.Sql.Subscription" Version="16.0.0" />
   </ItemGroup>
 
   <ItemGroup>

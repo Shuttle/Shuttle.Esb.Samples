@@ -10,7 +10,7 @@
     <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.1" />
     <PackageReference Include="Shuttle.Core.DependencyInjection" Version="1.0.1" />
     <PackageReference Include="Shuttle.Esb.AzureStorageQueues" Version="15.0.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.7.0" />
   </ItemGroup>
 
   <ItemGroup>
