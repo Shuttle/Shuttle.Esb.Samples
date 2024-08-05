@@ -31,7 +31,8 @@ public class Program
                     .AddDataAccess(builder =>
                     {
                         builder.AddConnectionString("ProcessManagement", "Microsoft.Data.SqlClient");
-                    }).AddSqlSubscription()
+                    })
+                    .AddSqlSubscription()
                     .AddServiceBus(builder =>
                     {
                         configuration.GetSection(ServiceBusOptions.SectionName).Bind(builder.Options);

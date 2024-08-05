@@ -9,7 +9,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.1" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
-    <PackageReference Include="Shuttle.Core.Data.Logging" Version="16.0.2" />
+    <PackageReference Include="Shuttle.Core.Data.Logging" Version="17.0.0" />
     <PackageReference Include="Shuttle.Core.Json" Version="12.0.2" />
     <PackageReference Include="Shuttle.Esb.AzureStorageQueues" Version="15.0.0" />
     <PackageReference Include="Shuttle.Esb.Logging" Version="15.0.0" />
