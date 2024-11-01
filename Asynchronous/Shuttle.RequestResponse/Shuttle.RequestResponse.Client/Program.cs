@@ -6,48 +6,44 @@ using Shuttle.Esb;
 using Shuttle.Esb.AzureStorageQueues;
 using Shuttle.RequestResponse.Messages;
 
-namespace Shuttle.RequestResponse.Client
+namespace Shuttle.RequestResponse.Client;
+
+internal class Program
 {
-	internal class Program
-	{
-		private static async Task Main(string[] args)
-		{
-			var services = new ServiceCollection();
+    private static async Task Main(string[] args)
+    {
+        var services = new ServiceCollection();
 
-			var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+        var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
 
-			services.AddSingleton<IConfiguration>(configuration);
-
-			services.AddServiceBus(builder =>
-			{
-				configuration.GetSection(ServiceBusOptions.SectionName).Bind(builder.Options);
-
-				builder.Options.Asynchronous = true;
+        services
+            .AddSingleton<IConfiguration>(configuration)
+            .AddServiceBus(builder =>
+            {
+                configuration.GetSection(ServiceBusOptions.SectionName).Bind(builder.Options);
+            })
+            .AddAzureStorageQueues(builder =>
+            {
+                builder.AddOptions("azure", new()
+                {
+                    ConnectionString = "UseDevelopmentStorage=true;"
+                });
             });
 
-			services.AddAzureStorageQueues(builder =>
-			{
-				builder.AddOptions("azure", new AzureStorageQueueOptions
-				{
-					ConnectionString = "UseDevelopmentStorage=true;"
-				});
-			});
+        Console.WriteLine("Type some characters and then press [enter] to submit; an empty line submission stops execution:");
+        Console.WriteLine();
 
-			Console.WriteLine("Type some characters and then press [enter] to submit; an empty line submission stops execution:");
-			Console.WriteLine();
+        await using (var serviceBus = await services.BuildServiceProvider().GetRequiredService<IServiceBus>().StartAsync())
+        {
+            string? userName;
 
-			await using (var serviceBus = await services.BuildServiceProvider().GetRequiredService<IServiceBus>().StartAsync())
-			{
-				string userName;
-
-				while (!string.IsNullOrEmpty(userName = Console.ReadLine()))
-				{
-					await serviceBus.SendAsync(new RegisterMember
-					{
-						UserName = userName
-					}, c => c.WillExpire(DateTime.Now.AddSeconds(5)));
-				}
-			}
-		}
-	}
+            while (!string.IsNullOrEmpty(userName = Console.ReadLine()))
+            {
+                await serviceBus.SendAsync(new RegisterMember
+                {
+                    UserName = userName
+                }, c => c.WillExpire(DateTime.Now.AddSeconds(5)));
+            }
+        }
+    }
 }
