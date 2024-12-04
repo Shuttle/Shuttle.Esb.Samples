@@ -13,18 +13,16 @@ namespace Shuttle.DependencyInjection.Server
 
 		public RegisterMemberHandler(IEMailService emailService)
 		{
-			Guard.AgainstNull(emailService, nameof(emailService));
-
-			_emailService = emailService;
+			_emailService = Guard.AgainstNull(emailService);
 		}
 
 		public async Task ProcessMessageAsync(IHandlerContext<RegisterMember> context)
 		{
 			Console.WriteLine();
-			Console.WriteLine("[MEMBER REGISTERED] : user name = '{0}'", context.Message.UserName);
+			Console.WriteLine($"[MEMBER REGISTERED] : user name = '{context.Message.UserName}'");
 			Console.WriteLine();
 
-			_emailService.SendAsync(context.Message.UserName);
+			await _emailService.SendAsync(context.Message.UserName);
 
 			await Task.CompletedTask;
 		}
