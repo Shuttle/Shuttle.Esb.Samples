@@ -8,6 +8,7 @@ using Shuttle.Core.Contract;
 using Shuttle.Core.Data;
 using Shuttle.Esb;
 using Shuttle.Esb.AzureStorageQueues;
+using Shuttle.Esb.Idempotence;
 using Shuttle.Esb.Sql.Idempotence;
 
 namespace Shuttle.Idempotence.Server;
@@ -33,6 +34,7 @@ public class Program
                     {
                         configuration.GetSection(ServiceBusOptions.SectionName).Bind(builder.Options);
                     })
+                    .AddIdempotence()
                     .AddSqlIdempotence(builder =>
                     {
                         builder.Options.ConnectionStringName = "Idempotence";
