@@ -32,12 +32,12 @@ public class DeferredHostedService : IHostedService
         await Task.CompletedTask;
     }
 
-    private void OnDeferredMessageProcessingAdjusted(object sender, DeferredMessageProcessingAdjustedEventArgs args)
+    private void OnDeferredMessageProcessingAdjusted(object? sender, DeferredMessageProcessingAdjustedEventArgs args)
     {
         Console.WriteLine($"[deferred processing adjusted] : next = {args.NextProcessingDateTime}");
     }
 
-    private void OnDeferredMessageProcessingHalted(object sender, DeferredMessageProcessingHaltedEventArgs args)
+    private void OnDeferredMessageProcessingHalted(object? sender, DeferredMessageProcessingHaltedEventArgs args)
     {
         Console.WriteLine($"[deferred processing halted] : until = {args.RestartDateTime}");
     }

@@ -1,7 +1,6 @@
-﻿namespace Shuttle.Idempotence.Messages
+﻿namespace Shuttle.Idempotence.Messages;
+
+public class RegisterMember
 {
-	public class RegisterMember
-	{
-		public string UserName { get; set; } = string.Empty;
-    }
+    public string UserName { get; set; } = string.Empty;
 }

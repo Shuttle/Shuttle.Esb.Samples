@@ -14,13 +14,15 @@ namespace Shuttle.PublishSubscribe.Client
         {
             var services = new ServiceCollection();
 
-            var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+            var configuration = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json").Build();
 
             services.AddSingleton<IConfiguration>(configuration);
 
             services.AddServiceBus(builder =>
             {
-                configuration.GetSection(ServiceBusOptions.SectionName).Bind(builder.Options);
+                configuration.GetSection(ServiceBusOptions.SectionName)
+                    .Bind(builder.Options);
             });
 
             services.AddAzureStorageQueues(builder =>
@@ -34,7 +36,8 @@ namespace Shuttle.PublishSubscribe.Client
             Console.WriteLine("Type some characters and then press [enter] to submit; an empty line submission stops execution:");
             Console.WriteLine();
 
-            await using (var serviceBus = await services.BuildServiceProvider().GetRequiredService<IServiceBus>().StartAsync())
+            await using (var serviceBus = await services.BuildServiceProvider()
+                             .GetRequiredService<IServiceBus>().StartAsync())
             {
                 string userName;
 

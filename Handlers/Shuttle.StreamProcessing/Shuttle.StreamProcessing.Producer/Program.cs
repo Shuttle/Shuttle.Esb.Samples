@@ -10,13 +10,15 @@ internal class Program
 {
     private static async Task Main(string[] args)
     {
-        var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+        var configuration = new ConfigurationBuilder()
+            .AddJsonFile("appsettings.json").Build();
 
         var services = new ServiceCollection()
             .AddSingleton<IConfiguration>(configuration)
             .AddServiceBus(builder =>
             {
-                configuration.GetSection(ServiceBusOptions.SectionName).Bind(builder.Options);
+                configuration.GetSection(ServiceBusOptions.SectionName)
+                    .Bind(builder.Options);
             })
             .AddKafka(builder =>
             {
@@ -37,7 +39,8 @@ internal class Program
         var random = new Random();
         decimal temperature = random.Next(-5, 30);
 
-        await using (var serviceBus = await services.BuildServiceProvider().GetRequiredService<IServiceBus>().StartAsync())
+        await using (var serviceBus = await services.BuildServiceProvider()
+                         .GetRequiredService<IServiceBus>().StartAsync())
         {
             string name;
 

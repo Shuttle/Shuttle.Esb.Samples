@@ -14,13 +14,15 @@ internal class Program
 {
     private static async Task Main(string[] args)
     {
-        var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+        var configuration = new ConfigurationBuilder()
+            .AddJsonFile("appsettings.json").Build();
 
         var services = new ServiceCollection()
             .AddSingleton<IConfiguration>(configuration)
             .AddServiceBus(builder =>
             {
-                configuration.GetSection(ServiceBusOptions.SectionName).Bind(builder.Options);
+                configuration.GetSection(ServiceBusOptions.SectionName)
+                    .Bind(builder.Options);
             })
             .AddAzureStorageQueues(builder =>
             {

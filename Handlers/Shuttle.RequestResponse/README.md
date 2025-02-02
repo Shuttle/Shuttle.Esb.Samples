@@ -75,54 +75,54 @@ This will provide the ability to read the `appsettings.json` file.
 
 ```c#
 using System;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Shuttle.Esb;
 using Shuttle.Esb.AzureStorageQueues;
 using Shuttle.RequestResponse.Messages;
 
-namespace Shuttle.RequestResponse.Client
+namespace Shuttle.RequestResponse.Client;
+
+internal class Program
 {
-	internal class Program
-	{
-		private static async Task Main(string[] args)
-		{
-			var services = new ServiceCollection();
+    private static async Task Main(string[] args)
+    {
+        var configuration = new ConfigurationBuilder()
+            .AddJsonFile("appsettings.json").Build();
 
-			var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+        var services = new ServiceCollection()
+            .AddSingleton<IConfiguration>(configuration)
+            .AddServiceBus(builder =>
+            {
+                configuration.GetSection(ServiceBusOptions.SectionName)
+                    .Bind(builder.Options);
+            })
+            .AddAzureStorageQueues(builder =>
+            {
+                builder.AddOptions("azure", new()
+                {
+                    ConnectionString = "UseDevelopmentStorage=true;"
+                });
+            });
 
-			services.AddSingleton<IConfiguration>(configuration);
+        Console.WriteLine("Type some characters and then press [enter] to submit; an empty line submission stops execution:");
+        Console.WriteLine();
 
-			services.AddServiceBus(builder =>
-			{
-				configuration.GetSection(ServiceBusOptions.SectionName).Bind(builder.Options);
-			});
+        await using (var serviceBus = await services.BuildServiceProvider()
+                         .GetRequiredService<IServiceBus>().StartAsync())
+        {
+            string? userName;
 
-			services.AddAzureStorageQueues(builder =>
-			{
-				builder.AddOptions("azure", new AzureStorageQueueOptions
-				{
-					ConnectionString = "UseDevelopmentStorage=true;"
-				});
-			});
-
-			Console.WriteLine("Type some characters and then press [enter] to submit; an empty line submission stops execution:");
-			Console.WriteLine();
-
-			await using (var serviceBus = await services.BuildServiceProvider().GetRequiredService<IServiceBus>().StartAsync())
-			{
-				string userName;
-
-				while (!string.IsNullOrEmpty(userName = Console.ReadLine()))
-				{
-					await serviceBus.SendAsync(new RegisterMember
-					{
-						UserName = userName
-					}, c => c.WillExpire(DateTime.Now.AddSeconds(5)));
-				}
-			}
-		}
-	}
+            while (!string.IsNullOrEmpty(userName = Console.ReadLine()))
+            {
+                await serviceBus.SendAsync(new RegisterMember
+                {
+                    UserName = userName
+                }, c => c.WillExpire(DateTime.Now.AddSeconds(5)));
+            }
+        }
+    }
 }
 ```
 
@@ -163,22 +163,22 @@ This tells the service bus that all messages sent having a type name starting wi
 
 ``` c#
 using System;
+using System.Threading.Tasks;
 using Shuttle.Esb;
 using Shuttle.RequestResponse.Messages;
 
-namespace Shuttle.RequestResponse.Client
-{
-	public class MemberRegisteredHandler : IAsyncMessageHandler<MemberRegistered>
-	{
-		public async Task ProcessMessageAsync(IHandlerContext<MemberRegistered> context)
-		{
-			Console.WriteLine();
-			Console.WriteLine("[RESPONSE RECEIVED] : user name = '{0}'", context.Message.UserName);
-			Console.WriteLine();
+namespace Shuttle.RequestResponse.Client;
 
-			await Task.CompletedTask;
-		}
-	}
+public class MemberRegisteredHandler : IMessageHandler<MemberRegistered>
+{
+    public async Task ProcessMessageAsync(IHandlerContext<MemberRegistered> context)
+    {
+        Console.WriteLine();
+        Console.WriteLine("[RESPONSE RECEIVED] : user name = '{0}'", context.Message.UserName);
+        Console.WriteLine();
+
+        await Task.CompletedTask;
+    }
 }
 ```
 
@@ -205,43 +205,43 @@ This will provide the ability to read the `appsettings.json` file.
 > Implement the `Program` class as follows:
 
 ``` c#
+using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Shuttle.Core.Contract;
 using Shuttle.Esb;
 using Shuttle.Esb.AzureStorageQueues;
 
-namespace Shuttle.RequestResponse.Server
+namespace Shuttle.RequestResponse.Server;
+
+internal class Program
 {
-    internal class Program
+    private static async Task Main()
     {
-        private static async Task Main()
-        {
-            await Host.CreateDefaultBuilder()
-                .ConfigureServices(services =>
-                {
-                    var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+        await Host.CreateDefaultBuilder()
+            .ConfigureServices(services =>
+            {
+                var configuration = new ConfigurationBuilder()
+                    .AddJsonFile("appsettings.json").Build();
 
-                    services.AddSingleton<IConfiguration>(configuration);
-
-                    services.AddServiceBus(builder =>
+                services
+                    .AddSingleton<IConfiguration>(configuration)
+                    .AddServiceBus(builder =>
                     {
-                        configuration.GetSection(ServiceBusOptions.SectionName).Bind(builder.Options);
-
-                        builder.Options.Asynchronous = true;
-                    });
-
-                    services.AddAzureStorageQueues(builder =>
+                        configuration.GetSection(ServiceBusOptions.SectionName)
+                            .Bind(builder.Options);
+                    })
+                    .AddAzureStorageQueues(builder =>
                     {
-                        builder.AddOptions("azure", new AzureStorageQueueOptions
+                        builder.AddOptions("azure", new()
                         {
-                            ConnectionString = configuration.GetConnectionString("azure")
+                            ConnectionString = Guard.AgainstNullOrEmptyString(configuration.GetConnectionString("azure"))
                         });
                     });
-                })
-                .Build()
-                .RunAsync();
-        }
+            })
+            .Build()
+            .RunAsync();
     }
 }
 ```
@@ -272,25 +272,25 @@ namespace Shuttle.RequestResponse.Server
 
 ``` c#
 using System;
+using System.Threading.Tasks;
 using Shuttle.Esb;
 using Shuttle.RequestResponse.Messages;
 
-namespace Shuttle.RequestResponse.Server
-{
-	public class RegisterMemberHandler : IAsyncMessageHandler<RegisterMember>
-	{
-		public async Task ProcessMessageAsync(IHandlerContext<RegisterMember> context)
-		{
-			Console.WriteLine();
-			Console.WriteLine("[MEMBER REGISTERED] : user name = '{0}'", context.Message.UserName);
-			Console.WriteLine();
+namespace Shuttle.RequestResponse.Server;
 
-			await context.SendAsync(new MemberRegistered
-			{
-				UserName = context.Message.UserName
-			}, builder => builder.Reply());
-		}
-	}
+public class RegisterMemberHandler : IMessageHandler<RegisterMember>
+{
+    public async Task ProcessMessageAsync(IHandlerContext<RegisterMember> context)
+    {
+        Console.WriteLine();
+        Console.WriteLine("[MEMBER REGISTERED] : user name = '{0}'", context.Message.UserName);
+        Console.WriteLine();
+
+        await context.SendAsync(new MemberRegistered
+        {
+            UserName = context.Message.UserName
+        }, builder => builder.Reply());
+    }
 }
 ```
 

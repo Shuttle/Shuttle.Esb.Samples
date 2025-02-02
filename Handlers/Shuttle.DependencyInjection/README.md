@@ -33,12 +33,11 @@ In this guide we'll create the following projects:
 > Rename the `Class1` default file to `RegisterMember` and add a `UserName` property.
 
 ``` c#
-namespace Shuttle.DependencyInjection.Messages
+nnamespace Shuttle.DependencyInjection.Messages;
+
+public class RegisterMember
 {
-	public class RegisterMember
-	{
-		public string UserName { get; set; }
-	}
+    public string UserName { get; set; } = string.Empty;
 }
 ```
 
@@ -62,51 +61,51 @@ This will provide the ability to read the `appsettings.json` file.
 
 ``` c#
 using System;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Shuttle.DependencyInjection.Messages;
 using Shuttle.Esb;
 using Shuttle.Esb.AzureStorageQueues;
 
-namespace Shuttle.DependencyInjection.Client
+namespace Shuttle.DependencyInjection.Client;
+
+internal class Program
 {
-    internal class Program
+    private static async Task Main(string[] args)
     {
-        private static void Main(string[] args)
-        {
-            var services = new ServiceCollection();
+        var configuration = new ConfigurationBuilder()
+            .AddJsonFile("appsettings.json").Build();
 
-            var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
-
-            services.AddSingleton<IConfiguration>(configuration);
-
-            services.AddServiceBus(builder =>
+        var services = new ServiceCollection()
+            .AddSingleton<IConfiguration>(configuration)
+            .AddServiceBus(builder =>
             {
-                configuration.GetSection(ServiceBusOptions.SectionName).Bind(builder.Options);
-            });
-
-            services.AddAzureStorageQueues(builder =>
+                configuration.GetSection(ServiceBusOptions.SectionName)
+                    .Bind(builder.Options);
+            })
+            .AddAzureStorageQueues(builder =>
             {
-                builder.AddOptions("azure", new AzureStorageQueueOptions
+                builder.AddOptions("azure", new()
                 {
                     ConnectionString = "UseDevelopmentStorage=true;"
                 });
             });
 
-			Console.WriteLine("Type some characters and then press [enter] to submit; an empty line submission stops execution:");
-			Console.WriteLine();
+        Console.WriteLine("Type some characters and then press [enter] to submit; an empty line submission stops execution:");
+        Console.WriteLine();
 
-            using (var serviceBus = services.BuildServiceProvider().GetRequiredService<IServiceBus>().Start())
+        await using (var serviceBus = await services.BuildServiceProvider()
+                         .GetRequiredService<IServiceBus>().StartAsync())
+        {
+            string userName;
+
+            while (!string.IsNullOrEmpty(userName = Console.ReadLine() ?? string.Empty))
             {
-                string userName;
-
-                while (!string.IsNullOrEmpty(userName = Console.ReadLine()))
+                await serviceBus.SendAsync(new RegisterMember
                 {
-                    serviceBus.Send(new RegisterMember
-                    {
-                        UserName = userName
-                    });
-                }
+                    UserName = userName
+                });
             }
         }
     }
@@ -150,12 +149,13 @@ To demonstrate the dependency injection we will create a fake e-mail service tha
 > Add an interface called `IEMailService` and implement it as follows:
 
 ``` c#
-namespace Shuttle.DependencyInjection.EMail
+using System.Threading.Tasks;
+
+namespace Shuttle.DependencyInjection.EMail;
+
+public interface IEMailService
 {
-	public interface IEMailService
-	{
-		void Send(string name);
-	}
+    Task SendAsync(string name);
 }
 ```
 
@@ -165,25 +165,24 @@ namespace Shuttle.DependencyInjection.EMail
 
 ``` c#
 using System;
-using System.Threading;
+using System.Threading.Tasks;
 
-namespace Shuttle.DependencyInjection.EMail
+namespace Shuttle.DependencyInjection.EMail;
+
+public class EMailService : IEMailService
 {
-	public class EMailService : IEMailService
-	{
-		public void Send(string name)
-		{
-			Console.WriteLine();
-			Console.WriteLine("[SENDING E-MAIL] : name = '{0}'", name);
-			Console.WriteLine();
+    public async Task SendAsync(string name)
+    {
+        Console.WriteLine();
+        Console.WriteLine("[SENDING E-MAIL] : name = '{0}'", name);
+        Console.WriteLine();
 
-			Thread.Sleep(3000); // simulate communication wait time
+        await Task.Delay(TimeSpan.FromSeconds(3)); // simulate communication wait time
 
-			Console.WriteLine();
-			Console.WriteLine("[E-MAIL SENT] : name = '{0}'", name);
-			Console.WriteLine();
-		}
-	}
+        Console.WriteLine();
+        Console.WriteLine("[E-MAIL SENT] : name = '{0}'", name);
+        Console.WriteLine();
+    }
 }
 ```
 
@@ -210,46 +209,45 @@ This will provide the ability to read the `appsettings.json` file.
 > Implement the `Program` class as follows:
 
 ``` c#
+using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Shuttle.Core.Contract;
 using Shuttle.DependencyInjection.EMail;
 using Shuttle.Esb;
 using Shuttle.Esb.AzureStorageQueues;
 
-namespace Shuttle.DependencyInjection.Server
+namespace Shuttle.DependencyInjection.Server;
+
+public class Program
 {
-    public class Program
+    public static async Task Main()
     {
-        public static async Task Main()
-        {
-            await Host.CreateDefaultBuilder()
-                .ConfigureServices(services =>
-                {
-                    var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+        await Host.CreateDefaultBuilder()
+            .ConfigureServices(services =>
+            {
+                var configuration = new ConfigurationBuilder()
+                    .AddJsonFile("appsettings.json").Build();
 
-                    services.AddSingleton<IConfiguration>(configuration);
-
-                    services.AddSingleton<IEMailService, EMailService>();
-
-                    services.AddServiceBus(builder =>
+                services
+                    .AddSingleton<IConfiguration>(configuration)
+                    .AddSingleton<IEMailService, EMailService>()
+                    .AddServiceBus(builder =>
                     {
-                        configuration.GetSection(ServiceBusOptions.SectionName).Bind(builder.Options);
-
-                        builder.Options.Asynchronous = true;
-                    });
-
-                    services.AddAzureStorageQueues(builder =>
+                        configuration.GetSection(ServiceBusOptions.SectionName)
+                            .Bind(builder.Options);
+                    })
+                    .AddAzureStorageQueues(builder =>
                     {
-                        builder.AddOptions("azure", new AzureStorageQueueOptions
+                        builder.AddOptions("azure", new()
                         {
-                            ConnectionString = configuration.GetConnectionString("azure")
+                            ConnectionString = Guard.AgainstNullOrEmptyString(configuration.GetConnectionString("azure"))
                         });
                     });
-                })
-                .Build()
-                .RunAsync();
-        }
+            })
+            .Build()
+            .RunAsync();
     }
 }
 ```
@@ -280,35 +278,33 @@ namespace Shuttle.DependencyInjection.Server
 
 ``` c#
 using System;
+using System.Threading.Tasks;
 using Shuttle.Core.Contract;
 using Shuttle.DependencyInjection.EMail;
-using Shuttle.Esb;
 using Shuttle.DependencyInjection.Messages;
+using Shuttle.Esb;
 
-namespace Shuttle.DependencyInjection.Server
+namespace Shuttle.DependencyInjection.Server;
+
+public class RegisterMemberHandler : IMessageHandler<RegisterMember>
 {
-	public class RegisterMemberHandler : IAsyncMessageHandler<RegisterMember>
-	{
-		private readonly IEMailService _emailService;
+    private readonly IEMailService _emailService;
 
-		public RegisterMemberHandler(IEMailService emailService)
-		{
-			Guard.AgainstNull(emailService, nameof(emailService));
+    public RegisterMemberHandler(IEMailService emailService)
+    {
+        _emailService = Guard.AgainstNull(emailService);
+    }
 
-			_emailService = emailService;
-		}
+    public async Task ProcessMessageAsync(IHandlerContext<RegisterMember> context)
+    {
+        Console.WriteLine();
+        Console.WriteLine($"[MEMBER REGISTERED] : user name = '{context.Message.UserName}'");
+        Console.WriteLine();
 
-		public async Task ProcessMessageAsync(IHandlerContext<RegisterMember> context)
-		{
-			Console.WriteLine();
-			Console.WriteLine("[MEMBER REGISTERED] : user name = '{0}'", context.Message.UserName);
-			Console.WriteLine();
+        await _emailService.SendAsync(context.Message.UserName);
 
-			_emailService.Send(context.Message.UserName);
-
-			await Task.CompletedTask;
-		}
-	}
+        await Task.CompletedTask;
+    }
 }
 ```
 

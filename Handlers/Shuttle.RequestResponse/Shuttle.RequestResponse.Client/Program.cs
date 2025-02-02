@@ -12,13 +12,15 @@ internal class Program
 {
     private static async Task Main(string[] args)
     {
-        var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+        var configuration = new ConfigurationBuilder()
+            .AddJsonFile("appsettings.json").Build();
 
         var services = new ServiceCollection()
             .AddSingleton<IConfiguration>(configuration)
             .AddServiceBus(builder =>
             {
-                configuration.GetSection(ServiceBusOptions.SectionName).Bind(builder.Options);
+                configuration.GetSection(ServiceBusOptions.SectionName)
+                    .Bind(builder.Options);
             })
             .AddAzureStorageQueues(builder =>
             {
@@ -31,7 +33,8 @@ internal class Program
         Console.WriteLine("Type some characters and then press [enter] to submit; an empty line submission stops execution:");
         Console.WriteLine();
 
-        await using (var serviceBus = await services.BuildServiceProvider().GetRequiredService<IServiceBus>().StartAsync())
+        await using (var serviceBus = await services.BuildServiceProvider()
+                         .GetRequiredService<IServiceBus>().StartAsync())
         {
             string? userName;
 

@@ -36,12 +36,11 @@ In this guide we'll create the following projects:
 > Rename the `Class1` default file to `RegisterMember` and add a `UserName` property.
 
 ``` c#
-namespace Shuttle.PublishSubscribe.Messages
+namespace Shuttle.PublishSubscribe.Messages;
+
+public class RegisterMember
 {
-	public class RegisterMember
-	{
-		public string UserName { get; set; }
-	}
+    public string UserName { get; set; }
 }
 ```
 
@@ -50,12 +49,11 @@ namespace Shuttle.PublishSubscribe.Messages
 > Add a new class called `MemberRegistered` also with a `UserName` property.
 
 ``` c#
-namespace Shuttle.PublishSubscribe.Messages
+namespace Shuttle.PublishSubscribe.Messages;
+
+public class MemberRegistered
 {
-	public class MemberRegistered
-	{
-		public string UserName { get; set; }
-	}
+    public string UserName { get; set; }
 }
 ```
 
@@ -75,10 +73,11 @@ This will provide the ability to read the `appsettings.json` file.
 
 ### Program
 
-> Implement the main client code as follows:
+> Implement the client code as follows:
 
 ``` c#
 using System;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Shuttle.Esb;
@@ -93,13 +92,15 @@ namespace Shuttle.PublishSubscribe.Client
         {
             var services = new ServiceCollection();
 
-            var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+            var configuration = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json").Build();
 
             services.AddSingleton<IConfiguration>(configuration);
 
             services.AddServiceBus(builder =>
             {
-                configuration.GetSection(ServiceBusOptions.SectionName).Bind(builder.Options);
+                configuration.GetSection(ServiceBusOptions.SectionName)
+                    .Bind(builder.Options);
             });
 
             services.AddAzureStorageQueues(builder =>
@@ -113,11 +114,12 @@ namespace Shuttle.PublishSubscribe.Client
             Console.WriteLine("Type some characters and then press [enter] to submit; an empty line submission stops execution:");
             Console.WriteLine();
 
-            await using (var serviceBus = await services.BuildServiceProvider().GetRequiredService<IServiceBus>().StartAsync())
+            await using (var serviceBus = await services.BuildServiceProvider()
+                             .GetRequiredService<IServiceBus>().StartAsync())
             {
                 string userName;
 
-                while (!string.IsNullOrEmpty(userName = Console.ReadLine()))
+                while (!string.IsNullOrEmpty(userName = Console.ReadLine() ?? string.Empty))
                 {
                     await serviceBus.SendAsync(new RegisterMember
                     {
@@ -188,55 +190,58 @@ Implement the `Program` class as follows:
 
 ``` c#
 using System.Data.Common;
+using System.Threading.Tasks;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Shuttle.Core.Contract;
 using Shuttle.Core.Data;
 using Shuttle.Esb;
 using Shuttle.Esb.AzureStorageQueues;
 using Shuttle.Esb.Sql.Subscription;
 
-namespace Shuttle.PublishSubscribe.Server
+namespace Shuttle.PublishSubscribe.Server;
+
+public class Program
 {
-    public class Program
+    public static async Task Main()
     {
-        public static async Task Main()
-        {
-            DbProviderFactories.RegisterFactory("Microsoft.Data.SqlClient", SqlClientFactory.Instance);
+        DbProviderFactories.RegisterFactory("Microsoft.Data.SqlClient", SqlClientFactory.Instance);
 
-            await Host.CreateDefaultBuilder()
-                .ConfigureServices(services =>
-                {
-                    var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+        await Host.CreateDefaultBuilder()
+            .ConfigureServices(services =>
+            {
+                var configuration = new ConfigurationBuilder()
+                    .AddJsonFile("appsettings.json").Build();
 
-                    services.AddSingleton<IConfiguration>(configuration);
-
-                    services.AddDataAccess(builder =>
+                services
+                    .AddSingleton<IConfiguration>(configuration)
+                    .AddDataAccess(builder =>
                     {
                         builder.AddConnectionString("Subscription", "Microsoft.Data.SqlClient");
-                    });
-
-                    services.AddSqlSubscription();
-
-                    services.AddServiceBus(builder =>
+                    })
+                    .AddSqlSubscription(builder =>
                     {
-                        configuration.GetSection(ServiceBusOptions.SectionName).Bind(builder.Options);
+                        builder.Options.ConnectionStringName = "Subscription";
 
-                        builder.Options.Asynchronous = true;
-                    });
-
-                    services.AddAzureStorageQueues(builder =>
+                        builder.UseSqlServer();
+                    })
+                    .AddServiceBus(builder =>
                     {
-                        builder.AddOptions("azure", new AzureStorageQueueOptions
+                        configuration.GetSection(ServiceBusOptions.SectionName)
+                            .Bind(builder.Options);
+                    })
+                    .AddAzureStorageQueues(builder =>
+                    {
+                        builder.AddOptions("azure", new()
                         {
-                            ConnectionString = configuration.GetConnectionString("azure")
+                            ConnectionString = Guard.AgainstNullOrEmptyString(configuration.GetConnectionString("azure"))
                         });
                     });
-                })
-                .Build()
-                .RunAsync();
-        }
+            })
+            .Build()
+            .RunAsync();
     }
 }
 ```
@@ -249,13 +254,9 @@ We need a store for our subscriptions.  In this example we will be using **Sql S
 docker run -d --name sql -h sql -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=Pass!000" -e "MSSQL_PID=Express" -p 1433:1433 -v C:\SQLServer.Data\:/var/opt/mssql/data mcr.microsoft.com/mssql/server:2019-latest
 ```
 
-When you reference the `Shuttle.Esb.Sql.Subscription` package a `scripts` folder is included in the relevant package folder.  Click on the NuGet referenced assembly in the `Dependencies` and navigate to the package folder (in the `Path` property) to find the `scripts` folder.
+> Create a new database called **Shuttle**
 
-The `{version}` bit will be in a `semver` format.
-
-> Create a new database called **Shuttle** and execute the script `{provider}\SubscriptionManagerCreate.sql` in the newly created database.
-
-This will create the required structures that the subscription manager will use to store the subcriptions.  However, this step is optional as the `SqlSubscriptionService` implementation will create any required structures.  In many cases one would need to create the structures manually, such as in production environments, so the script execution process is included for completeness.
+The implementation will create any required database structures on startup.  If you need to execute the creation scripts manually, please reference the [source code](https://github.com/Shuttle/Shuttle.Esb.Sql.Subscription).
 
 Whenever the `Publish` method is invoked on the `ServiceBus` instance the registered `ISubscriptionService` instance is asked for the subscribers to the published message type.  These are retrieved from the Sql Server database for the implementation we are using.
 
@@ -280,7 +281,7 @@ Whenever the `Publish` method is invoked on the `ServiceBus` instance the regist
 }
 ```
 
-The Sql Server implementation of the `ISubscriptionService` that we are using by default will try to find a connection string with a name of **Subscription**.  However, you can override this.  See the [documentation](https://shuttle.github.io/shuttle-esb/implementations/subscription/sql.html) for details about how to do this.
+The Sql Server implementation of the `ISubscriptionService` that we are using by default will try to find a connection string with a name of **Subscription**.  However, you can override this.  See the [documentation](/shuttle-esb/implementations/subscription/sql) for details about how to do this.
 
 ### RegisterMemberHandler
 
@@ -288,25 +289,25 @@ The Sql Server implementation of the `ISubscriptionService` that we are using by
 
 ``` c#
 using System;
+using System.Threading.Tasks;
 using Shuttle.Esb;
 using Shuttle.PublishSubscribe.Messages;
 
-namespace Shuttle.PublishSubscribe.Server
-{
-	public class RegisterMemberHandler : IAsyncMessageHandler<RegisterMember>
-	{
-		public async Task ProcessMessageAsync(IHandlerContext<RegisterMember> context)
-		{
-			Console.WriteLine();
-			Console.WriteLine("[MEMBER REGISTERED] : user name = '{0}'", context.Message.UserName);
-			Console.WriteLine();
+namespace Shuttle.PublishSubscribe.Server;
 
-			await context.PublishAsync(new MemberRegistered
-			{
-				UserName = context.Message.UserName
-			});
-		}
-	}
+public class RegisterMemberHandler : IMessageHandler<RegisterMember>
+{
+    public async Task ProcessMessageAsync(IHandlerContext<RegisterMember> context)
+    {
+        Console.WriteLine();
+        Console.WriteLine($"[MEMBER REGISTERED] : user name = '{context.Message.UserName}'");
+        Console.WriteLine();
+
+        await context.PublishAsync(new MemberRegistered
+        {
+            UserName = context.Message.UserName
+        });
+    }
 }
 ```
 
@@ -344,58 +345,61 @@ Implement the `Program` class as follows:
 
 ``` c#
 using System.Data.Common;
+using System.Threading.Tasks;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Shuttle.Core.Contract;
 using Shuttle.Core.Data;
 using Shuttle.Esb;
 using Shuttle.Esb.AzureStorageQueues;
 using Shuttle.Esb.Sql.Subscription;
 using Shuttle.PublishSubscribe.Messages;
 
-namespace Shuttle.PublishSubscribe.Subscriber
+namespace Shuttle.PublishSubscribe.Subscriber;
+
+public class Program
 {
-    public class Program
+    public static async Task Main()
     {
-        public static async Task Main()
-        {
-            DbProviderFactories.RegisterFactory("Microsoft.Data.SqlClient", SqlClientFactory.Instance);
+        DbProviderFactories.RegisterFactory("Microsoft.Data.SqlClient", SqlClientFactory.Instance);
 
-            await Host.CreateDefaultBuilder()
-                .ConfigureServices(services =>
-                {
-                    var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+        await Host.CreateDefaultBuilder()
+            .ConfigureServices(services =>
+            {
+                var configuration = new ConfigurationBuilder()
+                    .AddJsonFile("appsettings.json").Build();
 
-                    services.AddSingleton<IConfiguration>(configuration);
-
-                    services.AddDataAccess(builder =>
+                services
+                    .AddSingleton<IConfiguration>(configuration)
+                    .AddDataAccess(builder =>
                     {
                         builder.AddConnectionString("Subscription", "Microsoft.Data.SqlClient");
-                    });
-
-                    services.AddSqlSubscription();
-
-                    services.AddServiceBus(builder =>
+                    })
+                    .AddSqlSubscription(builder =>
                     {
-                        configuration.GetSection(ServiceBusOptions.SectionName).Bind(builder.Options);
+                        builder.Options.ConnectionStringName = "Subscription";
 
-                        builder.Options.Asynchronous = true;
+                        builder.UseSqlServer();
+                    })
+                    .AddServiceBus(builder =>
+                    {
+                        configuration.GetSection(ServiceBusOptions.SectionName)
+                            .Bind(builder.Options);
 
                         builder.AddSubscription<MemberRegistered>();
-                    });
-
-                    services.AddAzureStorageQueues(builder =>
+                    })
+                    .AddAzureStorageQueues(builder =>
                     {
-                        builder.AddOptions("azure", new AzureStorageQueueOptions
+                        builder.AddOptions("azure", new()
                         {
-                            ConnectionString = configuration.GetConnectionString("azure")
+                            ConnectionString = Guard.AgainstNullOrEmptyString(configuration.GetConnectionString("azure"))
                         });
                     });
-                })
-                .Build()
-                .RunAsync();
-        }
+            })
+            .Build()
+            .RunAsync();
     }
 }
 ```
@@ -431,22 +435,22 @@ It is important to note that in a production environment one would not typically
 
 ``` c#
 using System;
+using System.Threading.Tasks;
 using Shuttle.Esb;
 using Shuttle.PublishSubscribe.Messages;
 
-namespace Shuttle.PublishSubscribe.Subscriber
-{
-	public class MemberRegisteredHandler : IAsyncMessageHandler<MemberRegistered>
-	{
-		public async Task ProcessMessageAsync(IHandlerContext<MemberRegistered> context)
-		{
-			Console.WriteLine();
-			Console.WriteLine("[EVENT RECEIVED] : user name = '{0}'", context.Message.UserName);
-			Console.WriteLine();
+namespace Shuttle.PublishSubscribe.Subscriber;
 
-			await Task.CompletedTask;
-		}
-	}
+public class MemberRegisteredHandler : IMessageHandler<MemberRegistered>
+{
+    public async Task ProcessMessageAsync(IHandlerContext<MemberRegistered> context)
+    {
+        Console.WriteLine();
+        Console.WriteLine($"[EVENT RECEIVED] : user name = '{context.Message.UserName}'");
+        Console.WriteLine();
+
+        await Task.CompletedTask;
+    }
 }
 ```
 

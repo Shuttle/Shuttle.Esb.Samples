@@ -32,12 +32,11 @@ In this guide we'll create the following projects:
 > Rename the `Class1` default file to `RegisterMember` and add a `UserName` property.
 
 ``` c#
-namespace Shuttle.Deferred.Messages
+namespace Shuttle.Deferred.Messages;
+
+public class RegisterMember
 {
-	public class RegisterMember
-	{
-		public string UserName { get; set; }
-	}
+    public string UserName { get; set; }
 }
 ```
 
@@ -61,51 +60,51 @@ This will provide the ability to read the `appsettings.json` file.
 
 ```c#
 using System;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Shuttle.Deferred.Messages;
 using Shuttle.Esb;
 using Shuttle.Esb.AzureStorageQueues;
 
-namespace Shuttle.Deferred.Client
+namespace Shuttle.Deferred.Client;
+
+internal class Program
 {
-    internal class Program
+    private static async Task Main(string[] args)
     {
-        private static async Task Main(string[] args)
-        {
-            var services = new ServiceCollection();
+        var configuration = new ConfigurationBuilder()
+            .AddJsonFile("appsettings.json").Build();
 
-            var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
-
-            services.AddSingleton<IConfiguration>(configuration);
-
-            services.AddServiceBus(builder =>
+        var services = new ServiceCollection()
+            .AddSingleton<IConfiguration>(configuration)
+            .AddServiceBus(builder =>
             {
-                configuration.GetSection(ServiceBusOptions.SectionName).Bind(builder.Options);
-            });
-
-            services.AddAzureStorageQueues(builder =>
+                configuration.GetSection(ServiceBusOptions.SectionName)
+                    .Bind(builder.Options);
+            })
+            .AddAzureStorageQueues(builder =>
             {
-                builder.AddOptions("azure", new AzureStorageQueueOptions
+                builder.AddOptions("azure", new()
                 {
                     ConnectionString = "UseDevelopmentStorage=true;"
                 });
             });
 
-            Console.WriteLine("Type some characters and then press [enter] to submit; an empty line submission stops execution:");
-            Console.WriteLine();
+        Console.WriteLine("Type some characters and then press [enter] to submit; an empty line submission stops execution:");
+        Console.WriteLine();
 
-            await using (var serviceBus = await services.BuildServiceProvider().GetRequiredService<IServiceBus>().StartAsync())
+        await using (var serviceBus = await services.BuildServiceProvider()
+                         .GetRequiredService<IServiceBus>().StartAsync())
+        {
+            string userName;
+
+            while (!string.IsNullOrEmpty(userName = Console.ReadLine() ?? string.Empty))
             {
-                string userName;
-
-                while (!string.IsNullOrEmpty(userName = Console.ReadLine()))
+                await serviceBus.SendAsync(new RegisterMember
                 {
-                    await serviceBus.SendAsync(new RegisterMember
-                    {
-                        UserName = userName
-                    }, builder => builder.Defer(DateTime.Now.AddSeconds(5)));
-                }
+                    UserName = userName
+                }, builder => builder.Defer(DateTime.Now.AddSeconds(5)));
             }
         }
     }
@@ -163,43 +162,43 @@ This will provide the ability to read the `appsettings.json` file.
 > Implement the `Program` class as follows:
 
 ``` c#
+using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Shuttle.Esb;
 using Shuttle.Esb.AzureStorageQueues;
 
-namespace Shuttle.Deferred.Server
+namespace Shuttle.Deferred.Server;
+
+public class Programs
 {
-    public class Programs
+    public static async Task Main()
     {
-        public static async Task Main()
-        {
-            await Host.CreateDefaultBuilder()
-                .ConfigureServices(services =>
-                {
-                    var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+        await Host.CreateDefaultBuilder()
+            .ConfigureServices(services =>
+            {
+                var configuration = new ConfigurationBuilder()
+                    .AddJsonFile("appsettings.json").Build();
 
-                    services.AddSingleton<IConfiguration>(configuration);
-
-                    services.AddServiceBus(builder =>
+                services
+                    .AddSingleton<IConfiguration>(configuration)
+                    .AddHostedService<DeferredHostedService>()
+                    .AddServiceBus(builder =>
                     {
-                        configuration.GetSection(ServiceBusOptions.SectionName).Bind(builder.Options);
-
-                        builder.Options.Asynchronous = true;
-                    });
-
-                    services.AddAzureStorageQueues(builder =>
+                        configuration.GetSection(ServiceBusOptions.SectionName)
+                            .Bind(builder.Options);
+                    })
+                    .AddAzureStorageQueues(builder =>
                     {
-                        builder.AddOptions("azure", new AzureStorageQueueOptions
+                        builder.AddOptions("azure", new()
                         {
-                            ConnectionString = configuration.GetConnectionString("azure")
+                            ConnectionString = configuration.GetConnectionString("azure")!
                         });
                     });
-                })
-                .Build()
-                .RunAsync();
-        }
+            })
+            .Build()
+            .RunAsync();
     }
 }
 ```
@@ -231,20 +230,20 @@ namespace Shuttle.Deferred.Server
 
 ``` c#
 using System;
-using Shuttle.Esb;
+using System.Threading.Tasks;
 using Shuttle.Deferred.Messages;
+using Shuttle.Esb;
 
-namespace Shuttle.Deferred.Server
+namespace Shuttle.Deferred.Server;
+
+public class RegisterMemberHandler : IMessageHandler<RegisterMember>
 {
-	public class RegisterMemberHandler : IAsyncMessageHandler<RegisterMember>
-	{
-	    public async Task ProcessMessageAsync(IHandlerContext<RegisterMember> context)
-		{
-		    Console.WriteLine($"[MEMBER REGISTERED] : user name = '{context.Message.UserName}'");
+    public async Task ProcessMessageAsync(IHandlerContext<RegisterMember> context)
+    {
+        Console.WriteLine($"[MEMBER REGISTERED] : user name = '{context.Message.UserName}'");
 
-		    await Task.CompletedTask;
-		}
-	}
+        await Task.CompletedTask;
+    }
 }
 ```
 

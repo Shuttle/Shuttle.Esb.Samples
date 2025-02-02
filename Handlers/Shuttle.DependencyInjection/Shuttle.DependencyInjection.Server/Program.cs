@@ -16,14 +16,16 @@ public class Program
         await Host.CreateDefaultBuilder()
             .ConfigureServices(services =>
             {
-                var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+                var configuration = new ConfigurationBuilder()
+                    .AddJsonFile("appsettings.json").Build();
 
                 services
                     .AddSingleton<IConfiguration>(configuration)
                     .AddSingleton<IEMailService, EMailService>()
                     .AddServiceBus(builder =>
                     {
-                        configuration.GetSection(ServiceBusOptions.SectionName).Bind(builder.Options);
+                        configuration.GetSection(ServiceBusOptions.SectionName)
+                            .Bind(builder.Options);
                     })
                     .AddAzureStorageQueues(builder =>
                     {

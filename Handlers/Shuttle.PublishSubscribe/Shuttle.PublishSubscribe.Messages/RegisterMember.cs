@@ -1,7 +1,6 @@
-﻿namespace Shuttle.PublishSubscribe.Messages
+﻿namespace Shuttle.PublishSubscribe.Messages;
+
+public class RegisterMember
 {
-	public class RegisterMember
-	{
-		public string UserName { get; set; }
-	}
+    public string UserName { get; set; }
 }

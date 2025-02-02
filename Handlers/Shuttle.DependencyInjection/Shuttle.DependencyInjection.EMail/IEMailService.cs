@@ -1,9 +1,8 @@
 ﻿using System.Threading.Tasks;
 
-namespace Shuttle.DependencyInjection.EMail
+namespace Shuttle.DependencyInjection.EMail;
+
+public interface IEMailService
 {
-	public interface IEMailService
-	{
-		Task SendAsync(string name);
-	}
+    Task SendAsync(string name);
 }

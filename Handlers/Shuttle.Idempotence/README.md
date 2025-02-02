@@ -32,12 +32,11 @@ In this guide we'll create the following projects:
 > Rename the `Class1` default file to `RegisterMember` and add a `UserName` property.
 
 ``` c#
-namespace Shuttle.Idempotence.Messages
+namespace Shuttle.Idempotence.Messages;
+
+public class RegisterMember
 {
-	public class RegisterMember
-	{
-		public string UserName { get; set; }
-	}
+    public string UserName { get; set; } = string.Empty;
 }
 ```
 
@@ -61,74 +60,72 @@ This will provide the ability to read the `appsettings.json` file.
 
 ``` c#
 using System;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Shuttle.Core.Contract;
 using Shuttle.Core.Pipelines;
 using Shuttle.Esb;
 using Shuttle.Esb.AzureStorageQueues;
 using Shuttle.Idempotence.Messages;
 
-namespace Shuttle.Idempotence.Client
+namespace Shuttle.Idempotence.Client;
+
+internal class Program
 {
-	internal class Program
-	{
-		private static async Task Main(string[] args)
-		{
-			var services = new ServiceCollection();
+    private static async Task Main(string[] args)
+    {
+        var configuration = new ConfigurationBuilder()
+            .AddJsonFile("appsettings.json").Build();
 
-			var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+        var services = new ServiceCollection()
+            .AddSingleton<IConfiguration>(configuration)
+            .AddServiceBus(builder =>
+            {
+                configuration.GetSection(ServiceBusOptions.SectionName)
+                    .Bind(builder.Options);
+            })
+            .AddAzureStorageQueues(builder =>
+            {
+                builder.AddOptions("azure", new()
+                {
+                    ConnectionString = Guard.AgainstNullOrEmptyString(configuration.GetConnectionString("azure"))
+                });
+            });
 
-			services.AddSingleton<IConfiguration>(configuration);
+        Console.WriteLine("Type some characters and then press [enter] to submit; an empty line submission stops execution:");
+        Console.WriteLine();
 
-			services.AddServiceBus(builder =>
-			{
-				configuration.GetSection(ServiceBusOptions.SectionName).Bind(builder.Options);
+        var serviceProvider = services.BuildServiceProvider();
+        var pipelineFactory = serviceProvider.GetRequiredService<IPipelineFactory>();
+        var messageSender = serviceProvider.GetRequiredService<IMessageSender>();
+        var transportMessagePipeline = pipelineFactory.GetPipeline<TransportMessagePipeline>();
 
-				builder.Options.Asynchronous = true;
-			});
+        await using (var serviceBus = await serviceProvider.GetRequiredService<IServiceBus>().StartAsync())
+        {
+            string userName;
 
-			services.AddAzureStorageQueues(builder =>
-			{
-				builder.AddOptions("azure", new AzureStorageQueueOptions
-				{
-					ConnectionString = configuration.GetConnectionString("azure")
-				});
-			});
+            while (!string.IsNullOrEmpty(userName = Console.ReadLine() ?? string.Empty))
+            {
+                var command = new RegisterMember
+                {
+                    UserName = userName
+                };
 
-			Console.WriteLine("Type some characters and then press [enter] to submit; an empty line submission stops execution:");
-			Console.WriteLine();
+                await transportMessagePipeline.ExecuteAsync(command, null, null);
 
-			var serviceProvider = services.BuildServiceProvider();
-			var pipelineFactory = serviceProvider.GetRequiredService<IPipelineFactory>();
-			var messageSender = serviceProvider.GetRequiredService<IMessageSender>();
-			var transportMessagePipeline = pipelineFactory.GetPipeline<TransportMessagePipeline>();
+                var transportMessage = Guard.AgainstNull(transportMessagePipeline.State.GetTransportMessage());
 
-			await using (var serviceBus = await serviceProvider.GetRequiredService<IServiceBus>().StartAsync())
-			{
-				string userName;
+                for (var i = 0; i < 5; i++)
+                {
+                    await messageSender.DispatchAsync(transportMessage); // will be processed only once since message id is the same
+                }
 
-				while (!string.IsNullOrEmpty(userName = Console.ReadLine()))
-				{
-					var command = new RegisterMember
-					{
-						UserName = userName
-					};
-
-					await transportMessagePipeline.ExecuteAsync(command, null, null);
-
-					var transportMessage = transportMessagePipeline.State.GetTransportMessage();
-
-					for (var i = 0; i < 5; i++)
-					{
-						await messageSender.DispatchAsync(transportMessage, null); // will be processed only once since message id is the same
-					}
-
-					await serviceBus.SendAsync(command); // will be processed since it has a new message id
-					await serviceBus.SendAsync(command); // will also be processed since it too has a new message id
-				}
-			}
-		}
-	}
+                await serviceBus.SendAsync(command); // will be processed since it has a new message id
+                await serviceBus.SendAsync(command); // will also be processed since it too has a new message id
+            }
+        }
+    }
 }
 ```
 
@@ -197,68 +194,75 @@ Implement the `Program` class as follows:
 
 ``` c#
 using System.Data.Common;
+using System.Threading.Tasks;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Shuttle.Core.Contract;
 using Shuttle.Core.Data;
 using Shuttle.Esb;
 using Shuttle.Esb.AzureStorageQueues;
+using Shuttle.Esb.Idempotence;
 using Shuttle.Esb.Sql.Idempotence;
 
-namespace Shuttle.Idempotence.Server
+namespace Shuttle.Idempotence.Server;
+
+public class Program
 {
-    public class Program
+    public static async Task Main()
     {
-        public static async Task Main()
-        {
-            DbProviderFactories.RegisterFactory("Microsoft.Data.SqlClient", SqlClientFactory.Instance);
+        DbProviderFactories.RegisterFactory("Microsoft.Data.SqlClient", SqlClientFactory.Instance);
 
-            await Host.CreateDefaultBuilder()
-                .ConfigureServices(services =>
-                {
-                    var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+        await Host.CreateDefaultBuilder()
+            .ConfigureServices(services =>
+            {
+                var configuration = new ConfigurationBuilder()
+                    .AddJsonFile("appsettings.json").Build();
 
-                    services.AddSingleton<IConfiguration>(configuration);
-
-                    services.AddDataAccess(builder =>
+                services
+                    .AddSingleton<IConfiguration>(configuration)
+                    .AddDataAccess(builder =>
                     {
                         builder.AddConnectionString("Idempotence", "Microsoft.Data.SqlClient");
-                    });
-
-                    services.AddServiceBus(builder =>
+                    })
+                    .AddServiceBus(builder =>
                     {
-                        configuration.GetSection(ServiceBusOptions.SectionName).Bind(builder.Options);
-
-                        builder.Options.Asynchronous = true;
-                    });
-
-                    services.AddSqlIdempotence();
-
-                    services.AddAzureStorageQueues(builder =>
+                        configuration.GetSection(ServiceBusOptions.SectionName)
+                            .Bind(builder.Options);
+                    })
+                    .AddIdempotence()
+                    .AddSqlIdempotence(builder =>
                     {
-                        builder.AddOptions("azure", new AzureStorageQueueOptions
+                        builder.Options.ConnectionStringName = "Idempotence";
+
+                        builder.UseSqlServer();
+                    })
+                    .AddAzureStorageQueues(builder =>
+                    {
+                        builder.AddOptions("azure", new()
                         {
-                            ConnectionString = configuration.GetConnectionString("azure")
+                            ConnectionString = Guard.AgainstNullOrEmptyString(configuration.GetConnectionString("azure"))
                         });
                     });
-                })
-                .Build()
-                .RunAsync();
-        }
+            })
+            .Build()
+            .RunAsync();
     }
 }
 ```
 
 ### Database
 
-We need a store for our idempotence tracking.  In this example we will be using **Sql Server**.  If you use the express version remember to change the `data source` value to `.\sqlexpress` from the standard `.`.
+We need a store for our idempotence tracking.  In this example we will be using **Sql Server**.  If you are using docker you can quickly get up-and-running with the following:
 
-When you reference the `Shuttle.Esb.Sql.Idempotence` package a `scripts` folder is included in the relevant package folder.  Click on the NuGet referenced assembly in the `Dependencies` and navigate to the package folder (in the `Path` property) to find the `scripts` folder.
+```
+docker run -d --name sql -h sql -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=Pass!000" -e "MSSQL_PID=Express" -p 1433:1433 -v C:\SQLServer.Data\:/var/opt/mssql/data mcr.microsoft.com/mssql/server:2019-latest
+```
 
-The `{version}` bit will be in a `semver` format.
+> Create a new database called **Shuttle**
 
-> Create a new database called **Shuttle** and execute the script `{provider}\IdempotenceServiceCreate.sql` in the newly created database.
+The implementation will create any required database structures on startup.  If you need to execute the creation scripts manually, please reference the [source code](https://github.com/Shuttle/Shuttle.Esb.Sql.Idempotence).
 
 ### Server configuration file
 
@@ -288,22 +292,22 @@ The `{version}` bit will be in a `semver` format.
 
 ``` c#
 using System;
+using System.Threading.Tasks;
 using Shuttle.Esb;
 using Shuttle.Idempotence.Messages;
 
-namespace Shuttle.Idempotence.Server
-{
-	public class RegisterMemberHandler : IAsyncMessageHandler<RegisterMember>
-	{
-		public async Task ProcessMessageAsync(IHandlerContext<RegisterMember> context)
-		{
-			Console.WriteLine();
-			Console.WriteLine($"[MEMBER REGISTERED] : user name = '{context.Message.UserName}' / message id = '{context.TransportMessage.MessageId}'");
-			Console.WriteLine();
+namespace Shuttle.Idempotence.Server;
 
-			await Task.CompletedTask;
-		}
-	}
+public class RegisterMemberHandler : IMessageHandler<RegisterMember>
+{
+    public async Task ProcessMessageAsync(IHandlerContext<RegisterMember> context)
+    {
+        Console.WriteLine();
+        Console.WriteLine($"[MEMBER REGISTERED] : user name = '{context.Message.UserName}' / message id = '{context.TransportMessage.MessageId}'");
+        Console.WriteLine();
+
+        await Task.CompletedTask;
+    }
 }
 ```
 

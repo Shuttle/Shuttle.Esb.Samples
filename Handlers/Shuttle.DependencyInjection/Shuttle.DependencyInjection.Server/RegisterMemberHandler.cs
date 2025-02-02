@@ -2,29 +2,28 @@
 using System.Threading.Tasks;
 using Shuttle.Core.Contract;
 using Shuttle.DependencyInjection.EMail;
-using Shuttle.Esb;
 using Shuttle.DependencyInjection.Messages;
+using Shuttle.Esb;
 
-namespace Shuttle.DependencyInjection.Server
+namespace Shuttle.DependencyInjection.Server;
+
+public class RegisterMemberHandler : IMessageHandler<RegisterMember>
 {
-	public class RegisterMemberHandler : IMessageHandler<RegisterMember>
-	{
-		private readonly IEMailService _emailService;
+    private readonly IEMailService _emailService;
 
-		public RegisterMemberHandler(IEMailService emailService)
-		{
-			_emailService = Guard.AgainstNull(emailService);
-		}
+    public RegisterMemberHandler(IEMailService emailService)
+    {
+        _emailService = Guard.AgainstNull(emailService);
+    }
 
-		public async Task ProcessMessageAsync(IHandlerContext<RegisterMember> context)
-		{
-			Console.WriteLine();
-			Console.WriteLine($"[MEMBER REGISTERED] : user name = '{context.Message.UserName}'");
-			Console.WriteLine();
+    public async Task ProcessMessageAsync(IHandlerContext<RegisterMember> context)
+    {
+        Console.WriteLine();
+        Console.WriteLine($"[MEMBER REGISTERED] : user name = '{context.Message.UserName}'");
+        Console.WriteLine();
 
-			await _emailService.SendAsync(context.Message.UserName);
+        await _emailService.SendAsync(context.Message.UserName);
 
-			await Task.CompletedTask;
-		}
-	}
+        await Task.CompletedTask;
+    }
 }
